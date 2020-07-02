@@ -32,7 +32,7 @@ export default function App() {
               headerRight: () => (
                     <Text
                       // style={styles.register}
-                      onPress={() => navigation.navigate("RegistrScreen")}
+                      onPress={() => navigation.navigate("LoginScreen")}
                     >
                       Registr
                     </Text>
@@ -50,7 +50,7 @@ export default function App() {
                 },
                 headerTintColor: Platform.OS === "ios" ? "blue" : "black",
               }}
-              name="SignIn"
+              name="LoginScreen"
               component={LoginScreen}
             />
             <Stack.Screen
