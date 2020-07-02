@@ -14,6 +14,19 @@ import { AntDesign } from "@expo/vector-icons";
 const Tab = createBottomTabNavigator();
 
 export const MainScreen = ({ navigation, route }) => {
+
+  navigation.setOptions({
+    headerRight: () => (
+      <Text
+        style={styles.register}
+        onPress={() => navigation.navigate("LoginScreen")}
+      >
+        Login
+      </Text>
+    ),
+  });
+
+
   return (
     <View>
       <Text>MAINPAGE</Text>
