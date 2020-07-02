@@ -20,7 +20,7 @@ export default function App() {
     <Provider store={store}>
       <NavigationContainer>
         <Stack.Navigator>
-          {/* <Stack.Screen
+          <Stack.Screen
             // options={{ headerShown: false }}
             options={{
               headerTitleAlign: "center",
@@ -29,18 +29,18 @@ export default function App() {
                 backgroundColor: Platform.OS === "ios" ? "black" : "#6CC4C7",
               },
               headerTintColor: Platform.OS === "ios" ? "blue" : "black",
-              headerRight: () => (
-                    <Text
-                      // style={styles.register}
-                      onPress={() => navigation.navigate("LoginScreen")}
-                    >
-                      Registr
-                    </Text>
-                  ),
+              // headerRight: () => (
+              //       <Text
+              //         // style={styles.register}
+              //         onPress={() => navigation.navigate("LoginScreen")}
+              //       >
+              //         Registr
+              //       </Text>
+              //     ),
             }}
             name="MainScreen"
             component={MainScreen}
-          /> */}
+          />
             <Stack.Screen
               options={{
                 headerTitleAlign: "center",
