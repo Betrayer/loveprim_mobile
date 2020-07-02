@@ -15,6 +15,8 @@ import {
 
 import { auth } from "../firebase/config";
 import { useDispatch } from "react-redux";
+import { loginUser } from "../redux/operations";
+
 
 const initialState = {
   email: "",
@@ -27,12 +29,12 @@ export const LoginScreen = ({ navigation, route }) => {
   const [textValue, setTextValue] = useState(initialState);
   const dispatch = useDispatch();
 
-  const loginUser = async () => {
+  const loginUserAdd = async () => {
     const { email, password } = textValue;
-    console.log("email", email);
-    console.log("password", password);
-    console.log("textValue", textValue)
-    dispatch(loginUser(textValue, setError, setErrorId));
+    // console.log("email", email);
+    // console.log("password", password);
+    // console.log("textValue", textValue)
+    await dispatch(loginUser(textValue, setError, setErrorId));
     // await setEmail("");
     // await setPassword("");
 
@@ -95,7 +97,7 @@ export const LoginScreen = ({ navigation, route }) => {
               setTextValue({ ...textValue, password: value })
             }
           />
-          <Button title="Log Innnnn" onPress={loginUser} />
+          <Button title="Log In" onPress={loginUserAdd} />
         </View>
       </KeyboardAvoidingView>
     </TouchableWithoutFeedback>
