@@ -43,9 +43,7 @@ export const registerUser = (param, setError, setErrorId) => async (
 };
 
 export const loginUser = (param, setError, setErrorId) => async (dispatch) => {
-  // console.log("param", param)
-  console.log(param.email, param.password)
-
+  console.log(param)
   try {
     await auth.signInWithEmailAndPassword(param.email, param.password);
     const currentUser = await auth.currentUser;
