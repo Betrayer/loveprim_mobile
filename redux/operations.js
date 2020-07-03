@@ -4,7 +4,7 @@ import { auth, firestore } from "../firebase/config";
 export const registerUser = (param, setError, setErrorId, toMain) => async (
   dispatch
 ) => {
-  console.log("param", param);
+  // console.log("param", param);
   try {
     const user = await auth.createUserWithEmailAndPassword(
       param.email,
