@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { TouchableOpacity, StyleSheet, Text, View } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { FontAwesome5 } from "@expo/vector-icons";
@@ -10,26 +10,48 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 // import { ServicesTab } from "./tabs/servicesTab";
 // import { MainTab } from "./tabs/mainTab";
 import { AntDesign } from "@expo/vector-icons";
+import { useDispatch, useSelector } from "react-redux";
+import { logoutUser } from "../redux/operations";
+import { firestore, storage } from "../firebase/config";
+
+
 
 const Tab = createBottomTabNavigator();
 
 export const MainScreen = ({ navigation, route }) => {
+  const { userId, admin, userName } = useSelector((state) => state.user);
+  const dispatch = useDispatch();
+  const [allProducts, setAllProducts] = useState([]);
+
+
+
+  const logout = () => {
+    console.log("LOGOUT")
+    dispatch(logoutUser());
+
+  }
+
+
+  
 
   navigation.setOptions({
     headerRight: () => (
       <Text
         style={styles.register}
-        onPress={() => navigation.navigate("LoginScreen")}
+        onPress={() => {!userId ?(navigation.navigate("LoginScreen")): (logout())}}
       >
-        Login
+        {!userId ? ("Login") : ("LOGOUT")}
       </Text>
     ),
   });
 
-
   return (
     <View>
       <Text>MAINPAGE</Text>
+      <Text>{userName}</Text>
+
+
+
     </View>
     // <Tab.Navigator
     //   tabBarOptions={{

@@ -29,14 +29,7 @@ export default function App() {
                 backgroundColor: Platform.OS === "ios" ? "black" : "#6CC4C7",
               },
               headerTintColor: Platform.OS === "ios" ? "blue" : "black",
-              // headerRight: () => (
-              //       <Text
-              //         // style={styles.register}
-              //         onPress={() => navigation.navigate("LoginScreen")}
-              //       >
-              //         Registr
-              //       </Text>
-              //     ),
+
             }}
             name="MainScreen"
             component={MainScreen}

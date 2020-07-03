@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   StyleSheet,
   Text,
@@ -14,9 +14,8 @@ import {
 } from "react-native";
 
 import { auth } from "../firebase/config";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { loginUser } from "../redux/operations";
-
 
 const initialState = {
   email: "",
@@ -28,16 +27,24 @@ export const LoginScreen = ({ navigation, route }) => {
   const [errorId, setErrorId] = useState();
   const [textValue, setTextValue] = useState(initialState);
   const dispatch = useDispatch();
+  const { userId, admin } = useSelector((state) => state.user);
+
+  // useEffect(() => {
+  // }, [error, errorId]);
+
+const toMain = () => {
+  navigation.navigate("MainScreen")
+}
+
 
   const loginUserAdd = async () => {
     const { email, password } = textValue;
     // console.log("email", email);
     // console.log("password", password);
-    // console.log("textValue", textValue)
-    await dispatch(loginUser(textValue, setError, setErrorId));
+    // console.log("textValue", textValue);
+    await dispatch(loginUser(textValue, setError, setErrorId, toMain));
     // await setEmail("");
     // await setPassword("");
-
 
     // try {
     //   await auth.signInWithEmailAndPassword(email, password);
@@ -98,6 +105,7 @@ export const LoginScreen = ({ navigation, route }) => {
             }
           />
           <Button title="Log In" onPress={loginUserAdd} />
+          {errorId ? <Text>{errorId}</Text> : <></>}
         </View>
       </KeyboardAvoidingView>
     </TouchableWithoutFeedback>
