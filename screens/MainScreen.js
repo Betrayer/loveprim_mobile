@@ -11,13 +11,26 @@ import { FontAwesome5 } from "@expo/vector-icons";
 import { MaterialIcons } from "@expo/vector-icons";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { AntDesign } from "@expo/vector-icons";
+import { useDispatch, useSelector } from "react-redux";
+import { logoutUser } from "../redux/operations";
+import { firestore, storage } from "../firebase/config";
 import { ProfileScreen } from "./additionalScreens/ProfileScreen";
 import { BacketScreen } from "./additionalScreens/BacketScreen";
 import { HomeScreen } from "./additionalScreens/HomeScreen";
 
+const Tab = createBottomTabNavigator();
+
 export const MainScreen = ({ navigation, route }) => {
+  const { userId, admin, userName } = useSelector((state) => state.user);
+  const dispatch = useDispatch();
+  const [allProducts, setAllProducts] = useState([]);
+
   const [drawer, setDrawer] = useState(false);
-  const Tab = createBottomTabNavigator();
+
+  const logout = () => {
+    console.log("LOGOUT");
+    dispatch(logoutUser());
+  };
 
   useEffect(() => {
     setDrawer(false);
@@ -27,9 +40,16 @@ export const MainScreen = ({ navigation, route }) => {
     headerRight: () => (
       <Text
         style={styles.register}
-        onPress={() => navigation.navigate("LoginScreen")}
+        onPress={() => {
+          !userId ? navigation.navigate("LoginScreen") : logout();
+        }}
       >
-        Login
+        {!userId ? "Login" : "LOGOUT"}
+      </Text>
+    ),
+    headerLeft: () => (
+      <Text style={styles.register} onPress={() => toggleDrawer()}>
+        Меню
       </Text>
     ),
     headerLeft: () => (
@@ -60,6 +80,9 @@ export const MainScreen = ({ navigation, route }) => {
 
   return (
     <>
+      <View>
+        <Text>{userName}</Text>
+      </View>
       <Tab.Navigator
         tabBarOptions={{
           showLabel: true,

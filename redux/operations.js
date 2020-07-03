@@ -1,9 +1,10 @@
 import types from "./types";
 import { auth, firestore } from "../firebase/config";
 
-export const registerUser = (param, setError, setErrorId) => async (
+export const registerUser = (param, setError, setErrorId, toMain) => async (
   dispatch
 ) => {
+  // console.log("param", param);
   try {
     const user = await auth.createUserWithEmailAndPassword(
       param.email,
@@ -11,7 +12,7 @@ export const registerUser = (param, setError, setErrorId) => async (
     );
     await user.user
       .updateProfile({
-        displayName: param.name,
+        displayName: param.userName,
       })
       .then(setError(true));
     const currentUser = await auth.currentUser;
@@ -20,7 +21,7 @@ export const registerUser = (param, setError, setErrorId) => async (
       userEmail: currentUser.email,
       userId: currentUser.uid,
       userName: currentUser.displayName,
-      userPhone: param.phone,
+      userPhone: param.userPhone,
       userAdress: "",
       userBonus: 0,
     });
@@ -31,19 +32,20 @@ export const registerUser = (param, setError, setErrorId) => async (
         userEmail: currentUser.email,
         userId: currentUser.uid,
         userName: currentUser.displayName,
-        userPhone: param.phone,
+        userPhone: param.userPhone,
         userAdress: "",
         userBonus: 0,
       },
-    });
+    }).then(toMain());
   } catch (error) {
     setError(false);
     setErrorId("Пользователь существует или введена не правильная информация");
   }
 };
 
-export const loginUser = (param, setError, setErrorId) => async (dispatch) => {
-  console.log(param)
+export const loginUser = (param, setError, setErrorId, toMain) => async (
+  dispatch
+) => {
   try {
     await auth.signInWithEmailAndPassword(param.email, param.password);
     const currentUser = await auth.currentUser;
@@ -58,7 +60,6 @@ export const loginUser = (param, setError, setErrorId) => async (dispatch) => {
         });
       })
       .then(setError(true))
-      .then(console.log(dataData))
       .catch(function (error) {
         console.log("Error getting document:", error);
       });
@@ -73,7 +74,7 @@ export const loginUser = (param, setError, setErrorId) => async (dispatch) => {
         userAdress: dataData.userAdress,
         buyer: dataData.buyer,
       },
-    });
+    }).then(toMain());
   } catch (error) {
     setError(false);
     setErrorId("Введите правильный email и пароль");
