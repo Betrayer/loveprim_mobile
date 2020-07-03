@@ -12,6 +12,8 @@ import { ItemScreen } from "./screens/additionalScreens/ItemScreen";
 import { ReviewsScreen } from "./screens/additionalScreens/ReviewsScreen";
 import { SizeChartScreen } from "./screens/additionalScreens/SizeChartScreen";
 import { FAQScreen } from "./screens/additionalScreens/FAQScreen";
+// import { DeckSwiperExample } from "./screens/additionalScreens/FAQScreen";
+
 
 export default function App() {
   const Stack = createStackNavigator();
@@ -62,7 +64,7 @@ export default function App() {
           <Stack.Screen
             options={{
               headerTitleAlign: "center",
-              headerTitle: "Registration",
+              headerTitle: "Item",
               headerStyle: {
                 backgroundColor: Platform.OS === "ios" ? "black" : "blue",
               },
@@ -86,7 +88,7 @@ export default function App() {
           <Stack.Screen
             options={{
               headerTitleAlign: "center",
-              headerTitle: "Rewievs",
+              headerTitle: "SizeChart",
               headerStyle: {
                 backgroundColor: Platform.OS === "ios" ? "black" : "blue",
               },
@@ -98,7 +100,7 @@ export default function App() {
           <Stack.Screen
             options={{
               headerTitleAlign: "center",
-              headerTitle: "Rewievs",
+              headerTitle: "FAQ",
               headerStyle: {
                 backgroundColor: Platform.OS === "ios" ? "black" : "blue",
               },
