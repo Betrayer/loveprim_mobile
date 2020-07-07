@@ -82,6 +82,8 @@ export const MainScreen = ({ navigation, route }) => {
     <>
       <View>
         <Text>{userName}</Text>
+        <Text>{userId}</Text>
+
       </View>
       <Tab.Navigator
         tabBarOptions={{
