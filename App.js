@@ -4,7 +4,7 @@ import { StyleSheet, Text, View } from "react-native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { NavigationContainer } from "@react-navigation/native";
 import { Provider } from "react-redux";
-import  firebase  from "firebase"; // Богдан тест
+import firebase from "firebase"; // Богдан тест
 import { firestore, storage, auth, firebaseConfig } from "./firebase/config";
 
 import { store } from "./redux/store";
@@ -17,7 +17,14 @@ import { SizeChartScreen } from "./screens/additionalScreens/SizeChartScreen";
 import { FAQScreen } from "./screens/additionalScreens/FAQScreen";
 import { AddReviewsScreen } from "./screens/additionalScreens/ReviewsScreenAdd";
 import { CommentImg } from "./screens/additionalScreens/commentImg";
-
+import { ChildrenScreen } from "./screens/additionalScreens/ChildrenScreen";
+import { MenScreen } from "./screens/additionalScreens/MenScreen";
+import { WomenScreen } from "./screens/additionalScreens/WomenScreen";
+import { ShoesScreen } from "./screens/additionalScreens/ShoesScreen";
+import { AccesoriesScreen } from "./screens/additionalScreens/AccesoriesScreen";
+import { DecorationsScreen } from "./screens/additionalScreens/DecorationsScreen";
+import { InStockScreen } from "./screens/additionalScreens/InStockScreen";
+import { SalesScreen } from "./screens/additionalScreens/SalesScreen";
 
 export default function App() {
   const Stack = createStackNavigator();
@@ -136,6 +143,102 @@ export default function App() {
             }}
             name="CommentImg"
             component={CommentImg}
+          />
+          <Stack.Screen
+            options={{
+              headerTitleAlign: "center",
+              headerTitle: "Дети",
+              headerStyle: {
+                backgroundColor: "#6CC4C7",
+              },
+              headerTintColor: "white",
+            }}
+            name="ChildrenScreen"
+            component={ChildrenScreen}
+          />
+          <Stack.Screen
+            options={{
+              headerTitleAlign: "center",
+              headerTitle: "Мужчины",
+              headerStyle: {
+                backgroundColor: "#6CC4C7",
+              },
+              headerTintColor: "white",
+            }}
+            name="MenScreen"
+            component={MenScreen}
+          />
+          <Stack.Screen
+            options={{
+              headerTitleAlign: "center",
+              headerTitle: "Женщины",
+              headerStyle: {
+                backgroundColor: "#6CC4C7",
+              },
+              headerTintColor: "white",
+            }}
+            name="WomenScreen"
+            component={WomenScreen}
+          />
+          <Stack.Screen
+            options={{
+              headerTitleAlign: "center",
+              headerTitle: "Обувь",
+              headerStyle: {
+                backgroundColor: "#6CC4C7",
+              },
+              headerTintColor: "white",
+            }}
+            name="ShoesScreen"
+            component={ShoesScreen}
+          />
+          <Stack.Screen
+            options={{
+              headerTitleAlign: "center",
+              headerTitle: "Ассексуары",
+              headerStyle: {
+                backgroundColor: "#6CC4C7",
+              },
+              headerTintColor: "white",
+            }}
+            name="AccesoriesScreen"
+            component={AccesoriesScreen}
+          />
+          <Stack.Screen
+            options={{
+              headerTitleAlign: "center",
+              headerTitle: "Декор",
+              headerStyle: {
+                backgroundColor: "#6CC4C7",
+              },
+              headerTintColor: "white",
+            }}
+            name="DecorationsScreen"
+            component={DecorationsScreen}
+          />
+          <Stack.Screen
+            options={{
+              headerTitleAlign: "center",
+              headerTitle: "В наличии",
+              headerStyle: {
+                backgroundColor: "#6CC4C7",
+              },
+              headerTintColor: "white",
+            }}
+            name="InStockScreen"
+            component={InStockScreen}
+          />
+          <Stack.Screen
+            options={{
+              headerTitleAlign: "center",
+              headerTitle: "Скидки",
+              headerStyle: {
+                backgroundColor: "#6CC4C7",
+              },
+              headerTintColor: "white",
+            }}
+            name="SalesScreen"
+            component={SalesScreen}
           />
         </Stack.Navigator>
       </NavigationContainer>

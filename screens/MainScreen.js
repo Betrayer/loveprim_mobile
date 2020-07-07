@@ -56,11 +56,6 @@ export const MainScreen = ({ navigation, route }) => {
         Меню
       </Text>
     ),
-    headerLeft: () => (
-      <Text style={styles.register} onPress={() => toggleDrawer()}>
-        Меню
-      </Text>
-    ),
   });
 
   const toggleDrawer = () => {
@@ -82,52 +77,91 @@ export const MainScreen = ({ navigation, route }) => {
     toggleDrawer();
   };
 
+  const toChildren = () => {
+    navigation.navigate("ChildrenScreen");
+    toggleDrawer();
+  };
+
+  const toMen = () => {
+    navigation.navigate("MenScreen");
+    toggleDrawer();
+  };
+
+  const toWomen = () => {
+    navigation.navigate("WomenScreen");
+    toggleDrawer();
+  };
+
+  const toShoes = () => {
+    navigation.navigate("ShoesScreen");
+    toggleDrawer();
+  };
+
+  const toAccesories = () => {
+    navigation.navigate("WomenScreen");
+    toggleDrawer();
+  };
+
+  const toDecor = () => {
+    navigation.navigate("WomenScreen");
+    toggleDrawer();
+  };
+
+  const toStock = () => {
+    navigation.navigate("WomenScreen");
+    toggleDrawer();
+  };
+
+  const toSales = () => {
+    navigation.navigate("WomenScreen");
+    toggleDrawer();
+  };
   // -=-=-=-=-=-=-=-=-=
 
-      const registerForPushNotificationsAsync = async () => {
-        if (Constants.isDevice) {
-          const { status: existingStatus } = await Permissions.getAsync(
-            Permissions.NOTIFICATIONS
-            );
-            let finalStatus = existingStatus;
-            if (existingStatus !== "granted") {
-              const { status } = await Permissions.askAsync(
-                Permissions.NOTIFICATIONS
-                );
-                finalStatus = status;
-              }
-              if (finalStatus !== "granted") {
-          alert("Failed to get push token for push notification!");
-          return;
-        }
-          console.log("userId", userId);
-          try {
-            let token = await Notifications.getExpoPushTokenAsync();
-            console.log('token', token)
-            // firebase
-            // .database()
-            // .ref("users/" + userId + "/push_token")
-            // .set(token);
-          } catch (error) {
-            console.log("error", error);
-          }
-          // console.log(token);
-          // this.setState({ expoPushToken: token });
-        } else {
-          alert("Must use physical device for Push Notifications");
-        }
-        
-        if (Platform.OS === "android") {
-          Notifications.createChannelAndroidAsync("default", {
-            name: "default",
-            sound: true,
-            priority: "max",
-            vibrate: [0, 250, 250, 250],
-          });
-        }
-      };
-    
-    useEffect(() => {
+  const registerForPushNotificationsAsync = async () => {
+    if (Constants.isDevice) {
+      const { status: existingStatus } = await Permissions.getAsync(
+        Permissions.NOTIFICATIONS
+      );
+      let finalStatus = existingStatus;
+      if (existingStatus !== "granted") {
+        const { status } = await Permissions.askAsync(
+          Permissions.NOTIFICATIONS
+        );
+        finalStatus = status;
+      }
+      if (finalStatus !== "granted") {
+        alert("Failed to get push token for push notification!");
+        return;
+      }
+      console.log("userId", userId);
+      try {
+        let token = await Notifications.getExpoPushTokenAsync();
+        console.log("token", token);
+        // firebase
+        // .database()
+        // .ref("users/" + userId + "/push_token")
+        // .set(token);
+      } catch (error) {
+        console.log("error", error);
+      }
+      // console.log(token);
+      // this.setState({ expoPushToken: token });
+    } else {
+      alert("Must use physical device for Push Notifications");
+    }
+
+    if (Platform.OS === "android") {
+      Notifications.createChannelAndroidAsync("default", {
+        name: "default",
+        sound: true,
+        priority: "max",
+        vibrate: [0, 250, 250, 250],
+      });
+    }
+  };
+
+  useEffect(() => {
     async function pushNotify() {
       try {
         await registerForPushNotificationsAsync();
@@ -204,6 +238,36 @@ export const MainScreen = ({ navigation, route }) => {
           >
             <Text>Размерная сетка</Text>
           </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => toChildren()}
+            style={styles.menuItem}
+          >
+            <Text>Дети</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => toMen()} style={styles.menuItem}>
+            <Text>Мужчины</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => toWomen()} style={styles.menuItem}>
+            <Text>Женщинцы</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => toShoes()} style={styles.menuItem}>
+            <Text>Обувь</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => toAccesories()}
+            style={styles.menuItem}
+          >
+            <Text>Аксессуары</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => toDecor()} style={styles.menuItem}>
+            <Text>Декор</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => toStock()} style={styles.menuItem}>
+            <Text>Товар в наличии</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => toSales()} style={styles.menuItem}>
+            <Text>Скидки</Text>
+          </TouchableOpacity>
         </View>
       ) : (
         <></>
@@ -223,9 +287,9 @@ const styles = StyleSheet.create({
   menu: {
     backgroundColor: "lightblue",
     width: 300,
-    height: 300,
+    height: "auto",
     position: "absolute",
-    top: "10%",
+    top: "5%",
     left: 0,
   },
   menuItem: {
