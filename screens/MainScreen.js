@@ -4,6 +4,7 @@ import {
   StyleSheet,
   Text,
   View,
+  Button,
   TouchableWithoutFeedback,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
@@ -11,9 +12,12 @@ import { FontAwesome5 } from "@expo/vector-icons";
 import { MaterialIcons } from "@expo/vector-icons";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { AntDesign } from "@expo/vector-icons";
+import { Notifications } from "expo"; // Богдан тест
+import * as Permissions from "expo-permissions";
+import Constants from "expo-constants";
+import firebase from "firebase"; // Богдан тест
 import { useDispatch, useSelector } from "react-redux";
 import { logoutUser } from "../redux/operations";
-import { firestore, storage } from "../firebase/config";
 import { ProfileScreen } from "./additionalScreens/ProfileScreen";
 import { BacketScreen } from "./additionalScreens/BacketScreen";
 import { HomeScreen } from "./additionalScreens/HomeScreen";
@@ -77,6 +81,64 @@ export const MainScreen = ({ navigation, route }) => {
     navigation.navigate("SizeChartScreen");
     toggleDrawer();
   };
+
+  // -=-=-=-=-=-=-=-=-=
+
+      const registerForPushNotificationsAsync = async () => {
+        if (Constants.isDevice) {
+          const { status: existingStatus } = await Permissions.getAsync(
+            Permissions.NOTIFICATIONS
+            );
+            let finalStatus = existingStatus;
+            if (existingStatus !== "granted") {
+              const { status } = await Permissions.askAsync(
+                Permissions.NOTIFICATIONS
+                );
+                finalStatus = status;
+              }
+              if (finalStatus !== "granted") {
+          alert("Failed to get push token for push notification!");
+          return;
+        }
+          console.log("userId", userId);
+          try {
+            let token = await Notifications.getExpoPushTokenAsync();
+            console.log('token', token)
+            // firebase
+            // .database()
+            // .ref("users/" + userId + "/push_token")
+            // .set(token);
+          } catch (error) {
+            console.log("error", error);
+          }
+          // console.log(token);
+          // this.setState({ expoPushToken: token });
+        } else {
+          alert("Must use physical device for Push Notifications");
+        }
+        
+        if (Platform.OS === "android") {
+          Notifications.createChannelAndroidAsync("default", {
+            name: "default",
+            sound: true,
+            priority: "max",
+            vibrate: [0, 250, 250, 250],
+          });
+        }
+      };
+    
+    useEffect(() => {
+    async function pushNotify() {
+      try {
+        await registerForPushNotificationsAsync();
+      } catch (error) {
+        console.log("PushEror", error);
+      }
+    }
+    pushNotify();
+  }, []);
+
+  // =-=-=-=--=-=-=-=-=
 
   return (
     <>

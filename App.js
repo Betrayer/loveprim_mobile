@@ -4,6 +4,9 @@ import { StyleSheet, Text, View } from "react-native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { NavigationContainer } from "@react-navigation/native";
 import { Provider } from "react-redux";
+import  firebase  from "firebase"; // Богдан тест
+import { firestore, storage, auth, firebaseConfig } from "./firebase/config";
+
 import { store } from "./redux/store";
 import { MainScreen } from "./screens/MainScreen";
 import { LoginScreen } from "./screens/LoginScreen";
@@ -13,6 +16,7 @@ import { ReviewsScreen } from "./screens/additionalScreens/ReviewsScreen";
 import { SizeChartScreen } from "./screens/additionalScreens/SizeChartScreen";
 import { FAQScreen } from "./screens/additionalScreens/FAQScreen";
 // import { DeckSwiperExample } from "./screens/additionalScreens/FAQScreen";
+// firebase.initializeApp(firebaseConfig); // Богдан тест
 
 
 export default function App() {
