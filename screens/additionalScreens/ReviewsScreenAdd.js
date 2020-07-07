@@ -153,7 +153,7 @@ export const AddReviewsScreen = () => {
               style={{ width: 350, height: 300 }}
             />
           ) : (
-            <View style={{ flex: 1 }}>
+            <View style={{ flex: 0.2 }}>
               <Camera
                 ref={(ref) => setTakePhoto(ref)}
                 style={{ width: 350, height: 300 }}
@@ -161,9 +161,10 @@ export const AddReviewsScreen = () => {
               >
                 <TouchableOpacity
                   style={{
-                    flex: 0.1,
+                    flex: 1,
                     alignSelf: "flex-end",
                     alignItems: "center",
+                    paddingRight: 10,
                   }}
                   onPress={() => {
                     setType(
@@ -226,7 +227,6 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "center",
-    // fontFamily: "ubuntu-regular",
   },
   txtInput: {
     width: "70%",

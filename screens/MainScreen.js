@@ -52,6 +52,11 @@ export const MainScreen = ({ navigation, route }) => {
         Меню
       </Text>
     ),
+    headerLeft: () => (
+      <Text style={styles.register} onPress={() => toggleDrawer()}>
+        Меню
+      </Text>
+    ),
   });
 
   const toggleDrawer = () => {

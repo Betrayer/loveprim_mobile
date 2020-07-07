@@ -65,7 +65,7 @@ export default function App() {
           <Stack.Screen
             options={{
               headerTitleAlign: "center",
-              headerTitle: "Registration",
+              headerTitle: "Item",
               headerStyle: {
                 backgroundColor: "#6CC4C7",
               },
@@ -113,7 +113,7 @@ export default function App() {
           <Stack.Screen
             options={{
               headerTitleAlign: "center",
-              headerTitle: "Rewievs",
+              headerTitle: "FAQ",
               headerStyle: {
                 backgroundColor: "#6CC4C7",
               },
