@@ -12,7 +12,8 @@ import { ItemScreen } from "./screens/additionalScreens/ItemScreen";
 import { ReviewsScreen } from "./screens/additionalScreens/ReviewsScreen";
 import { SizeChartScreen } from "./screens/additionalScreens/SizeChartScreen";
 import { FAQScreen } from "./screens/additionalScreens/FAQScreen";
-// import { DeckSwiperExample } from "./screens/additionalScreens/FAQScreen";
+import { AddReviewsScreen } from "./screens/additionalScreens/ReviewsScreenAdd";
+import { CommentImg } from "./screens/additionalScreens/commentImg";
 
 
 export default function App() {
@@ -30,9 +31,9 @@ export default function App() {
               headerTitleAlign: "center",
               headerTitle: "LovePRIM",
               headerStyle: {
-                backgroundColor: Platform.OS === "ios" ? "black" : "#6CC4C7",
+                backgroundColor: "#6CC4C7",
               },
-              headerTintColor: Platform.OS === "ios" ? "blue" : "black",
+              headerTintColor: "white",
             }}
             name="MainScreen"
             component={MainScreen}
@@ -42,9 +43,9 @@ export default function App() {
               headerTitleAlign: "center",
               headerTitle: "Log in",
               headerStyle: {
-                backgroundColor: Platform.OS === "ios" ? "black" : "blue",
+                backgroundColor: "#6CC4C7",
               },
-              headerTintColor: Platform.OS === "ios" ? "blue" : "black",
+              headerTintColor: "white",
             }}
             name="LoginScreen"
             component={LoginScreen}
@@ -54,9 +55,9 @@ export default function App() {
               headerTitleAlign: "center",
               headerTitle: "Registration",
               headerStyle: {
-                backgroundColor: Platform.OS === "ios" ? "black" : "blue",
+                backgroundColor: "#6CC4C7",
               },
-              headerTintColor: Platform.OS === "ios" ? "blue" : "black",
+              headerTintColor: "white",
             }}
             name="RegistrScreen"
             component={RegistrScreen}
@@ -66,9 +67,9 @@ export default function App() {
               headerTitleAlign: "center",
               headerTitle: "Item",
               headerStyle: {
-                backgroundColor: Platform.OS === "ios" ? "black" : "blue",
+                backgroundColor: "#6CC4C7",
               },
-              headerTintColor: Platform.OS === "ios" ? "blue" : "black",
+              headerTintColor: "white",
             }}
             name="ItemScreen"
             component={ItemScreen}
@@ -76,11 +77,11 @@ export default function App() {
           <Stack.Screen
             options={{
               headerTitleAlign: "center",
-              headerTitle: "Rewievs",
+              headerTitle: "Комментарии",
               headerStyle: {
-                backgroundColor: Platform.OS === "ios" ? "black" : "blue",
+                backgroundColor: "#6CC4C7",
               },
-              headerTintColor: Platform.OS === "ios" ? "blue" : "black",
+              headerTintColor: "white",
             }}
             name="ReviewsScreen"
             component={ReviewsScreen}
@@ -88,11 +89,23 @@ export default function App() {
           <Stack.Screen
             options={{
               headerTitleAlign: "center",
-              headerTitle: "SizeChart",
+              headerTitle: "Добавить отзыв",
               headerStyle: {
-                backgroundColor: Platform.OS === "ios" ? "black" : "blue",
+                backgroundColor: "#6CC4C7",
               },
-              headerTintColor: Platform.OS === "ios" ? "blue" : "black",
+              headerTintColor: "white",
+            }}
+            name="AddReviewsScreen"
+            component={AddReviewsScreen}
+          />
+          <Stack.Screen
+            options={{
+              headerTitleAlign: "center",
+              headerTitle: "Rewievs",
+              headerStyle: {
+                backgroundColor: "#6CC4C7",
+              },
+              headerTintColor: "white",
             }}
             name="SizeChartScreen"
             component={SizeChartScreen}
@@ -102,12 +115,24 @@ export default function App() {
               headerTitleAlign: "center",
               headerTitle: "FAQ",
               headerStyle: {
-                backgroundColor: Platform.OS === "ios" ? "black" : "blue",
+                backgroundColor: "#6CC4C7",
               },
-              headerTintColor: Platform.OS === "ios" ? "blue" : "black",
+              headerTintColor: "white",
             }}
             name="FAQScreen"
             component={FAQScreen}
+          />
+          <Stack.Screen
+            options={{
+              headerTitleAlign: "center",
+              headerTitle: "Комментарии",
+              headerStyle: {
+                backgroundColor: "#6CC4C7",
+              },
+              headerTintColor: "white",
+            }}
+            name="CommentImg"
+            component={CommentImg}
           />
         </Stack.Navigator>
       </NavigationContainer>

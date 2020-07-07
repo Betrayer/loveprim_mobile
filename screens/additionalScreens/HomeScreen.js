@@ -75,11 +75,11 @@ export const HomeScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    fontFamily: "ubuntu-regular",
+    // fontFamily: "ubuntu-regular",
     backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "center",
-    height: 300,
+    // height: 300,
     width: "100%",
     padding: 10,
   },
