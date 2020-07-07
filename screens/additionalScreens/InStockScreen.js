@@ -1,15 +1,13 @@
 import React from "react";
-import { StyleSheet, Text } from "react-native";
-import { View } from "native-base";
+import { StyleSheet, Text, View } from "react-native";
 
-export const HamburgerMenu = () => {
+export const InStockScreen = () => {
   return (
     <View style={styles.container}>
-      <Text>I am menu</Text>
+      <Text>В наличии</Text>
     </View>
   );
 };
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,

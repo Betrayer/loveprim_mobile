@@ -4,6 +4,7 @@ import {
   StyleSheet,
   Text,
   View,
+  Button,
   TouchableWithoutFeedback,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
@@ -11,9 +12,12 @@ import { FontAwesome5 } from "@expo/vector-icons";
 import { MaterialIcons } from "@expo/vector-icons";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { AntDesign } from "@expo/vector-icons";
+import { Notifications } from "expo"; // Богдан тест
+import * as Permissions from "expo-permissions";
+import Constants from "expo-constants";
+import firebase from "firebase"; // Богдан тест
 import { useDispatch, useSelector } from "react-redux";
 import { logoutUser } from "../redux/operations";
-import { firestore, storage } from "../firebase/config";
 import { ProfileScreen } from "./additionalScreens/ProfileScreen";
 import { BacketScreen } from "./additionalScreens/BacketScreen";
 import { HomeScreen } from "./additionalScreens/HomeScreen";
@@ -24,6 +28,7 @@ export const MainScreen = ({ navigation, route }) => {
   const { userId, admin, userName } = useSelector((state) => state.user);
   const dispatch = useDispatch();
   const [allProducts, setAllProducts] = useState([]);
+  const [user, setUser] = useState({});
 
   const [drawer, setDrawer] = useState(false);
 
@@ -34,6 +39,7 @@ export const MainScreen = ({ navigation, route }) => {
 
   useEffect(() => {
     setDrawer(false);
+    getUser()
   }, []);
 
   navigation.setOptions({
@@ -52,17 +58,21 @@ export const MainScreen = ({ navigation, route }) => {
         Меню
       </Text>
     ),
-    headerLeft: () => (
-      <Text style={styles.register} onPress={() => toggleDrawer()}>
-        Меню
-      </Text>
-    ),
   });
 
   const toggleDrawer = () => {
     setDrawer(!drawer);
   };
-
+const getUser = async() => {
+  await firebase.firestore().collection("users").where("userId", "==", userId).onSnapshot((data) => {
+    setUser(
+      ...data.docs.map((doc) => {
+        console.log("doc.id", doc.id);
+        return { id: doc.id };
+      })
+    );
+  });
+}
   const toReviews = () => {
     navigation.navigate("ReviewsScreen");
     toggleDrawer();
@@ -77,6 +87,160 @@ export const MainScreen = ({ navigation, route }) => {
     navigation.navigate("SizeChartScreen");
     toggleDrawer();
   };
+
+  const toChildren = () => {
+    navigation.navigate("ChildrenScreen");
+    toggleDrawer();
+  };
+
+  const toMen = () => {
+    navigation.navigate("MenScreen");
+    toggleDrawer();
+  };
+
+  const toWomen = () => {
+    navigation.navigate("WomenScreen");
+    toggleDrawer();
+  };
+
+  const toShoes = () => {
+    navigation.navigate("ShoesScreen");
+    toggleDrawer();
+  };
+
+  const toAccesories = () => {
+    navigation.navigate("WomenScreen");
+    toggleDrawer();
+  };
+
+  const toDecor = () => {
+    navigation.navigate("WomenScreen");
+    toggleDrawer();
+  };
+
+  const toStock = () => {
+    navigation.navigate("WomenScreen");
+    toggleDrawer();
+  };
+
+  const toSales = () => {
+    navigation.navigate("WomenScreen");
+    toggleDrawer();
+  };
+  // -=-=-=-=-=-=-=-=-=
+
+  const registerForPushNotificationsAsync = async () => {
+    if (Constants.isDevice) {
+      const { status: existingStatus } = await Permissions.getAsync(
+        Permissions.NOTIFICATIONS
+      );
+      let finalStatus = existingStatus;
+      if (existingStatus !== "granted") {
+        const { status } = await Permissions.askAsync(
+          Permissions.NOTIFICATIONS
+        );
+        finalStatus = status;
+      }
+      if (finalStatus !== "granted") {
+        alert("Failed to get push token for push notification!");
+        return;
+      }
+      console.log("userId", userId);
+      try {
+        let token = await Notifications.getExpoPushTokenAsync();
+        console.log("token", token);
+        // firebase
+        // .database()
+        // .ref("users/" + userId + "/push_token")
+        // .set(token);
+      } catch (error) {
+        console.log("error", error);
+      }
+      // console.log(token);
+      // this.setState({ expoPushToken: token });
+    } else {
+      alert("Must use physical device for Push Notifications");
+    }
+
+    if (Platform.OS === "android") {
+      Notifications.createChannelAndroidAsync("default", {
+        name: "default",
+        sound: true,
+        priority: "max",
+        vibrate: [0, 250, 250, 250],
+      });
+    }
+  };
+
+  // // -=-=-=-=-=-=-=-=-=
+
+  // const registerForPushNotificationsAsync = async () => {
+  //   if (Constants.isDevice) {
+  //     const { status: existingStatus } = await Permissions.getAsync(
+  //       Permissions.NOTIFICATIONS
+  //     );
+  //     let finalStatus = existingStatus;
+  //     if (existingStatus !== "granted") {
+  //       const { status } = await Permissions.askAsync(
+  //         Permissions.NOTIFICATIONS
+  //       );
+  //       finalStatus = status;
+  //     }
+  //     if (finalStatus !== "granted") {
+  //       alert("Failed to get push token for push notification!");
+  //       return;
+  //     }
+  //     console.log("userId", userId);
+  //     try {
+  //       let token = await Notifications.getExpoPushTokenAsync();
+  //       console.log("token", token);
+  //       // firebase
+  //       // .database()
+  //       // .ref("users/" + userId + "/push_token")
+  //       // .set(token);
+  //       console.log('user', user)
+  //       await firebase.firestore()
+  //         .collection("users")
+  //         .doc(user.id)
+  //         .update({
+  //           push_token: token
+  //         })
+  //         // .onSnapshot((data) => {
+  //         //   data.docs.map((doc) => {
+  //         //     console.log("doc", doc.data());
+  //         //   });
+  //         // });
+  //     } catch (error) {
+  //       console.log("error", error);
+  //     }
+  //     // console.log(token);
+  //     // this.setState({ expoPushToken: token });
+  //   } else {
+  //     alert("Must use physical device for Push Notifications");
+  //   }
+
+  //   if (Platform.OS === "android") {
+  //     Notifications.createChannelAndroidAsync("default", {
+  //       name: "default",
+  //       sound: true,
+  //       priority: "max",
+  //       vibrate: [0, 250, 250, 250],
+  //     });
+  //   }
+  // };
+
+  useEffect(() => {
+    if(user){async function pushNotify() {
+      try {
+        await registerForPushNotificationsAsync();
+      } catch (error) {
+        console.log("PushEror", error);
+      }
+    }
+    pushNotify();}
+  }, [user]);
+
+  // =-=-=-=--=-=-=-=-=
 
   return (
     <>
@@ -144,6 +308,36 @@ export const MainScreen = ({ navigation, route }) => {
           >
             <Text>Размерная сетка</Text>
           </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => toChildren()}
+            style={styles.menuItem}
+          >
+            <Text>Дети</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => toMen()} style={styles.menuItem}>
+            <Text>Мужчины</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => toWomen()} style={styles.menuItem}>
+            <Text>Женщинцы</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => toShoes()} style={styles.menuItem}>
+            <Text>Обувь</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => toAccesories()}
+            style={styles.menuItem}
+          >
+            <Text>Аксессуары</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => toDecor()} style={styles.menuItem}>
+            <Text>Декор</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => toStock()} style={styles.menuItem}>
+            <Text>Товар в наличии</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => toSales()} style={styles.menuItem}>
+            <Text>Скидки</Text>
+          </TouchableOpacity>
         </View>
       ) : (
         <></>
@@ -163,9 +357,9 @@ const styles = StyleSheet.create({
   menu: {
     backgroundColor: "lightblue",
     width: 300,
-    height: 300,
+    height: "auto",
     position: "absolute",
-    top: "10%",
+    top: "5%",
     left: 0,
   },
   menuItem: {

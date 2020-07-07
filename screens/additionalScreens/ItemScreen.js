@@ -5,8 +5,8 @@ import {
   View,
   Image,
   Button,
-  FlatList,
-  CheckBox,
+  Picker,
+  Form,
 } from "react-native";
 
 export const ItemScreen = ({ route }) => {
@@ -15,6 +15,7 @@ export const ItemScreen = ({ route }) => {
   }, []);
 
   const [cartModal, setCartModal] = useState(false);
+  const [choosenSize, setChoozenSize] = useState("");
 
   const toCart = () => {
     setCartModal(true);
@@ -30,22 +31,26 @@ export const ItemScreen = ({ route }) => {
         />
         <Text>{route.params.info.name}</Text>
         <Text>{route.params.info.price}</Text>
-        <View style={styles.checks}>
-          {/* <FlatList
-            horizontal={true}
-            data={route}
-            keyExtractor={(item) => item.params.info.id}
-            renderItem={({ item }) => (
-              <CheckBox title={item.params.info.size} checked={false} />
-            )}
-          /> */}
-        </View>
         <Button
           title="В корзину"
           onPress={() => {
             toCart();
           }}
         />
+        <Form>
+          <Picker
+            note
+            mode="dropdown"
+            style={{ width: 120 }}
+            selectedValue={setChoozenSize(selected)}
+          >
+            <Picker.Item label="Wallet" value="key0" />
+            <Picker.Item label="ATM Card" value="key1" />
+            <Picker.Item label="Debit Card" value="key2" />
+            <Picker.Item label="Credit Card" value="key3" />
+            <Picker.Item label="Net Banking" value="key4" />
+          </Picker>
+        </Form>
       </View>
     </>
   );
