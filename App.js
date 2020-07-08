@@ -25,7 +25,6 @@ import { AccesoriesScreen } from "./screens/additionalScreens/AccesoriesScreen";
 import { DecorationsScreen } from "./screens/additionalScreens/DecorationsScreen";
 import { InStockScreen } from "./screens/additionalScreens/InStockScreen";
 import { SalesScreen } from "./screens/additionalScreens/SalesScreen";
-import { Drawer } from "./screens/Menu/Drawer";
 
 export default function App() {
   const Stack = createStackNavigator();
