@@ -125,7 +125,7 @@ export const AddReviewsScreen = () => {
                 style={{
                   marginTop: 30,
                   padding: 10,
-                  width: "90%",
+                  width: 300,
                   height: 40,
                   justifyContent: "center",
                   alignItems: "center",
