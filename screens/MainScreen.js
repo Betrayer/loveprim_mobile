@@ -148,7 +148,7 @@ export const MainScreen = ({ navigation, route }) => {
       // console.log(token);
       // this.setState({ expoPushToken: token });
     } else {
-      alert("Must use physical device for Push Notifications");
+      // alert("Must use physical device for Push Notifications");
     }
 
     if (Platform.OS === "android") {
