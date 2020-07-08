@@ -39,7 +39,7 @@ export const MainScreen = ({ navigation, route }) => {
 
   useEffect(() => {
     setDrawer(false);
-    getUser()
+    getUser();
   }, []);
 
   navigation.setOptions({
@@ -63,16 +63,20 @@ export const MainScreen = ({ navigation, route }) => {
   const toggleDrawer = () => {
     setDrawer(!drawer);
   };
-const getUser = async() => {
-  await firebase.firestore().collection("users").where("userId", "==", userId).onSnapshot((data) => {
-    setUser(
-      ...data.docs.map((doc) => {
-        console.log("doc.id", doc.id);
-        return { id: doc.id };
-      })
-    );
-  });
-}
+  const getUser = async () => {
+    await firebase
+      .firestore()
+      .collection("users")
+      .where("userId", "==", userId)
+      .onSnapshot((data) => {
+        setUser(
+          ...data.docs.map((doc) => {
+            console.log("doc.id", doc.id);
+            return { id: doc.id };
+          })
+        );
+      });
+  };
   const toReviews = () => {
     navigation.navigate("ReviewsScreen");
     toggleDrawer();
@@ -159,7 +163,7 @@ const getUser = async() => {
       // console.log(token);
       // this.setState({ expoPushToken: token });
     } else {
-      alert("Must use physical device for Push Notifications");
+      // alert("Must use physical device for Push Notifications");
     }
 
     if (Platform.OS === "android") {
@@ -230,24 +234,39 @@ const getUser = async() => {
   // };
 
   useEffect(() => {
-    if(user){async function pushNotify() {
-      try {
-        await registerForPushNotificationsAsync();
-      } catch (error) {
-        console.log("PushEror", error);
+    if (user) {
+      async function pushNotify() {
+        try {
+          await registerForPushNotificationsAsync();
+        } catch (error) {
+          console.log("PushEror", error);
+        }
       }
+      pushNotify();
     }
-    pushNotify();}
   }, [user]);
 
   // =-=-=-=--=-=-=-=-=
 
   return (
     <>
-      <View>
-        <Text>{userName}</Text>
-        <Text>{userId}</Text>
-
+      <View style={{ 
+        // justifyContent: "center", 
+      alignItems: "center",
+      // marginBottom: -20 
+      }}>
+        {userId ? (
+          <TouchableOpacity
+            style={styles.buttonStl}
+            onPress={() => {
+              navigation.navigate("AdminPageScreen");
+            }}
+          >
+            <Text style={styles.buttonStlText}>ПАНЕЛЬ АДМИНИСТРАТОРА</Text>
+          </TouchableOpacity>
+        ) : (
+          <></>
+        )}
       </View>
       <Tab.Navigator
         tabBarOptions={{
@@ -348,8 +367,7 @@ const getUser = async() => {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    // fontFamily: "ubuntu-regular",
+    flex: 0.15,
     backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "center",
@@ -370,5 +388,15 @@ const styles = StyleSheet.create({
   menuWrapper: {
     width: "100%",
     height: "100%",
+  },
+  buttonStl: {
+    width: "80%",
+    height: 30,
+    borderRadius: 10,
+    backgroundColor: "#6CC4C7",
+    justifyContent: "center",
+    alignItems: "center",
+    // marginBottom: -40,
+    marginTop: 20,
   },
 });

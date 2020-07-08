@@ -4,7 +4,7 @@ import { StyleSheet, Text, View } from "react-native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { NavigationContainer } from "@react-navigation/native";
 import { Provider } from "react-redux";
-import  firebase  from "firebase"; // Богдан тест
+import firebase from "firebase"; // Богдан тест
 import { firestore, storage, auth, firebaseConfig } from "./firebase/config";
 
 import { store } from "./redux/store";
@@ -25,6 +25,10 @@ import { AccesoriesScreen } from "./screens/additionalScreens/AccesoriesScreen";
 import { DecorationsScreen } from "./screens/additionalScreens/DecorationsScreen";
 import { InStockScreen } from "./screens/additionalScreens/InStockScreen";
 import { SalesScreen } from "./screens/additionalScreens/SalesScreen";
+import { AdminPageScreen } from "./screens/additionalScreens/AdminPageScreen";
+import { OrderScreen } from "./screens/additionalScreens/OrderScreen";
+
+
 
 export default function App() {
   const Stack = createStackNavigator();
@@ -143,6 +147,30 @@ export default function App() {
             }}
             name="CommentImg"
             component={CommentImg}
+          />
+          <Stack.Screen
+            options={{
+              headerTitleAlign: "center",
+              headerTitle: "Панель администратора",
+              headerStyle: {
+                backgroundColor: "#6CC4C7",
+              },
+              headerTintColor: "white",
+            }}
+            name="AdminPageScreen"
+            component={AdminPageScreen}
+          />
+          <Stack.Screen
+            options={{
+              headerTitleAlign: "center",
+              headerTitle: "Панель заказа",
+              headerStyle: {
+                backgroundColor: "#6CC4C7",
+              },
+              headerTintColor: "white",
+            }}
+            name="OrderScreen"
+            component={OrderScreen}
           />
           <Stack.Screen
             options={{
