@@ -116,7 +116,6 @@ export const MainScreen = ({ navigation, route }) => {
     navigation.navigate("WomenScreen");
     toggleDrawer();
   };
-  // -=-=-=-=-=-=-=-=-=
 
   const registerForPushNotificationsAsync = async () => {
     if (Constants.isDevice) {
@@ -148,7 +147,7 @@ export const MainScreen = ({ navigation, route }) => {
       // console.log(token);
       // this.setState({ expoPushToken: token });
     } else {
-      // alert("Must use physical device for Push Notifications");
+      alert("Must use physical device for Push Notifications");
     }
 
     if (Platform.OS === "android") {
@@ -162,53 +161,6 @@ export const MainScreen = ({ navigation, route }) => {
   };
 
   useEffect(() => {
-=======
-  // -=-=-=-=-=-=-=-=-=
-
-      const registerForPushNotificationsAsync = async () => {
-        if (Constants.isDevice) {
-          const { status: existingStatus } = await Permissions.getAsync(
-            Permissions.NOTIFICATIONS
-            );
-            let finalStatus = existingStatus;
-            if (existingStatus !== "granted") {
-              const { status } = await Permissions.askAsync(
-                Permissions.NOTIFICATIONS
-                );
-                finalStatus = status;
-              }
-              if (finalStatus !== "granted") {
-          alert("Failed to get push token for push notification!");
-          return;
-        }
-          console.log("userId", userId);
-          try {
-            let token = await Notifications.getExpoPushTokenAsync();
-            console.log('token', token)
-            // firebase
-            // .database()
-            // .ref("users/" + userId + "/push_token")
-            // .set(token);
-          } catch (error) {
-            console.log("error", error);
-          }
-          // console.log(token);
-          // this.setState({ expoPushToken: token });
-        } else {
-          alert("Must use physical device for Push Notifications");
-        }
-        
-        if (Platform.OS === "android") {
-          Notifications.createChannelAndroidAsync("default", {
-            name: "default",
-            sound: true,
-            priority: "max",
-            vibrate: [0, 250, 250, 250],
-          });
-        }
-      };
-    
-    useEffect(() => {
     async function pushNotify() {
       try {
         await registerForPushNotificationsAsync();
