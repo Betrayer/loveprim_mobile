@@ -1,11 +1,25 @@
 import React, { useState, useEffect } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { useNavigation } from "@react-navigation/native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  FlatList,
+  TouchableOpacity,
+  Image,
+} from "react-native";
 import AsyncStorage from "@react-native-community/async-storage";
-import firestore from "../../firebase/config";
+import { firestore } from "../../firebase/config";
 
 export const ChildrenScreen = () => {
+  const navigation = useNavigation();
   const [exchange, setExchange] = useState("27");
   const [rate, setRate] = useState("27");
+  const [allProducts, setAllProducts] = useState([]);
+
+  const renderedSeparator = () => {
+    return <View style={styles.separator} />;
+  };
 
   const getCollection = async () => {
     await firestore.collection("products").onSnapshot((data) => {
@@ -14,6 +28,15 @@ export const ChildrenScreen = () => {
           .map((doc) => {
             return { ...doc.data(), id: doc.id };
           })
+          .filter(
+            (cat) =>
+              cat.category === "boys0-3" ||
+              cat.category === "boys2-8" ||
+              cat.category === "boys8-15" ||
+              cat.category === "girls0-3" ||
+              cat.category === "girls2-8" ||
+              cat.category === "girls8-15"
+          )
           .sort(function (a, b) {
             if (a.numberOfProduct > b.numberOfProduct) {
               return -1;
@@ -69,9 +92,30 @@ export const ChildrenScreen = () => {
   };
 
   return (
-    <View style={styles.container}>
-      <Text>CHildren</Text>
-    </View>
+    <FlatList
+      showsVerticalScrollIndicator={false}
+      activeOpacity={0.7}
+      data={allProducts}
+      keyExtractor={(item, index) => index.toString()}
+      ItemSeparatorComponent={renderedSeparator}
+      renderItem={({ item }) => {
+        return (
+          <TouchableOpacity
+            style={styles.container}
+            onPress={() => navigation.navigate("ItemScreen", { info: item })}
+          >
+            <Image
+              style={styles.pic}
+              source={{
+                uri: item.image,
+              }}
+            />
+            <Text>{item.name}</Text>
+            <Text>{item.price}</Text>
+          </TouchableOpacity>
+        );
+      }}
+    />
   );
 };
 const styles = StyleSheet.create({
@@ -81,5 +125,14 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "center",
+  },
+  pic: {
+    width: "100%",
+    height: 200,
+  },
+  separator: {
+    height: 1,
+    width: "100%",
+    backgroundColor: "black",
   },
 });
