@@ -172,109 +172,6 @@ const getUser = async() => {
   };
 
   useEffect(() => {
-  // -=-=-=-=-=-=-=-=-=
-
-  const registerForPushNotificationsAsync = async () => {
-    if (Constants.isDevice) {
-      const { status: existingStatus } = await Permissions.getAsync(
-        Permissions.NOTIFICATIONS
-      );
-      let finalStatus = existingStatus;
-      if (existingStatus !== "granted") {
-        const { status } = await Permissions.askAsync(
-          Permissions.NOTIFICATIONS
-        );
-        finalStatus = status;
-      }
-      if (finalStatus !== "granted") {
-        alert("Failed to get push token for push notification!");
-        return;
-      }
-      console.log("userId", userId);
-      try {
-        let token = await Notifications.getExpoPushTokenAsync();
-        console.log("token", token);
-        // firebase
-        // .database()
-        // .ref("users/" + userId + "/push_token")
-        // .set(token);
-      } catch (error) {
-        console.log("error", error);
-      }
-      // console.log(token);
-      // this.setState({ expoPushToken: token });
-    } else {
-      alert("Must use physical device for Push Notifications");
-    }
-
-    if (Platform.OS === "android") {
-      Notifications.createChannelAndroidAsync("default", {
-        name: "default",
-        sound: true,
-        priority: "max",
-        vibrate: [0, 250, 250, 250],
-      });
-    }
-  };
-
-  // // -=-=-=-=-=-=-=-=-=
-
-  // const registerForPushNotificationsAsync = async () => {
-  //   if (Constants.isDevice) {
-  //     const { status: existingStatus } = await Permissions.getAsync(
-  //       Permissions.NOTIFICATIONS
-  //     );
-  //     let finalStatus = existingStatus;
-  //     if (existingStatus !== "granted") {
-  //       const { status } = await Permissions.askAsync(
-  //         Permissions.NOTIFICATIONS
-  //       );
-  //       finalStatus = status;
-  //     }
-  //     if (finalStatus !== "granted") {
-  //       alert("Failed to get push token for push notification!");
-  //       return;
-  //     }
-  //     console.log("userId", userId);
-  //     try {
-  //       let token = await Notifications.getExpoPushTokenAsync();
-  //       console.log("token", token);
-  //       // firebase
-  //       // .database()
-  //       // .ref("users/" + userId + "/push_token")
-  //       // .set(token);
-  //       console.log('user', user)
-  //       await firebase.firestore()
-  //         .collection("users")
-  //         .doc(user.id)
-  //         .update({
-  //           push_token: token
-  //         })
-  //         // .onSnapshot((data) => {
-  //         //   data.docs.map((doc) => {
-  //         //     console.log("doc", doc.data());
-  //         //   });
-  //         // });
-  //     } catch (error) {
-  //       console.log("error", error);
-  //     }
-  //     // console.log(token);
-  //     // this.setState({ expoPushToken: token });
-  //   } else {
-  //     alert("Must use physical device for Push Notifications");
-  //   }
-
-  //   if (Platform.OS === "android") {
-  //     Notifications.createChannelAndroidAsync("default", {
-  //       name: "default",
-  //       sound: true,
-  //       priority: "max",
-  //       vibrate: [0, 250, 250, 250],
-  //     });
-  //   }
-  // };
-
-  useEffect(() => {
     if(user){async function pushNotify() {
       try {
         await registerForPushNotificationsAsync();
@@ -284,8 +181,6 @@ const getUser = async() => {
     }
     pushNotify();}
   }, [user]);
-
-  // =-=-=-=--=-=-=-=-=
 
   return (
     <>
