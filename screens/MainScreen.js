@@ -165,13 +165,9 @@ export const MainScreen = ({ navigation, route }) => {
       // console.log(token);
       // this.setState({ expoPushToken: token });
     } else {
-<<<<<<< HEAD
       // alert("Must use physical device for Push Notifications");
-=======
-      alert("Must use physical device for Push Notifications");
->>>>>>> 3eb0df1465653c08f6048be79c1afa8c823af303
     }
-
+  
   //   if (Platform.OS === "android") {
   //     Notifications.createChannelAndroidAsync("default", {
   //       name: "default",
