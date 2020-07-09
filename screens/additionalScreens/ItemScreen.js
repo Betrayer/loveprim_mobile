@@ -269,7 +269,7 @@ export const ItemScreen = ({ route }) => {
   const renderedSeparator = () => {
     return <View style={styles.separator} />;
   };
-  const sizesObj = Object.assign({}, good.sizes);
+  // const sizesObj = Object.assign({}, good.sizes);
 
   return (
     <>
@@ -280,12 +280,11 @@ export const ItemScreen = ({ route }) => {
         <Text>{price} грн</Text>
         <Text>{good.text}</Text>
         <Text>{good.sizes[0]}</Text>
-        {/* {console.log(sizesObj)} */}
 
-        {/* <FlatList
+        <FlatList
           showsVerticalScrollIndicator={false}
           activeOpacity={0.1}
-          data={sizesObj}
+          data={goodsSorted}
           keyExtractor={(item, index) => index.toString()}
           ItemSeparatorComponent={renderedSeparator}
           renderItem={({ item }) => {
@@ -294,12 +293,11 @@ export const ItemScreen = ({ route }) => {
                 style={styles.container}
                 onPress={() => navigation.navigate("ItemScreen", { info: item })}
               >
-                <Text>wedgkweygdywe</Text>
-                <Text>{item.sizes}</Text>
+                <Text>{item}</Text>
               </TouchableOpacity>
             );
           }}
-        /> */}
+        />
         <Button
           style={styles.cartButton}
           title="В корзину"
