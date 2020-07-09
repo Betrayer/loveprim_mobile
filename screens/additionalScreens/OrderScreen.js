@@ -133,13 +133,13 @@ export const OrderScreen = ({ route }) => {
       </Text>
       <Text>Доставка: {user.delivery ? user.delivery : "Не выбран"}</Text>
       <Text>Адрес: {user.userAdress ? user.userAdress : "Не выбран"}</Text>
-      {order.status === "inUkr" ? <><Text>Номер накладной:{order.deliveryNo}</Text>
+      {/* {order.status === "inUkr" ? <><Text>Номер накладной:{order.deliveryNo}</Text>
       <TextInput
       style={{ height: 40, borderColor: 'gray', borderWidth: 1 }}
       onChangeText={text => onChangeText(text)}
       value={value}
     />
-      </> ? <Text>Не введено</Text>}
+      </> ? <Text>Не введено</Text>} */}
       <Text>УПАКОВКА</Text>
       <Text>Цена: {route.params.info.packaging}</Text>
       <Text>СТАТУС</Text>
