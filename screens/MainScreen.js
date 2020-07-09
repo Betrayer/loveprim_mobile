@@ -39,7 +39,7 @@ export const MainScreen = ({ navigation, route }) => {
 
   useEffect(() => {
     setDrawer(false);
-    getUser()
+    getUser();
   }, []);
 
   navigation.setOptions({
@@ -58,26 +58,25 @@ export const MainScreen = ({ navigation, route }) => {
         Меню
       </Text>
     ),
-    headerLeft: () => (
-      <Text style={styles.register} onPress={() => toggleDrawer()}>
-        Меню
-      </Text>
-    ),
   });
 
   const toggleDrawer = () => {
     setDrawer(!drawer);
   };
-const getUser = async() => {
-  await firebase.firestore().collection("users").where("userId", "==", userId).onSnapshot((data) => {
-    setUser(
-      ...data.docs.map((doc) => {
-        console.log("doc.id", doc.id);
-        return { id: doc.id };
-      })
-    );
-  });
-}
+  const getUser = async () => {
+    await firebase
+      .firestore()
+      .collection("users")
+      .where("userId", "==", userId)
+      .onSnapshot((data) => {
+        setUser(
+          ...data.docs.map((doc) => {
+            console.log("doc.id", doc.id);
+            return { id: doc.id };
+          })
+        );
+      });
+  };
   const toReviews = () => {
     navigation.navigate("ReviewsScreen");
     toggleDrawer();
@@ -92,6 +91,47 @@ const getUser = async() => {
     navigation.navigate("SizeChartScreen");
     toggleDrawer();
   };
+
+  const toChildren = () => {
+    navigation.navigate("ChildrenScreen");
+    toggleDrawer();
+  };
+
+  const toMen = () => {
+    navigation.navigate("MenScreen");
+    toggleDrawer();
+  };
+
+  const toWomen = () => {
+    navigation.navigate("WomenScreen");
+    toggleDrawer();
+  };
+
+  const toShoes = () => {
+    navigation.navigate("ShoesScreen");
+    toggleDrawer();
+  };
+
+  const toAccesories = () => {
+    navigation.navigate("WomenScreen");
+    toggleDrawer();
+  };
+
+  const toDecor = () => {
+    navigation.navigate("WomenScreen");
+    toggleDrawer();
+  };
+
+  const toStock = () => {
+    navigation.navigate("WomenScreen");
+    toggleDrawer();
+  };
+
+  const toSales = () => {
+    navigation.navigate("WomenScreen");
+    toggleDrawer();
+  };
+
 
   // -=-=-=-=-=-=-=-=-=
 
@@ -119,18 +159,6 @@ const getUser = async() => {
         // .database()
         // .ref("users/" + userId + "/push_token")
         // .set(token);
-        console.log('user', user)
-        await firebase.firestore()
-          .collection("users")
-          .doc(user.id)
-          .update({
-            push_token: token
-          })
-          // .onSnapshot((data) => {
-          //   data.docs.map((doc) => {
-          //     console.log("doc", doc.data());
-          //   });
-          // });
       } catch (error) {
         console.log("error", error);
       }
@@ -140,33 +168,53 @@ const getUser = async() => {
       alert("Must use physical device for Push Notifications");
     }
 
-    if (Platform.OS === "android") {
-      Notifications.createChannelAndroidAsync("default", {
-        name: "default",
-        sound: true,
-        priority: "max",
-        vibrate: [0, 250, 250, 250],
-      });
-    }
-  };
+  //   if (Platform.OS === "android") {
+  //     Notifications.createChannelAndroidAsync("default", {
+  //       name: "default",
+  //       sound: true,
+  //       priority: "max",
+  //       vibrate: [0, 250, 250, 250],
+  //     });
+  //   }
+  // };
+
+  // // -=-=-=-=-=-=-=-=-=
+
 
   useEffect(() => {
-    if(user){async function pushNotify() {
-      try {
-        await registerForPushNotificationsAsync();
-      } catch (error) {
-        console.log("PushEror", error);
+    if (user) {
+      async function pushNotify() {
+        try {
+          await registerForPushNotificationsAsync();
+        } catch (error) {
+          console.log("PushEror", error);
+        }
       }
+      pushNotify();
     }
-    pushNotify();}
   }, [user]);
-
+  }
   // =-=-=-=--=-=-=-=-=
 
   return (
     <>
-      <View>
-        <Text>{userName}</Text>
+      <View style={{ 
+        // justifyContent: "center", 
+      alignItems: "center",
+      // marginBottom: -20 
+      }}>
+        {userId ? (
+          <TouchableOpacity
+            style={styles.buttonStl}
+            onPress={() => {
+              navigation.navigate("AdminPageScreen");
+            }}
+          >
+            <Text style={styles.buttonStlText}>ПАНЕЛЬ АДМИНИСТРАТОРА</Text>
+          </TouchableOpacity>
+        ) : (
+          <></>
+        )}
       </View>
       <Tab.Navigator
         tabBarOptions={{
@@ -227,6 +275,36 @@ const getUser = async() => {
           >
             <Text>Размерная сетка</Text>
           </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => toChildren()}
+            style={styles.menuItem}
+          >
+            <Text>Дети</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => toMen()} style={styles.menuItem}>
+            <Text>Мужчины</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => toWomen()} style={styles.menuItem}>
+            <Text>Женщинцы</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => toShoes()} style={styles.menuItem}>
+            <Text>Обувь</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => toAccesories()}
+            style={styles.menuItem}
+          >
+            <Text>Аксессуары</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => toDecor()} style={styles.menuItem}>
+            <Text>Декор</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => toStock()} style={styles.menuItem}>
+            <Text>Товар в наличии</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => toSales()} style={styles.menuItem}>
+            <Text>Скидки</Text>
+          </TouchableOpacity>
         </View>
       ) : (
         <></>
@@ -237,8 +315,7 @@ const getUser = async() => {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    // fontFamily: "ubuntu-regular",
+    flex: 0.15,
     backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "center",
@@ -246,9 +323,9 @@ const styles = StyleSheet.create({
   menu: {
     backgroundColor: "lightblue",
     width: 300,
-    height: 300,
+    height: "auto",
     position: "absolute",
-    top: "10%",
+    top: "5%",
     left: 0,
   },
   menuItem: {
@@ -259,5 +336,15 @@ const styles = StyleSheet.create({
   menuWrapper: {
     width: "100%",
     height: "100%",
+  },
+  buttonStl: {
+    width: "80%",
+    height: 30,
+    borderRadius: 10,
+    backgroundColor: "#6CC4C7",
+    justifyContent: "center",
+    alignItems: "center",
+    // marginBottom: -40,
+    marginTop: 20,
   },
 });
