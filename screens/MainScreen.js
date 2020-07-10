@@ -113,25 +113,24 @@ export const MainScreen = ({ navigation, route }) => {
   };
 
   const toAccesories = () => {
-    navigation.navigate("WomenScreen");
+    navigation.navigate("AccesoriesScreen");
     toggleDrawer();
   };
 
   const toDecor = () => {
-    navigation.navigate("WomenScreen");
+    navigation.navigate("DecorationsScreen");
     toggleDrawer();
   };
 
   const toStock = () => {
-    navigation.navigate("WomenScreen");
+    navigation.navigate("InStockScreen");
     toggleDrawer();
   };
 
   const toSales = () => {
-    navigation.navigate("WomenScreen");
+    navigation.navigate("SalesScreen");
     toggleDrawer();
   };
-
 
   // -=-=-=-=-=-=-=-=-=
 
@@ -168,41 +167,42 @@ export const MainScreen = ({ navigation, route }) => {
       alert("Must use physical device for Push Notifications");
     }
 
-  //   if (Platform.OS === "android") {
-  //     Notifications.createChannelAndroidAsync("default", {
-  //       name: "default",
-  //       sound: true,
-  //       priority: "max",
-  //       vibrate: [0, 250, 250, 250],
-  //     });
-  //   }
-  // };
+    //   if (Platform.OS === "android") {
+    //     Notifications.createChannelAndroidAsync("default", {
+    //       name: "default",
+    //       sound: true,
+    //       priority: "max",
+    //       vibrate: [0, 250, 250, 250],
+    //     });
+    //   }
+    // };
 
-  // // -=-=-=-=-=-=-=-=-=
+    // // -=-=-=-=-=-=-=-=-=
 
-
-  useEffect(() => {
-    if (user) {
-      async function pushNotify() {
-        try {
-          await registerForPushNotificationsAsync();
-        } catch (error) {
-          console.log("PushEror", error);
+    useEffect(() => {
+      if (user) {
+        async function pushNotify() {
+          try {
+            await registerForPushNotificationsAsync();
+          } catch (error) {
+            console.log("PushEror", error);
+          }
         }
+        pushNotify();
       }
-      pushNotify();
-    }
-  }, [user]);
-  }
+    }, [user]);
+  };
   // =-=-=-=--=-=-=-=-=
 
   return (
     <>
-      <View style={{ 
-        // justifyContent: "center", 
-      alignItems: "center",
-      // marginBottom: -20 
-      }}>
+      <View
+        style={{
+          // justifyContent: "center",
+          alignItems: "center",
+          // marginBottom: -20
+        }}
+      >
         {userId ? (
           <TouchableOpacity
             style={styles.buttonStl}

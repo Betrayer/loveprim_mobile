@@ -6,14 +6,13 @@ import { NavigationContainer } from "@react-navigation/native";
 import { Provider } from "react-redux";
 import firebase from "firebase"; // Богдан тест
 import { firestore, storage, auth, firebaseConfig } from "./firebase/config";
-
 import { store } from "./redux/store";
 import { MainScreen } from "./screens/MainScreen";
 import { LoginScreen } from "./screens/LoginScreen";
 import { RegistrScreen } from "./screens/RegistrScreen";
 import { ItemScreen } from "./screens/additionalScreens/ItemScreen";
 import { ReviewsScreen } from "./screens/additionalScreens/ReviewsScreen";
-import { SizeChartScreen } from "./screens/additionalScreens/SizeChartScreen";
+import { SizeChartScreen } from "./screens/additionalScreens/sizeChart/SizeChartScreen";
 import { FAQScreen } from "./screens/additionalScreens/FAQScreen";
 import { AddReviewsScreen } from "./screens/additionalScreens/ReviewsScreenAdd";
 import { CommentImg } from "./screens/additionalScreens/commentImg";
@@ -28,13 +27,11 @@ import { SalesScreen } from "./screens/additionalScreens/SalesScreen";
 import { AdminPageScreen } from "./screens/additionalScreens/AdminPageScreen";
 import { OrderScreen } from "./screens/additionalScreens/OrderScreen";
 
-
-
 export default function App() {
   const Stack = createStackNavigator();
   const [isAuth, setIsAuth] = useState(false);
   const [isReady, setIsReady] = useState(false);
-
+  
   return (
     <Provider store={store}>
       <NavigationContainer>
@@ -115,7 +112,7 @@ export default function App() {
           <Stack.Screen
             options={{
               headerTitleAlign: "center",
-              headerTitle: "Rewievs",
+              headerTitle: "Размерная сетка",
               headerStyle: {
                 backgroundColor: "#6CC4C7",
               },
