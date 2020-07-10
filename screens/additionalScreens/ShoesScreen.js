@@ -21,6 +21,7 @@ export const ShoesScreen = () => {
   const [woman, setWoman] = useState(false);
   const [filter, setFilter] = useState(false);
 
+
   const renderedSeparator = () => {
     return <View style={styles.separator} />;
   };
