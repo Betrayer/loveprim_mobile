@@ -6,7 +6,6 @@ import { NavigationContainer } from "@react-navigation/native";
 import { Provider } from "react-redux";
 import firebase from "firebase"; // Богдан тест
 import { firestore, storage, auth, firebaseConfig } from "./firebase/config";
-
 import { store } from "./redux/store";
 import { MainScreen } from "./screens/MainScreen";
 import { LoginScreen } from "./screens/LoginScreen";
@@ -32,7 +31,7 @@ export default function App() {
   const Stack = createStackNavigator();
   const [isAuth, setIsAuth] = useState(false);
   const [isReady, setIsReady] = useState(false);
-
+  
   return (
     <Provider store={store}>
       <NavigationContainer>
