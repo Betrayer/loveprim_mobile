@@ -2,6 +2,7 @@ import React from "react";
 import { StyleSheet, Text, ScrollView, View } from "react-native";
 import { Accordion } from "native-base";
 
+
 export const FAQScreen = () => {
   const dataArray = [
     {
@@ -33,7 +34,10 @@ export const FAQScreen = () => {
   return (
     <ScrollView>
       <Text style={styles.faqHeader}>Часто задаваемые вопросы</Text>
-      <Accordion dataArray={dataArray} expanded={0} />
+      <Accordion dataArray={dataArray} expanded={0} icon="add"
+            expandedIcon="remove"
+            iconStyle={{ color: "green" }}
+            expandedIconStyle={{ color: "red" }}/>
     </ScrollView>
   );
 };
