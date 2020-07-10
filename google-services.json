@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "525173646822",
+    "firebase_url": "https://primax-bd2d6.firebaseio.com",
+    "project_id": "primax-bd2d6",
+    "storage_bucket": "primax-bd2d6.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:525173646822:android:cc9d233bc87086520fa227",
+        "android_client_info": {
+          "package_name": "primark.native.test"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "525173646822-1lras9qqqhgagiihfv5d7etk17ps0d8c.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAshg8C3sYwthol6e_VRoTY_mGjQiYcsA8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "525173646822-1lras9qqqhgagiihfv5d7etk17ps0d8c.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
