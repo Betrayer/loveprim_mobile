@@ -32,7 +32,7 @@ export const LoginScreen = ({ navigation, route }) => {
     console.log("email", email);
     console.log("password", password);
     console.log("textValue", textValue)
-    dispatch(loginUser(textValue, setError, setErrorId));
+    // dispatch(loginUser(textValue, setError, setErrorId));
     // await setEmail("");
     // await setPassword("");
 
