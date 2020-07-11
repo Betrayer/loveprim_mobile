@@ -1,4 +1,5 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, Component } from "react";
+import { Container, Header, Icon, Fab } from "native-base";
 import { useSelector } from "react-redux";
 import { firestore } from "../../firebase/config";
 import {
@@ -9,6 +10,7 @@ import {
   Button,
   TouchableOpacity,
   FlatList,
+  Share,
 } from "react-native";
 
 const sizes = ["2XS", "XS", "S", "M", "L", "XL", "2XL", "3XL"];
@@ -80,10 +82,30 @@ export const ItemScreen = ({ route }) => {
   const [emptySize, setEmptySize] = useState(false);
   const [translatedCatagory, setTranslatedCatagory] = useState("");
   const [exchange, setExchange] = useState(27);
+  const [active, setActive] = useState(false);
   const [price, setPrice] = useState(
     Math.ceil(good.price * 1.15 * Number(exchange) + Number(good.charge) + 2)
   );
 
+  const onShare = async () => {
+    try {
+      const result = await Share.share({
+        message:
+          `https://loveprim.com.ua/item/${good.numberOfProduct}`,
+      });
+      if (result.action === Share.sharedAction) {
+        if (result.activityType) {
+          // shared with activity type of result.activityType
+        } else {
+          // shared
+        }
+      } else if (result.action === Share.dismissedAction) {
+        // dismissed
+      }
+    } catch (error) {
+      alert(error.message);
+    }
+  };
   // const selectRef = useRef(null);
   // useOutsideAlerter(selectRef);
 
@@ -273,7 +295,6 @@ export const ItemScreen = ({ route }) => {
 
   return (
     <>
-      {/* {console.log(good)} */}
       <View style={styles.container}>
         <Image style={styles.itemImage} source={{ uri: good.image }} />
         <Text style={{ marginBottom: 20 }}>{good.name}</Text>
@@ -291,13 +312,39 @@ export const ItemScreen = ({ route }) => {
             return (
               <TouchableOpacity
                 style={styles.container}
-                onPress={() => navigation.navigate("ItemScreen", { info: item })}
+                onPress={() =>
+                  navigation.navigate("ItemScreen", { info: item })
+                }
               >
                 <Text>{item}</Text>
               </TouchableOpacity>
             );
           }}
         />
+
+        <View style={styles.shareFab}>
+          <Fab
+            active={active}
+            direction="up"
+            containerStyle={{}}
+            style={{ backgroundColor: "#5067FF" }}
+            position="bottomRight"
+            onPress={() => setActive(!active)}
+          >
+            <Icon name="share" />
+            <Button style={{ backgroundColor: "#34A34F" }}
+            onPress={onShare} title='Share'>
+              <Icon name="logo-whatsapp" />
+            </Button>
+            <Button style={{ backgroundColor: "#3B5998" }}>
+              <Icon name="logo-facebook" />
+            </Button>
+            <Button disabled style={{ backgroundColor: "#DD5144" }}>
+              <Icon name="mail" />
+            </Button>
+          </Fab>
+        </View>
+
         <Button
           style={styles.cartButton}
           title="В корзину"
@@ -322,5 +369,10 @@ const styles = StyleSheet.create({
     width: 300,
     marginTop: 20,
     borderRadius: 10,
+  },
+  shareFab: {
+    position: "absolute",
+    bottom: 10,
+    right: 10,
   },
 });
