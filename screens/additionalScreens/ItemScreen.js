@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef, Component } from "react";
 import { Container, Header, Fab, Icon } from "native-base";
 import { useSelector } from "react-redux";
-// import  Icon  from "react-native-vector-icons/Ionicons";
 import { firestore } from "../../firebase/config";
 import {
   StyleSheet,
@@ -332,16 +331,16 @@ export const ItemScreen = ({ route }) => {
             position="bottomRight"
             onPress={() => setActive(!active)}
           >
-            <Icon color='#fff' size={20} name="ios-airplane-sharp" />
+            <Icon color='#fff' size={20} name="md-share" />
             <Button style={{ backgroundColor: "#34A34F" }}
             onPress={onShare} title='Share'>
-              <Icon color='#fff' size={20} name="ios-logo-whatsapp" />
+              <Icon color='#fff' size={20} name="logo-whatsapp" />
             </Button>
             <Button style={{ backgroundColor: "#3B5998" }}>
-              <Icon color='#fff' size={20} name="ios-logo-facebook" />
+              <Icon color='#fff' size={20} name="logo-facebook" />
             </Button>
             <Button disabled style={{ backgroundColor: "#DD5144" }}>
-              <Icon color='#fff' size={20} name="ios-mail" />
+              <Icon color='#fff' size={20} name="md-mail" />
             </Button>
           </Fab>
         </View>

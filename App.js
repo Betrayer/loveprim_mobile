@@ -38,8 +38,8 @@ export default function App() {
   }, [])
 
   const fontLoad = async() => {
-    await Expo.Font.loadAsync({
-      ionicons: require('@expo/vector-icons/build/vendor/react-native-vector-icons/Fonts/Ionicons.ttf'),
+    await Font.loadAsync({
+      Ionicons: require('@expo/vector-icons/build/vendor/react-native-vector-icons/Fonts/Ionicons.ttf'),
   });
   }
   
