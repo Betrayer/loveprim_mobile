@@ -7,11 +7,11 @@ import {
   Button,
   TouchableWithoutFeedback,
 } from "react-native";
-import { Ionicons } from "@expo/vector-icons";
-import { FontAwesome5 } from "@expo/vector-icons";
-import { MaterialIcons } from "@expo/vector-icons";
+// import { Ionicons } from "@expo/vector-icons";
+// import { FontAwesome5 } from "@expo/vector-icons";
+// import { MaterialIcons } from "@expo/vector-icons";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { AntDesign } from "@expo/vector-icons";
+// import { AntDesign } from "@expo/vector-icons";
 import { Notifications } from "expo"; // Богдан тест
 import * as Permissions from "expo-permissions";
 import Constants from "expo-constants";

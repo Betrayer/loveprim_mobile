@@ -32,6 +32,16 @@ export default function App() {
   const [isAuth, setIsAuth] = useState(false);
   const [isReady, setIsReady] = useState(false);
 
+  useEffect(() => {
+    fontLoad()
+    
+  }, [])
+
+  const fontLoad = async() => {
+    await Expo.Font.loadAsync({
+      ionicons: require('@expo/vector-icons/build/vendor/react-native-vector-icons/Fonts/Ionicons.ttf'),
+  });
+  }
   
   return (
     <Provider store={store}>
