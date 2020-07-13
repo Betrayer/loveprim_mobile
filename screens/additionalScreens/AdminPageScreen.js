@@ -120,7 +120,8 @@ export const AdminPageScreen = ({ navigation }) => {
       </View>
       <Picker
         selectedValue={selectedValue}
-        style={{ height: 50, width: 150 }}
+        style={{ width: 200, height: 44, backgroundColor: "#fff" }}
+          itemStyle={{ height: 44 }}
         // onValueChange={(itemValue) => setSelectedValue(itemValue)}
         onValueChange={(itemValue) => filterOrders(itemValue)}
       >

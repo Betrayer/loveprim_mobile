@@ -23,7 +23,7 @@ import { logoutUser } from "../redux/operations";
 import { ProfileScreen } from "./additionalScreens/ProfileScreen";
 import { BacketScreen } from "./additionalScreens/BacketScreen";
 import { HomeScreen } from "./additionalScreens/HomeScreen";
-// import { Ionicons } from '@expo/vector-icons';
+import { Ionicons } from '@expo/vector-icons';
 
 const Tab = createBottomTabNavigator();
 
@@ -213,41 +213,41 @@ export const MainScreen = ({ navigation, route }) => {
         }}
       >
         <Tab.Screen
-          // options={{
-          //   tabBarIcon: ({ focused, size, color }) => (
-          //     <AntDesign
-          //       name="laptop"
-          //       size={focused ? 56 : 40}
-          //       color={focused ? "white" : "tomato"}
-          //     />
-          //   ),
-          // }}
+          options={{
+            tabBarIcon: ({ focused, size, color }) => (
+              <Ionicons
+                name="md-laptop"
+                size={focused ? 40 : 30}
+                color={!focused ? "#aaa" : "tomato"}
+              />
+            ),
+          }}
           name="Home"
           component={HomeScreen}
         />
         <Tab.Screen
-          // options={{
-          //   tabBarIcon: ({ focused, size, color }) => (
-          //     <AntDesign
-          //       name="laptop"
-          //       size={focused ? 56 : 40}
-          //       color={focused ? "white" : "tomato"}
-          //     />
-          //   ),
-          // }}
+          options={{
+            tabBarIcon: ({ focused, size, color }) => (
+              <Ionicons
+                name="ios-basket"
+                size={focused ? 40 : 30}
+                color={!focused ? "#aaa" : "tomato"}
+              />
+            ),
+          }}
           name="Backet"
           component={BacketScreen}
         />
         <Tab.Screen
-          // options={{
-          //   tabBarIcon: ({ focused, size, color }) => (
-          //     <AntDesign
-          //       name="laptop"
-          //       size={focused ? 56 : 40}
-          //       color={focused ? "white" : "tomato"}
-          //     />
-          //   ),
-          // }}
+          options={{
+            tabBarIcon: ({ focused, size, color }) => (
+              <Ionicons
+                name="ios-contact"
+                size={focused ? 40 : 30}
+                color={!focused ? "#aaa" : "tomato"}
+              />
+            ),
+          }}
           name="Profile"
           component={ProfileScreen}
         />
