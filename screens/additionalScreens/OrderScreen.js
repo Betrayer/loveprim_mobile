@@ -132,7 +132,7 @@ export const OrderScreen = ({ route }) => {
         Цена: {calcPrice}&euro; / {hrnPrice}грн
       </Text>
       <Text>Доставка: {user.delivery ? user.delivery : "Не выбран"}</Text>
-      <Text>Адрес: {user.userAdress ? user.userAdress : "Не выбран"}</Text>
+      <Text>Адрес: {user.userAdress ? user.userAdress : "Не указан"}</Text>
       {/* {order.status === "inUkr" ? <><Text>Номер накладной:{order.deliveryNo}</Text>
       <TextInput
       style={{ height: 40, borderColor: 'gray', borderWidth: 1 }}
