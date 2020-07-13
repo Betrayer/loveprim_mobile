@@ -17,10 +17,17 @@ export const HomeScreen = () => {
   const [allProducts, setAllProducts] = useState([]);
   const [searchValue, setSearchValue] = useState("");
   const [search, setSearch] = useState(false);
+  const [filteredItems, setFilteredItems] = useState([]);
+
 
   useEffect(() => {
     getCollection();
   }, []);
+
+  
+  useEffect(() => {
+      headerFilter(searchValue);
+  }, [searchValue]);
 
   const getCollection = async () => {
     // console.log("propName", route.params)
@@ -77,7 +84,7 @@ export const HomeScreen = () => {
   //   ),
   // });
 
-  const textttt = "Hello from screen 1";
+  // const textttt = "Hello from screen 1";
 
   return (
     <>
@@ -103,6 +110,7 @@ export const HomeScreen = () => {
               <TextInput
                 style={styles.txtInput}
                 placeholder="Искать..."
+                value={searchValue}
                 onChangeText={(value) => setSearchValue(value)}
               />
             </View>
@@ -115,7 +123,7 @@ export const HomeScreen = () => {
       <FlatList
         showsVerticalScrollIndicator={false}
         activeOpacity={0.7}
-        data={allProducts}
+        data={filteredItems}
         keyExtractor={(item, index) => index.toString()}
         ItemSeparatorComponent={renderedSeparator}
         renderItem={({ item }) => {

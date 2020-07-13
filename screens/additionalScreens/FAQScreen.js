@@ -2,7 +2,6 @@ import React from "react";
 import { StyleSheet, Text, ScrollView, View } from "react-native";
 import { Accordion } from "native-base";
 
-
 export const FAQScreen = () => {
   const dataArray = [
     {
