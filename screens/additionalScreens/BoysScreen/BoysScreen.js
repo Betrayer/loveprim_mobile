@@ -8,10 +8,14 @@ import {
   TouchableOpacity,
   Image,
 } from "react-native";
+import { Tab, Tabs, Container } from "native-base";
 import AsyncStorage from "@react-native-community/async-storage";
-import { firestore } from "../../firebase/config";
+import { firestore } from "../../../firebase/config";
+import { BoysFirstTab } from "./BoysTabs/BoysFirstTab";
+import { BoysSecondTab } from "./BoysTabs/BoysFirstTab";
+import { BoysThirdTab } from "./BoysTabs/BoysFirstTab";
 
-export const ShoesScreen = () => {
+export const BoysScreen = () => {
   const navigation = useNavigation();
   const [exchange, setExchange] = useState("27");
   const [rate, setRate] = useState("27");
@@ -19,7 +23,6 @@ export const ShoesScreen = () => {
   const [kid, setKid] = useState(false);
   const [man, setMan] = useState(false);
   const [woman, setWoman] = useState(false);
-  const [filter, setFilter] = useState(false);
 
   const renderedSeparator = () => {
     return <View style={styles.separator} />;
@@ -115,7 +118,7 @@ export const ShoesScreen = () => {
 
   return (
     <>
-      <View style={styles.buttonWrapper}>
+      {/* <View style={styles.buttonWrapper}>
         <TouchableOpacity
           rounded
           style={styles.button}
@@ -137,8 +140,8 @@ export const ShoesScreen = () => {
         >
           <Text>Детям</Text>
         </TouchableOpacity>
-      </View>
-      <FlatList
+      </View> */}
+      {/* <FlatList
         showsVerticalScrollIndicator={false}
         activeOpacity={0.7}
         data={allProducts}
@@ -161,7 +164,20 @@ export const ShoesScreen = () => {
             </TouchableOpacity>
           );
         }}
-      />
+      /> */}
+      <Container>
+        <Tabs tabBarPosition="overlayBottom">
+          <Tab heading="Женщинам">
+            <BoysFirstTab />
+          </Tab>
+          <Tab heading="Мужчинам">
+            <BoysSecondTab />
+          </Tab>
+          <Tab heading="Детям">
+            <BoysThirdTab />
+          </Tab>
+        </Tabs>
+      </Container>
     </>
   );
 };
