@@ -5,15 +5,17 @@ import {
   Text,
   View,
   Button,
+  Image,
   TouchableWithoutFeedback,
+  KeyboardAvoidingView,
+  Keyboard,
+  Platform,
+  TextInput,
 } from "react-native";
-import { Ionicons } from "@expo/vector-icons";
-import { FontAwesome5 } from "@expo/vector-icons";
-import { MaterialIcons } from "@expo/vector-icons";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { AntDesign } from "@expo/vector-icons";
 import { Notifications } from "expo"; // Богдан тест
 import * as Permissions from "expo-permissions";
+// import { FontAwesome5 } from "@expo/vector-icons";
 import Constants from "expo-constants";
 import firebase from "firebase"; // Богдан тест
 import { useDispatch, useSelector } from "react-redux";
@@ -21,6 +23,7 @@ import { logoutUser } from "../redux/operations";
 import { ProfileScreen } from "./additionalScreens/ProfileScreen";
 import { BacketScreen } from "./additionalScreens/BacketScreen";
 import { HomeScreen } from "./additionalScreens/HomeScreen";
+// import { Ionicons } from '@expo/vector-icons';
 
 const Tab = createBottomTabNavigator();
 
@@ -29,7 +32,6 @@ export const MainScreen = ({ navigation, route }) => {
   const dispatch = useDispatch();
   const [allProducts, setAllProducts] = useState([]);
   const [user, setUser] = useState({});
-
   const [drawer, setDrawer] = useState(false);
 
   const logout = () => {
@@ -63,6 +65,9 @@ export const MainScreen = ({ navigation, route }) => {
   const toggleDrawer = () => {
     setDrawer(!drawer);
   };
+
+
+
   const getUser = async () => {
     await firebase
       .firestore()
@@ -168,7 +173,7 @@ export const MainScreen = ({ navigation, route }) => {
       // console.log(token);
       // this.setState({ expoPushToken: token });
     } else {
-      alert("Must use physical device for Push Notifications");
+      // alert("Must use physical device for Push Notifications");
     }
 
     //   if (Platform.OS === "android") {
@@ -200,26 +205,8 @@ export const MainScreen = ({ navigation, route }) => {
 
   return (
     <>
-      <View
-        style={{
-          // justifyContent: "center",
-          alignItems: "center",
-          // marginBottom: -20
-        }}
-      >
-        {userId ? (
-          <TouchableOpacity
-            style={styles.buttonStl}
-            onPress={() => {
-              navigation.navigate("AdminPageScreen");
-            }}
-          >
-            <Text style={styles.buttonStlText}>ПАНЕЛЬ АДМИНИСТРАТОРА</Text>
-          </TouchableOpacity>
-        ) : (
-          <></>
-        )}
-      </View>
+ 
+
       <Tab.Navigator
         tabBarOptions={{
           showLabel: true,
@@ -344,14 +331,5 @@ const styles = StyleSheet.create({
     width: "100%",
     height: "100%",
   },
-  buttonStl: {
-    width: "80%",
-    height: 30,
-    borderRadius: 10,
-    backgroundColor: "#6CC4C7",
-    justifyContent: "center",
-    alignItems: "center",
-    // marginBottom: -40,
-    marginTop: 20,
-  },
+
 });
