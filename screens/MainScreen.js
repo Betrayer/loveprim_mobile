@@ -12,11 +12,7 @@ import {
   Platform,
   TextInput,
 } from "react-native";
-import { Ionicons } from "@expo/vector-icons";
-// import { FontAwesome5 } from "@expo/vector-icons";
-// import { MaterialIcons } from "@expo/vector-icons";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-// import { AntDesign } from "@expo/vector-icons";
 import { Notifications } from "expo"; // Богдан тест
 import * as Permissions from "expo-permissions";
 // import { FontAwesome5 } from "@expo/vector-icons";
@@ -27,7 +23,7 @@ import { logoutUser } from "../redux/operations";
 import { ProfileScreen } from "./additionalScreens/ProfileScreen";
 import { BacketScreen } from "./additionalScreens/BacketScreen";
 import { HomeScreen } from "./additionalScreens/HomeScreen";
-// import { Ionicons } from '@expo/vector-icons';
+import { Ionicons } from '@expo/vector-icons';
 
 const Tab = createBottomTabNavigator();
 
