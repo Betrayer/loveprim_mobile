@@ -118,22 +118,22 @@ export const MainScreen = ({ navigation, route }) => {
   };
 
   const toAccesories = () => {
-    navigation.navigate("WomenScreen");
+    navigation.navigate("AccesoriesScreen");
     toggleDrawer();
   };
 
   const toDecor = () => {
-    navigation.navigate("WomenScreen");
+    navigation.navigate("DecorationsScreen");
     toggleDrawer();
   };
 
   const toStock = () => {
-    navigation.navigate("WomenScreen");
+    navigation.navigate("InStockScreen");
     toggleDrawer();
   };
 
   const toSales = () => {
-    navigation.navigate("WomenScreen");
+    navigation.navigate("SalesScreen");
     toggleDrawer();
   };
   // -=-=-=-=-=-=-=-=-=
