@@ -114,11 +114,45 @@ export const OrderScreen = ({ route }) => {
       status: selectedValue,
     });
   };
-  //   const css = {
-  //     orderStat: {
-  //       color: color,
-  //     },
-  //   };
+  const setOrderDeliveryNo = async () => {
+    await firestore.collection("orders").doc(route.params.info.id).update({
+      deliveryNo: deliveryNo,
+    });
+    await firestore.collection("notifications").add({
+      userId: route.params.info.userId,
+      notification: `Накладная No${deliveryNo}, заказ `,
+      orderNo: route.params.info.numberOfOrder,
+      date: Date.now(),
+    });
+  };
+  const checkOnlyOne = async (id) => {
+    // const id = e.target.value;
+    setSelectedValue(id);
+    notifStatusUpdate(id);
+    if (id === "approved") {
+      await firestore.collection("orders").doc(route.params.info.id).update({
+        needToPay: Date.now(),
+      });
+    }
+  };
+  const notifStatusUpdate = async (id) => {
+    if (id === "approved") {
+      await firestore.collection("notifications").add({
+        userId: route.params.info.userId,
+        notification: "Пожалуйста, оплатите заказ ",
+        orderNo: route.params.info.numberOfOrder,
+        date: Date.now(),
+      });
+    }
+    if (id === "payed") {
+      await firestore.collection("notifications").add({
+        userId: route.params.info.userId,
+        notification: "Была принята оплата за заказ ",
+        orderNo: route.params.info.numberOfOrder,
+        date: Date.now(),
+      });
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -127,11 +161,10 @@ export const OrderScreen = ({ route }) => {
       <Text>{route.params.info.userPhone}</Text>
       <Text>Дата заказа {day}</Text>
       <Text>Цена без веса: {priceWOutWeight}&euro;</Text>
-      {console.log('user', user)}
       <Text>
         Цена: {calcPrice}&euro; / {hrnPrice}грн
       </Text>
-      <Text>Доставка: {user.delivery ? user.delivery : "Не выбран"}</Text>
+      <Text>Доставка: {user.delivery ? user.delivery : "Не выбрана"}</Text>
       <Text>Адрес: {user.userAdress ? user.userAdress : "Не указан"}</Text>
       {/* {order.status === "inUkr" ? <><Text>Номер накладной:{order.deliveryNo}</Text>
       <TextInput
@@ -147,7 +180,7 @@ export const OrderScreen = ({ route }) => {
       <Picker
         selectedValue={selectedValue}
         style={{ height: 50, width: 220 }}
-        onValueChange={(itemValue) => setSelectedValue(itemValue)}
+        onValueChange={(itemValue) => checkOnlyOne(itemValue)}
       >
         <Picker.Item label="Все" value="all" />
         <Picker.Item label="Подождуны" value="wait" />

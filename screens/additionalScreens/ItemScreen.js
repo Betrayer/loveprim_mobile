@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, Component } from "react";
-import { Container, Header, Icon, Fab } from "native-base";
+import { Container, Header, Fab, Icon } from "native-base";
 import { useSelector } from "react-redux";
 import { firestore } from "../../firebase/config";
 import {
@@ -345,19 +345,16 @@ export const ItemScreen = ({ route, navigation }) => {
             position="bottomRight"
             onPress={() => setActive(!active)}
           >
-            <Icon name="share" />
-            <Button
-              style={{ backgroundColor: "#34A34F" }}
-              onPress={onShare}
-              title="Share"
-            >
-              <Icon name="logo-whatsapp" />
+            <Icon color='#fff' size={20} name="md-share" />
+            <Button style={{ backgroundColor: "#34A34F" }}
+            onPress={onShare} title='Share'>
+              <Icon color='#fff' size={20} name="logo-whatsapp" />
             </Button>
             <Button style={{ backgroundColor: "#3B5998" }}>
-              <Icon name="logo-facebook" />
+              <Icon color='#fff' size={20} name="logo-facebook" />
             </Button>
             <Button disabled style={{ backgroundColor: "#DD5144" }}>
-              <Icon name="mail" />
+              <Icon color='#fff' size={20} name="md-mail" />
             </Button>
           </Fab>
         </View>

@@ -171,6 +171,7 @@ export const ProfileScreen = ({ navigation, route }) => {
     setUserTel(number);
     phoneTranslate(number);
   };
+  
 
   return (
     <View>
