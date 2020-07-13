@@ -1,13 +1,16 @@
 import React, { useState, useEffect } from "react";
 import { StyleSheet, Text, View, Picker, TextInput } from "react-native";
+import { useSelector } from "react-redux";
 import { firestore } from "../../firebase/config";
 import moment from "moment";
 
 export const ProfileOrderScreen = ({ order }) => {
+    const { admin, userId, buyer } = useSelector((state) => state.user);
   const day = moment(order.numberOfOrder).format("D/M/YYYY, HH:mm");
   const [status, setStatus] = useState("Обработка");
   useEffect(() => {
     translateStatus();
+    remindToPay(order.numberOfOrder);
   }, []);
   const translateStatus = () => {
     if (order.status === "processing") {
@@ -26,6 +29,16 @@ export const ProfileOrderScreen = ({ order }) => {
       setStatus("Прибыло в Украину");
     } else if (order.status === "received") {
       setStatus("Получено");
+    }
+  };
+  const remindToPay = async (id) => {
+    if (!admin && !buyer) {
+      await firestore.collection("notifications").add({
+        userId: userId,
+        notification: "Не забудьте оплатить заказ ",
+        orderNo: id,
+        date: Date.now(),
+      });
     }
   };
   const weightPrice = Number(order.weight) * 0.006 * Number(order.kurs);
