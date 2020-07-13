@@ -19,15 +19,15 @@ export const HomeScreen = () => {
   const [search, setSearch] = useState(false);
   const [filteredItems, setFilteredItems] = useState([]);
 
-
   useEffect(() => {
     getCollection();
   }, []);
 
-  
   useEffect(() => {
+    if (allProducts) {
       headerFilter(searchValue);
-  }, [searchValue]);
+    }
+  }, [searchValue, allProducts]);
 
   const getCollection = async () => {
     // console.log("propName", route.params)
@@ -72,20 +72,6 @@ export const HomeScreen = () => {
     setSearch(!search);
   };
 
-  // navigation.setOptions({
-  //   headerRight: () => (
-  //     <TouchableOpacity
-  //       onPress={() => {
-  //         toggleSearch();
-  //       }}
-  //     >
-  //       <Image source={require("../../image/icons8-search-40.png")} />
-  //     </TouchableOpacity>
-  //   ),
-  // });
-
-  // const textttt = "Hello from screen 1";
-
   return (
     <>
       <View
@@ -95,7 +81,6 @@ export const HomeScreen = () => {
           // marginBottom: -20
         }}
       >
-        {/* {console.log(search)} */}
         <TouchableOpacity
           onPress={() => {
             toggleSearch();

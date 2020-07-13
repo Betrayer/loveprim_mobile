@@ -5,11 +5,12 @@ import {
   Picker,
   FlatList,
   TouchableOpacity,
+  TextInput,
 } from "react-native";
 import React, { useState, useEffect, useRef } from "react";
 import { firestore } from "../../firebase/config";
 
-export const AdminPageScreen = ({navigation}) => {
+export const AdminPageScreen = ({ navigation }) => {
   const [orderList, setOrderList] = useState([]);
   const [opened, setOpened] = useState("");
   const [exchange, setExchange] = useState(27);
@@ -19,6 +20,10 @@ export const AdminPageScreen = ({navigation}) => {
   const [openOrderPage, setOpenOrderPage] = useState(true);
   const [filteredOrders, setFilteredOrders] = useState([]);
   const [selectedValue, setSelectedValue] = useState("all");
+  const [searchValue, setSearchValue] = useState("");
+  const [filteredItems, setFilteredItems] = useState([]);
+
+
 
   useEffect(() => {
     getOrders();
@@ -29,13 +34,17 @@ export const AdminPageScreen = ({navigation}) => {
     setExchange(rate);
   }, []);
 
-  //   useEffect(() => {
-  //     localStorage.setItem("exchangeRate", exchange);
-  //   }, [exchange]);
 
   useEffect(() => {
     setFilteredOrders(orderList);
   }, [orderList]);
+
+
+  useEffect(() => {
+    if (orderList) {
+      headerFilter(searchValue);
+    }
+  }, [searchValue, orderList]);
 
   const getOrders = async () => {
     await firestore.collection("orders").onSnapshot((data) => {
@@ -55,6 +64,21 @@ export const AdminPageScreen = ({navigation}) => {
           })
       );
     });
+  };
+
+  const headerFilter = (searchValue) => {
+    if (searchValue !== "") {
+      const settingUpFilter = orderList.filter((product) =>
+        product.userPhone.toLowerCase().includes(searchValue.toLowerCase())
+      );
+      if (settingUpFilter[0]) {
+        setFilteredItems(settingUpFilter);
+      } else {
+        setFilteredItems([1]);
+      }
+    } else {
+      setFilteredItems(orderList);
+    }
   };
 
   const getKurs = async () => {
@@ -84,9 +108,16 @@ export const AdminPageScreen = ({navigation}) => {
 
   return (
     <View style={styles.container}>
-      <Text>{selectedValue}</Text>
       <Text>{exchange}</Text>
-      {/* {console.log(filteredOrders)} */}
+      <View>
+        <View style={{ ...StyleSheet.absoluteFill }}></View>
+        <TextInput
+          style={styles.txtInput}
+          placeholder="Искать по телефону"
+          value={searchValue}
+          onChangeText={(value) => setSearchValue(value)}
+        />
+      </View>
       <Picker
         selectedValue={selectedValue}
         style={{ height: 50, width: 150 }}
@@ -104,15 +135,17 @@ export const AdminPageScreen = ({navigation}) => {
         <Picker.Item label="Прибыло в Украину" value="inUkr" />
         <Picker.Item label="Получено" value="received" />
       </Picker>
-
       <FlatList
-        data={filteredOrders}
+        // data={filteredOrders}
+        data={filteredItems}
         keyExtractor={(item, indx) => indx.toString()}
         renderItem={({ item }) => {
           return (
             <View style={styles.comment}>
               <TouchableOpacity
-              onPress={() => navigation.navigate("OrderScreen", { info: item })}
+                onPress={() =>
+                  navigation.navigate("OrderScreen", { info: item })
+                }
               >
                 <View style={styles.order}>
                   <Text>{item.numberOfOrder}</Text>
