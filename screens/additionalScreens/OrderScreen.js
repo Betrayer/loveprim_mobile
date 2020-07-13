@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from "react";
-import { StyleSheet, Text, View, Picker, TextInput } from "react-native";
+import { StyleSheet, Text, View, Picker, TextInput, TouchableOpacity } from "react-native";
 import { firestore } from "../../firebase/config";
 import moment from "moment";
-import { TouchableOpacity } from "react-native-gesture-handler";
 
 export const OrderScreen = ({ route }) => {
   const day = moment(route.params.info.numberOfOrder).format("D/M/YYYY, HH:mm");
   const [user, setUser] = useState("");
   const [order, setOrder] = useState("");
   const [selectedValue, setSelectedValue] = useState(route.params.info.status);
+  const [ukrDelivery, setUkrDelivery] = useState("");
   const [calcPrice, setCalcPrice] = useState(route.params.info.price);
   const [hrnPrice, setHrnPrice] = useState(
     route.params.info.price * route.params.info.kurs
@@ -69,6 +69,20 @@ export const OrderScreen = ({ route }) => {
           setUser(doc.data());
         });
       });
+      const translateDelivery = () => {
+        if (user.delivery === "ukrPoshta") {
+          setUkrDelivery("Укрпошта");
+        } else if (user.delivery === "novaPoshta") {
+          setUkrDelivery("Нова пошта");
+        } else if (
+          user.delivery === "" ||
+          user.delivery === undefined ||
+          user.delivery === null
+        ) {
+          setUkrDelivery("Не выбрана");
+        }
+      };
+      translateDelivery();
   };
   const getOrder = async () => {
     await firestore
@@ -166,16 +180,18 @@ export const OrderScreen = ({ route }) => {
       <Text>
         Цена: {calcPrice}&euro; / {hrnPrice}грн
       </Text>
-      <Text>Доставка: {user.delivery ? user.delivery : "Не выбрана"}</Text>
+      <Text>Доставка: {user.delivery ? ukrDelivery : "Не выбрана"}</Text>
       <Text>Адрес: {user.userAdress ? user.userAdress : "Не указан"}</Text>
       {order.status === "inUkr" ? <><Text>Номер накладной:{order.deliveryNo}</Text>
       <TextInput
-      style={{ height: 40, borderColor: 'gray', borderWidth: 1, paddingHorizontal: 10 }}
+      style={{ height: 40, borderColor: 'gray', borderWidth: 1, paddingHorizontal: 10, width: 160 }}
       onChangeText={text => setDeliveryNo(text)}
       placeholder="Номер накладной"
       value={deliveryNo}
     />
-    {/* <TouchableOpacity></TouchableOpacity> */}
+    <TouchableOpacity style={styles.btn} onPress={setOrderDeliveryNo}>
+          <Text style={styles.btn}>Внести изменения</Text>
+        </TouchableOpacity>
       </> : <Text>Не введено</Text>}
       <Text>УПАКОВКА</Text>
       <Text>Цена: {route.params.info.packaging}</Text>
@@ -183,7 +199,8 @@ export const OrderScreen = ({ route }) => {
       <Text style={{color: color}}>{status}</Text>
       <Picker
         selectedValue={selectedValue}
-        style={{ height: 50, width: 220 }}
+        style={{ width: 200, height: 44, backgroundColor: "#fff" }}
+          itemStyle={{ height: 44 }}
         onValueChange={(itemValue) => checkOnlyOne(itemValue)}
       >
         <Picker.Item label="Все" value="all" />
@@ -207,5 +224,11 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "center",
+  },
+  btn: {
+    textAlign: "center",
+    alignItems: "center",
+    backgroundColor: "#DDDDDD",
+    padding: 4,
   },
 });

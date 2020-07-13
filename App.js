@@ -19,13 +19,14 @@ import { CommentImg } from "./screens/additionalScreens/commentImg";
 import { ChildrenScreen } from "./screens/additionalScreens/ChildrenScreen";
 import { MenScreen } from "./screens/additionalScreens/MenScreen";
 import { WomenScreen } from "./screens/additionalScreens/WomenScreen";
-import { ShoesScreen } from "./screens/additionalScreens/ShoesScreen";
+import { ShoesScreen } from "./screens/additionalScreens/shoesScreen/ShoesScreen";
 import { AccesoriesScreen } from "./screens/additionalScreens/AccesoriesScreen";
 import { DecorationsScreen } from "./screens/additionalScreens/DecorationsScreen";
 import { InStockScreen } from "./screens/additionalScreens/InStockScreen";
 import { SalesScreen } from "./screens/additionalScreens/SalesScreen";
 import { AdminPageScreen } from "./screens/additionalScreens/AdminPageScreen";
 import { OrderScreen } from "./screens/additionalScreens/OrderScreen";
+import { BoysScreen} from "./screens/additionalScreens/BoysScreen/BoysScreen"
 
 export default function App() {
   const Stack = createStackNavigator();
@@ -38,8 +39,8 @@ export default function App() {
   }, [])
 
   const fontLoad = async() => {
-    await Expo.Font.loadAsync({
-      ionicons: require('@expo/vector-icons/build/vendor/react-native-vector-icons/Fonts/Ionicons.ttf'),
+    await Font.loadAsync({
+      Ionicons: require('@expo/vector-icons/build/vendor/react-native-vector-icons/Fonts/Ionicons.ttf'),
   });
   }
   
@@ -275,6 +276,18 @@ export default function App() {
             }}
             name="SalesScreen"
             component={SalesScreen}
+          />
+          <Stack.Screen // TESTING
+            options={{
+              headerTitleAlign: "center",
+              headerTitle: "Мальчикам",
+              headerStyle: {
+                backgroundColor: "#6CC4C7",
+              },
+              headerTintColor: "white",
+            }}
+            name="BoysScreen"
+            component={BoysScreen}
           />
         </Stack.Navigator>
       </NavigationContainer>
