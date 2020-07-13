@@ -35,18 +35,20 @@ export default function App() {
 
   useEffect(() => {
     fontLoad()
-    
   }, [])
+  useEffect(() => {
+  }, [isReady])
 
   const fontLoad = async() => {
-    await Font.loadAsync({
-      Ionicons: require('@expo/vector-icons/build/vendor/react-native-vector-icons/Fonts/Ionicons.ttf'),
+    await Expo.Font.loadAsync({
+      ionicons: require('@expo/vector-icons/build/vendor/react-native-vector-icons/Fonts/Ionicons.ttf'),
   });
+  return setIsReady(true)
   }
   
   return (
     <Provider store={store}>
-      <NavigationContainer>
+      {isReady ? <NavigationContainer>
         <Stack.Navigator>
           <Stack.Screen
             // options={{ headerShown: false }}
@@ -290,7 +292,7 @@ export default function App() {
             component={BoysScreen}
           />
         </Stack.Navigator>
-      </NavigationContainer>
+      </NavigationContainer> : <></>}
     </Provider>
   );
 }

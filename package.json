@@ -11,6 +11,7 @@
     "@expo/vector-icons": "^10.2.0",
     "@react-native-community/async-storage": "^1.11.0",
     "@react-native-community/masked-view": "^0.1.6",
+    "@react-native-community/toolbar-android": "0.1.0-rc.2",
     "@react-navigation/bottom-tabs": "^5.6.0",
     "@react-navigation/drawer": "^5.8.4",
     "@react-navigation/material-bottom-tabs": "^5.2.12",
