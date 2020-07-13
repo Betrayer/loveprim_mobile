@@ -31,6 +31,7 @@ export default function App() {
   const Stack = createStackNavigator();
   const [isAuth, setIsAuth] = useState(false);
   const [isReady, setIsReady] = useState(false);
+
   
   return (
     <Provider store={store}>
