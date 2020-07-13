@@ -345,16 +345,16 @@ export const ItemScreen = ({ route, navigation }) => {
             position="bottomRight"
             onPress={() => setActive(!active)}
           >
-            <Icon color='#fff' size={20} name="md-share" />
+            <Icon color='#fff'  name="md-share" />
             <Button style={{ backgroundColor: "#34A34F" }}
             onPress={onShare} title='Share'>
-              <Icon color='#fff' size={20} name="logo-whatsapp" />
+              <Icon color='#fff'  name="logo-whatsapp" />
             </Button>
             <Button style={{ backgroundColor: "#3B5998" }}>
-              <Icon color='#fff' size={20} name="logo-facebook" />
+              <Icon color='#fff'  name="logo-facebook" />
             </Button>
             <Button disabled style={{ backgroundColor: "#DD5144" }}>
-              <Icon color='#fff' size={20} name="md-mail" />
+              <Icon color='#fff' name="md-mail" />
             </Button>
           </Fab>
         </View>
@@ -375,6 +375,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "center",
+    paddingTop: 280,
   },
   itemImage: {
     height: 400,
