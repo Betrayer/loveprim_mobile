@@ -10,6 +10,7 @@ import {
   Button,
   TouchableOpacity,
   FlatList,
+  Alert,
   Share,
 } from "react-native";
 
@@ -71,7 +72,7 @@ const shoeSize = [
   "45",
 ];
 
-export const ItemScreen = ({ route }) => {
+export const ItemScreen = ({ route, navigation }) => {
   const good = route.params.info;
   const { admin, userId } = useSelector((state) => state.user);
   const [selectUser, openSelectUser] = useState(false);
@@ -90,8 +91,7 @@ export const ItemScreen = ({ route }) => {
   const onShare = async () => {
     try {
       const result = await Share.share({
-        message:
-          `https://loveprim.com.ua/item/${good.numberOfProduct}`,
+        message: `https://loveprim.com.ua/item/${good.numberOfProduct}`,
       });
       if (result.action === Share.sharedAction) {
         if (result.activityType) {
@@ -139,38 +139,38 @@ export const ItemScreen = ({ route }) => {
     }
   }, [exchange]);
 
-  // useEffect(() => {
-  //   const translateCategory = () => {
-  //     if (good.category === "woman") {
-  //       setTranslatedCatagory("Женщинам");
-  //     } else if (good.category === "man") {
-  //       setTranslatedCatagory("Мужчинам");
-  //     } else if (good.category === "boys0-3") {
-  //       setTranslatedCatagory("Мальчики 0-3 года");
-  //     } else if (good.category === "boys2-8") {
-  //       setTranslatedCatagory("Мальчики 2-8 года");
-  //     } else if (good.category === "boys8-15") {
-  //       setTranslatedCatagory("Мальчики 8-15 лет");
-  //     } else if (good.category === "girls0-3") {
-  //       setTranslatedCatagory("Девочки 0-3 года");
-  //     } else if (good.category === "girls2-8") {
-  //       setTranslatedCatagory("Девочки 2-8 года");
-  //     } else if (good.category === "girls8-15") {
-  //       setTranslatedCatagory("Девочки 8-15 лет");
-  //     } else if (good.category === "womanShoes") {
-  //       setTranslatedCatagory("Женская обувь");
-  //     } else if (good.category === "manShoes") {
-  //       setTranslatedCatagory("Мужская обувь");
-  //     } else if (good.category === "kidsShoes") {
-  //       setTranslatedCatagory("Детская обувь");
-  //     } else if (good.category === "decor") {
-  //       setTranslatedCatagory("Декор");
-  //     } else if (good.category === "accessories") {
-  //       setTranslatedCatagory("Акксесуары");
-  //     }
-  //   };
-  //   translateCategory();
-  // }, [good]);
+  useEffect(() => {
+    const translateCategory = () => {
+      if (good.category === "woman") {
+        setTranslatedCatagory("Женщинам");
+      } else if (good.category === "man") {
+        setTranslatedCatagory("Мужчинам");
+      } else if (good.category === "boys0-3") {
+        setTranslatedCatagory("Мальчики 0-3 года");
+      } else if (good.category === "boys2-8") {
+        setTranslatedCatagory("Мальчики 2-8 года");
+      } else if (good.category === "boys8-15") {
+        setTranslatedCatagory("Мальчики 8-15 лет");
+      } else if (good.category === "girls0-3") {
+        setTranslatedCatagory("Девочки 0-3 года");
+      } else if (good.category === "girls2-8") {
+        setTranslatedCatagory("Девочки 2-8 года");
+      } else if (good.category === "girls8-15") {
+        setTranslatedCatagory("Девочки 8-15 лет");
+      } else if (good.category === "womanShoes") {
+        setTranslatedCatagory("Женская обувь");
+      } else if (good.category === "manShoes") {
+        setTranslatedCatagory("Мужская обувь");
+      } else if (good.category === "kidsShoes") {
+        setTranslatedCatagory("Детская обувь");
+      } else if (good.category === "decor") {
+        setTranslatedCatagory("Декор");
+      } else if (good.category === "accessories") {
+        setTranslatedCatagory("Акксесуары");
+      }
+    };
+    translateCategory();
+  }, [good]);
 
   const getKurs = async () => {
     await firestore
@@ -189,55 +189,42 @@ export const ItemScreen = ({ route }) => {
     );
   };
 
-  // const closeCartModal = () => {
-  //   setAdded(false);
+  // const handleAdd = (e) => {
+  //   if (good.sizes[0]) {
+  //     if (chosenSizes !== "" && chosenSizes !== undefined && chosenSizes) {
+  //       onAdd(e, chosenSizes);
+  //       setEmptySize(false);
+  //       setActiveHelp(false);
+  //       setAdded(true);
+  //     } else {
+  //       setEmptySize(true);
+  //       setActiveHelp(true);
+  //     }
+  //   } else {
+  //     onAdd(e, null);
+  //     setAdded(true);
+  //   }
   // };
 
-  // function useOutsideAlerter(selectRef) {
-  //   useEffect(() => {
-  //     function handleClickOutside(event) {
-  //       if (selectRef.current && !selectRef.current.contains(event.target)) {
-  //         openSelectUser(false);
-  //       }
-  //     }
-  //     document.addEventListener("mouseup", handleClickOutside);
-  //     return () => {
-  //       document.removeEventListener("mouseup", handleClickOutside);
-  //     };
-  //   }, [selectRef]);
-  // }
-
-  const handleAdd = (e) => {
-    if (good.sizes[0]) {
-      if (chosenSizes !== "" && chosenSizes !== undefined && chosenSizes) {
-        onAdd(e, chosenSizes);
-        setEmptySize(false);
-        setActiveHelp(false);
-        setAdded(true);
-      } else {
-        setEmptySize(true);
-        setActiveHelp(true);
-      }
-    } else {
-      onAdd(e, null);
-      setAdded(true);
-    }
+  const stylesSizes = {
+    height: 30,
+    width: 40,
+    fontSize: 50,
+    backgroundColor: emptySize ? "red" : "blue",
+    borderColor: "#6CC4C7",
+    borderRadius: 5,
+    borderWidth: 2,
+    justifyContent: "center",
+    alignItems: "center",
   };
 
-  // const styles = {
-  //   inStock: {
-  //     top: good.sale ? "42px" : "16px",
-  //   },
-  //   activeHelpp: {
-  //     height: emptySize ? "70px" : "50px",
-  //   },
-  //   goodSizeSelect: {
-  //     border: emptySize ? "2px solid #ff4827" : "2px solid transparent",
-  //   },
-  //   sizeList: {
-  //     display: selectUser ? "block" : "none",
-  //   },
-  // };
+  const chekedSizes = (item) => {
+    if (item === chosenSizes) {
+      setEmptySize(false);
+    } else {
+      setEmptySize(true);
+    }
+  };
 
   const goodsSorted = [];
 
@@ -291,36 +278,63 @@ export const ItemScreen = ({ route }) => {
   const renderedSeparator = () => {
     return <View style={styles.separator} />;
   };
-  // const sizesObj = Object.assign({}, good.sizes);
+
+  const ddd = async () => {
+    await firestore
+      .collection("backet")
+      .add({
+        userId: userId,
+        name: good.name,
+        text: good.text,
+        image: good.image,
+        price: good.price,
+        priceWeight: good.priceWeight,
+        weight: 0,
+        size: chosenSizes,
+        charge: good.charge ? good.charge : 0,
+        inStock: good.inStock,
+      })
+      .then(alert("Товар добавлен в корзину"));
+  };
 
   return (
     <>
       <View style={styles.container}>
+        {console.log("chosenSizes", chosenSizes)}
         <Image style={styles.itemImage} source={{ uri: good.image }} />
         <Text style={{ marginBottom: 20 }}>{good.name}</Text>
         <Text>{price} грн</Text>
         <Text>{good.text}</Text>
-        <Text>{good.sizes[0]}</Text>
-
-        <FlatList
-          showsVerticalScrollIndicator={false}
-          activeOpacity={0.1}
-          data={goodsSorted}
-          keyExtractor={(item, index) => index.toString()}
-          ItemSeparatorComponent={renderedSeparator}
-          renderItem={({ item }) => {
-            return (
-              <TouchableOpacity
-                style={styles.container}
-                onPress={() =>
-                  navigation.navigate("ItemScreen", { info: item })
-                }
-              >
-                <Text>{item}</Text>
-              </TouchableOpacity>
-            );
-          }}
-        />
+        <Text>{translatedCatagory}</Text>
+        <View>
+          <FlatList
+            showsVerticalScrollIndicator={false}
+            activeOpacity={0.1}
+            data={goodsSorted}
+            keyExtractor={(item, index) => index.toString()}
+            ItemSeparatorComponent={renderedSeparator}
+            renderItem={({ item }) => {
+              return (
+                <>
+                  {console.log("emptySize", emptySize)}
+                  {/* {chekedSizes(item)} */}
+                  <TouchableOpacity
+                    style={stylesSizes}
+                    onPress={() => setSizes(item)}
+                  >
+                    <Text>{item}</Text>
+                  </TouchableOpacity>
+                </>
+              );
+            }}
+          />
+        </View>
+        {/* <TouchableOpacity
+          style={styles.container}
+          onPress={() => navigation.navigate("ItemScreen", { info: item })}
+        >
+          <Text>{item}</Text>
+        </TouchableOpacity> */}
 
         <View style={styles.shareFab}>
           <Fab
@@ -348,9 +362,7 @@ export const ItemScreen = ({ route }) => {
         <Button
           style={styles.cartButton}
           title="В корзину"
-          onPress={() => {
-            alert("Hello");
-          }}
+          onPress={() => ddd()}
         />
       </View>
     </>
@@ -369,6 +381,22 @@ const styles = StyleSheet.create({
     width: 300,
     marginTop: 20,
     borderRadius: 10,
+  },
+  // sizes: {
+  //   height: 30,
+  //   width: 30,
+  //   fontSize: 30,
+  //   // backgroundColor: "#6CC4C7",
+  //   borderColor: "#6CC4C7",
+  //   borderRadius: 5,
+  //   borderWidth: 2,
+  //   justifyContent: "center",
+  //   alignItems: "center",
+  // },
+  sizesView: {
+    // flexDirection: "row",
+    // justifyContent: "center",
+    // alignItems: "center",
   },
   shareFab: {
     position: "absolute",

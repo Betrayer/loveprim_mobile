@@ -8,13 +8,15 @@ import {
   Picker,
   TouchableOpacity,
 } from "react-native";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+
 import { firestore } from "../../firebase/config";
 import { ProfileOrderScreen } from "./ProfileOrderScreen";
 
-export const ProfileScreen = () => {
-  const { userId, userEmail } = useSelector((state) => state.user);
+export const ProfileScreen = ({ navigation, route }) => {
   const [user, setUser] = useState("");
+  const { userId, admin, userName, userEmail } = useSelector((state) => state.user);
+  const dispatch = useDispatch();
   const [orderList, setOrderList] = useState([]);
   const [username, setUsername] = useState("user");
   const [userTel, setUserTel] = useState("");
@@ -22,6 +24,14 @@ export const ProfileScreen = () => {
   const [address, setAddress] = useState("");
   const [delivery, setDelivery] = useState("");
   const [newPassword, setNewPassword] = useState("");
+  // const text = this.props.navigation.getParam("text", "nothing sent");
+
+  const logout = () => {
+    console.log("LOGOUT");
+    dispatch(logoutUser());
+  };
+
+  
 
   useEffect(() => {
     getUser();
@@ -165,6 +175,34 @@ export const ProfileScreen = () => {
 
   return (
     <View>
+      {/* {console.log(route)} */}
+      <Text>I am profile</Text>
+      <View
+        style={{
+          // justifyContent: "center",
+          alignItems: "center",
+          // marginBottom: -20
+        }}
+      >
+        {userId ? (
+          <TouchableOpacity
+            style={styles.buttonStl}
+            onPress={() => {
+              navigation.navigate("AdminPageScreen");
+            }}
+          >
+            <Text style={styles.buttonStlText}>ПАНЕЛЬ АДМИНИСТРАТОРА</Text>
+          </TouchableOpacity>
+        ) : (
+          <></>
+        )}
+      </View>
+      {/* <Button title="LOGOUT" onPress={logout} />
+      <Button
+        title="login"
+        // onPress={() => navigation.navigate("LoginScreen")}
+      /> */}
+      <View>{/* <Text>{text}</Text> */}</View>
       <View style={styles.inputWrapper}>
         <Text>Имя</Text>
         <TextInput
@@ -244,6 +282,16 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "center",
+  },
+  buttonStl: {
+    width: "80%",
+    height: 30,
+    borderRadius: 10,
+    backgroundColor: "#6CC4C7",
+    justifyContent: "center",
+    alignItems: "center",
+    // marginBottom: -40,
+    marginTop: 20,
   },
   inputWrapper: {
     width: 200,
