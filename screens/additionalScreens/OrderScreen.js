@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { StyleSheet, Text, View, Picker, TextInput } from "react-native";
 import { firestore } from "../../firebase/config";
 import moment from "moment";
+import { TouchableOpacity } from "react-native-gesture-handler";
 
 export const OrderScreen = ({ route }) => {
   const day = moment(route.params.info.numberOfOrder).format("D/M/YYYY, HH:mm");
@@ -17,6 +18,7 @@ export const OrderScreen = ({ route }) => {
   );
   const [color, setColor] = useState("#8360c3");
   const [status, setStatus] = useState("Обработка");
+  const [deliveryNo, setDeliveryNo] = useState(route.params.info.deliveryNo ? route.params.info.deliveryNo : "");
 
 
   useEffect(() => {
@@ -166,13 +168,15 @@ export const OrderScreen = ({ route }) => {
       </Text>
       <Text>Доставка: {user.delivery ? user.delivery : "Не выбрана"}</Text>
       <Text>Адрес: {user.userAdress ? user.userAdress : "Не указан"}</Text>
-      {/* {order.status === "inUkr" ? <><Text>Номер накладной:{order.deliveryNo}</Text>
+      {order.status === "inUkr" ? <><Text>Номер накладной:{order.deliveryNo}</Text>
       <TextInput
-      style={{ height: 40, borderColor: 'gray', borderWidth: 1 }}
-      onChangeText={text => onChangeText(text)}
-      value={value}
+      style={{ height: 40, borderColor: 'gray', borderWidth: 1, paddingHorizontal: 10 }}
+      onChangeText={text => setDeliveryNo(text)}
+      placeholder="Номер накладной"
+      value={deliveryNo}
     />
-      </> ? <Text>Не введено</Text>} */}
+    {/* <TouchableOpacity></TouchableOpacity> */}
+      </> : <Text>Не введено</Text>}
       <Text>УПАКОВКА</Text>
       <Text>Цена: {route.params.info.packaging}</Text>
       <Text>СТАТУС</Text>
