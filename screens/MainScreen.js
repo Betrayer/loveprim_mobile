@@ -132,6 +132,10 @@ export const MainScreen = ({ navigation, route }) => {
     toggleDrawer();
   };
 
+  const toBoys = () => {
+    navigation.navigate("BoysScreen")
+    toggleDrawer()
+  }
   // -=-=-=-=-=-=-=-=-=
 
   const registerForPushNotificationsAsync = async () => {
@@ -305,9 +309,12 @@ export const MainScreen = ({ navigation, route }) => {
           <TouchableOpacity onPress={() => toSales()} style={styles.menuItem}>
             <Text>Скидки</Text>
           </TouchableOpacity>
+          <TouchableOpacity onPress={() => toBoys()} style={styles.menuItem}> 
+            <Text>Мальчикам</Text>
+          </TouchableOpacity>
         </View>
       ) : (
-        <></>
+        <></> // TESTING
       )}
     </>
   );
