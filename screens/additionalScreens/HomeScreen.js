@@ -8,18 +8,29 @@ import {
   Image,
   Button,
   TouchableOpacity,
+  TextInput,
 } from "react-native";
 import { firestore } from "../../firebase/config";
 
 export const HomeScreen = () => {
   const navigation = useNavigation();
   const [allProducts, setAllProducts] = useState([]);
+  const [searchValue, setSearchValue] = useState("");
+  const [search, setSearch] = useState(false);
+  const [filteredItems, setFilteredItems] = useState([]);
 
   useEffect(() => {
     getCollection();
   }, []);
 
+  useEffect(() => {
+    if (allProducts) {
+      headerFilter(searchValue);
+    }
+  }, [searchValue, allProducts]);
+
   const getCollection = async () => {
+    // console.log("propName", route.params)
     await firestore.collection("products").onSnapshot((data) => {
       setAllProducts(
         data.docs
@@ -39,36 +50,86 @@ export const HomeScreen = () => {
       );
     });
   };
+  const headerFilter = (searchValue) => {
+    if (searchValue !== "") {
+      const settingUpFilter = allProducts.filter((product) =>
+        product.name.toLowerCase().includes(searchValue.toLowerCase())
+      );
+      if (settingUpFilter[0]) {
+        setFilteredItems(settingUpFilter);
+      } else {
+        setFilteredItems([1]);
+      }
+    } else {
+      setFilteredItems(allProducts);
+    }
+  };
 
   const renderedSeparator = () => {
     return <View style={styles.separator} />;
   };
+  const toggleSearch = () => {
+    setSearch(!search);
+  };
 
   return (
-    <FlatList
-      showsVerticalScrollIndicator={false}
-      activeOpacity={0.7}
-      data={allProducts}
-      keyExtractor={(item, index) => index.toString()}
-      ItemSeparatorComponent={renderedSeparator}
-      renderItem={({ item }) => {
-        return (
-          <TouchableOpacity
-            style={styles.container}
-            onPress={() => navigation.navigate("ItemScreen", { info: item })}
-          >
-            <Image
-              style={styles.pic}
-              source={{
-                uri: item.image,
-              }}
-            />
-            <Text>{item.name}</Text>
-            <Text>{item.price}</Text>
-          </TouchableOpacity>
-        );
-      }}
-    />
+    <>
+      <View
+        style={{
+          // justifyContent: "center",
+          alignItems: "center",
+          // marginBottom: -20
+        }}
+      >
+        <TouchableOpacity
+          onPress={() => {
+            toggleSearch();
+          }}
+        >
+          <Image source={require("../../image/icons8-search-40.png")} />
+        </TouchableOpacity>
+        {search ? (
+          <>
+            <View>
+              <View style={{ ...StyleSheet.absoluteFill }}></View>
+              <TextInput
+                style={styles.txtInput}
+                placeholder="Искать..."
+                value={searchValue}
+                onChangeText={(value) => setSearchValue(value)}
+              />
+            </View>
+          </>
+        ) : (
+          <></>
+        )}
+      </View>
+
+      <FlatList
+        showsVerticalScrollIndicator={false}
+        activeOpacity={0.7}
+        data={filteredItems}
+        keyExtractor={(item, index) => index.toString()}
+        ItemSeparatorComponent={renderedSeparator}
+        renderItem={({ item }) => {
+          return (
+            <TouchableOpacity
+              style={styles.container}
+              onPress={() => navigation.navigate("ItemScreen", { info: item })}
+            >
+              <Image
+                style={styles.pic}
+                source={{
+                  uri: item.image,
+                }}
+              />
+              <Text>{item.name}</Text>
+              <Text>{item.price}</Text>
+            </TouchableOpacity>
+          );
+        }}
+      />
+    </>
   );
 };
 

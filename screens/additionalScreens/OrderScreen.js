@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { StyleSheet, Text, View, Picker, TextInput } from "react-native";
+import { StyleSheet, Text, View, Picker, TextInput, TouchableOpacity } from "react-native";
 import { firestore } from "../../firebase/config";
 import moment from "moment";
 
@@ -8,6 +8,7 @@ export const OrderScreen = ({ route }) => {
   const [user, setUser] = useState("");
   const [order, setOrder] = useState("");
   const [selectedValue, setSelectedValue] = useState(route.params.info.status);
+  const [ukrDelivery, setUkrDelivery] = useState("");
   const [calcPrice, setCalcPrice] = useState(route.params.info.price);
   const [hrnPrice, setHrnPrice] = useState(
     route.params.info.price * route.params.info.kurs
@@ -17,6 +18,7 @@ export const OrderScreen = ({ route }) => {
   );
   const [color, setColor] = useState("#8360c3");
   const [status, setStatus] = useState("Обработка");
+  const [deliveryNo, setDeliveryNo] = useState(route.params.info.deliveryNo ? route.params.info.deliveryNo : "");
 
 
   useEffect(() => {
@@ -67,6 +69,20 @@ export const OrderScreen = ({ route }) => {
           setUser(doc.data());
         });
       });
+      const translateDelivery = () => {
+        if (user.delivery === "ukrPoshta") {
+          setUkrDelivery("Укрпошта");
+        } else if (user.delivery === "novaPoshta") {
+          setUkrDelivery("Нова пошта");
+        } else if (
+          user.delivery === "" ||
+          user.delivery === undefined ||
+          user.delivery === null
+        ) {
+          setUkrDelivery("Не выбрана");
+        }
+      };
+      translateDelivery();
   };
   const getOrder = async () => {
     await firestore
@@ -114,11 +130,45 @@ export const OrderScreen = ({ route }) => {
       status: selectedValue,
     });
   };
-  //   const css = {
-  //     orderStat: {
-  //       color: color,
-  //     },
-  //   };
+  const setOrderDeliveryNo = async () => {
+    await firestore.collection("orders").doc(route.params.info.id).update({
+      deliveryNo: deliveryNo,
+    });
+    await firestore.collection("notifications").add({
+      userId: route.params.info.userId,
+      notification: `Накладная No${deliveryNo}, заказ `,
+      orderNo: route.params.info.numberOfOrder,
+      date: Date.now(),
+    });
+  };
+  const checkOnlyOne = async (id) => {
+    // const id = e.target.value;
+    setSelectedValue(id);
+    notifStatusUpdate(id);
+    if (id === "approved") {
+      await firestore.collection("orders").doc(route.params.info.id).update({
+        needToPay: Date.now(),
+      });
+    }
+  };
+  const notifStatusUpdate = async (id) => {
+    if (id === "approved") {
+      await firestore.collection("notifications").add({
+        userId: route.params.info.userId,
+        notification: "Пожалуйста, оплатите заказ ",
+        orderNo: route.params.info.numberOfOrder,
+        date: Date.now(),
+      });
+    }
+    if (id === "payed") {
+      await firestore.collection("notifications").add({
+        userId: route.params.info.userId,
+        notification: "Была принята оплата за заказ ",
+        orderNo: route.params.info.numberOfOrder,
+        date: Date.now(),
+      });
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -127,27 +177,31 @@ export const OrderScreen = ({ route }) => {
       <Text>{route.params.info.userPhone}</Text>
       <Text>Дата заказа {day}</Text>
       <Text>Цена без веса: {priceWOutWeight}&euro;</Text>
-      {console.log('user', user)}
       <Text>
         Цена: {calcPrice}&euro; / {hrnPrice}грн
       </Text>
-      <Text>Доставка: {user.delivery ? user.delivery : "Не выбран"}</Text>
-      <Text>Адрес: {user.userAdress ? user.userAdress : "Не выбран"}</Text>
-      {/* {order.status === "inUkr" ? <><Text>Номер накладной:{order.deliveryNo}</Text>
+      <Text>Доставка: {user.delivery ? ukrDelivery : "Не выбрана"}</Text>
+      <Text>Адрес: {user.userAdress ? user.userAdress : "Не указан"}</Text>
+      {order.status === "inUkr" ? <><Text>Номер накладной:{order.deliveryNo}</Text>
       <TextInput
-      style={{ height: 40, borderColor: 'gray', borderWidth: 1 }}
-      onChangeText={text => onChangeText(text)}
-      value={value}
+      style={{ height: 40, borderColor: 'gray', borderWidth: 1, paddingHorizontal: 10, width: 160 }}
+      onChangeText={text => setDeliveryNo(text)}
+      placeholder="Номер накладной"
+      value={deliveryNo}
     />
-      </> ? <Text>Не введено</Text>} */}
+    <TouchableOpacity style={styles.btn} onPress={setOrderDeliveryNo}>
+          <Text style={styles.btn}>Внести изменения</Text>
+        </TouchableOpacity>
+      </> : <Text>Не введено</Text>}
       <Text>УПАКОВКА</Text>
       <Text>Цена: {route.params.info.packaging}</Text>
       <Text>СТАТУС</Text>
       <Text style={{color: color}}>{status}</Text>
       <Picker
         selectedValue={selectedValue}
-        style={{ height: 50, width: 220 }}
-        onValueChange={(itemValue) => setSelectedValue(itemValue)}
+        style={{ width: 200, height: 44, backgroundColor: "#fff" }}
+          itemStyle={{ height: 44 }}
+        onValueChange={(itemValue) => checkOnlyOne(itemValue)}
       >
         <Picker.Item label="Все" value="all" />
         <Picker.Item label="Подождуны" value="wait" />
@@ -170,5 +224,11 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "center",
+  },
+  btn: {
+    textAlign: "center",
+    alignItems: "center",
+    backgroundColor: "#DDDDDD",
+    padding: 4,
   },
 });
