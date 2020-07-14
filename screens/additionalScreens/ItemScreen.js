@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, Component } from "react";
 import { Container, Header, Fab, Icon } from "native-base";
-import { Dimensions } from 'react-native';
+import { Dimensions } from "react-native";
 import { useSelector } from "react-redux";
 import { firestore } from "../../firebase/config";
 import {
@@ -72,7 +72,7 @@ const shoeSize = [
   "44",
   "45",
 ];
-  const win = Dimensions.get('window');
+const win = Dimensions.get("window");
 
 export const ItemScreen = ({ route, navigation }) => {
   const good = route.params.info;
@@ -370,36 +370,27 @@ export const ItemScreen = ({ route, navigation }) => {
 
         <View style={styles.shareFab}>
           <Fab
-            active={active}
+            active={!active}
             direction="up"
             containerStyle={{}}
             style={{ backgroundColor: "#5067FF" }}
             position="bottomRight"
-            onPress={() => setActive(!active)}
+            onPress={onShare}
           >
             <Icon color="#fff" name="md-share" />
-            <Button
-              style={{ backgroundColor: "#34A34F" }}
-              onPress={onShare}
-              title="Share"
-            >
-              <Icon color="#fff" name="logo-whatsapp" />
-            </Button>
-            <Button style={{ backgroundColor: "#3B5998" }}>
-              <Icon color="#fff" name="logo-facebook" />
-            </Button>
-            <Button disabled style={{ backgroundColor: "#DD5144" }}>
-              <Icon color="#fff" name="md-mail" />
-            </Button>
           </Fab>
         </View>
         <TouchableOpacity
-        disabled={good.sizes[0] && !chosenSizes}
-        style={good.sizes[0] && !chosenSizes ? styles.cartButtonDisabled : styles.cartButton}
-        onPress={() => ddd()}
-      >
-        <Text style={styles.cartButtonText}>В корзину</Text>
-      </TouchableOpacity>
+          disabled={good.sizes[0] && !chosenSizes}
+          style={
+            good.sizes[0] && !chosenSizes
+              ? styles.cartButtonDisabled
+              : styles.cartButton
+          }
+          onPress={() => ddd()}
+        >
+          <Text style={styles.cartButtonText}>В корзину</Text>
+        </TouchableOpacity>
       </View>
     </>
   );
@@ -502,6 +493,28 @@ const styles = StyleSheet.create({
     color: '#fff',
     textAlign: 'center',
     fontSize: 20, 
+    fontFamily: "Roboto-Condensed-Regular",
+  },
+  cartButton: {
+    backgroundColor: "#6cc4c7",
+    alignSelf: "stretch",
+    paddingVertical: 10,
+    borderRadius: 5,
+    marginTop: 20,
+    marginHorizontal: 10,
+  },
+  cartButtonDisabled: {
+    backgroundColor: "#aaa",
+    alignSelf: "stretch",
+    paddingVertical: 10,
+    borderRadius: 5,
+    marginTop: 20,
+    marginHorizontal: 10,
+  },
+  cartButtonText: {
+    color: "#fff",
+    textAlign: "center",
+    fontSize: 20,
     fontFamily: "Roboto-Condensed-Regular",
   },
 });

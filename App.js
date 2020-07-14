@@ -73,6 +73,7 @@ export default function App() {
               headerTitle: "LovePRIM",
               headerStyle: {
                 backgroundColor: "#6CC4C7",
+                fontFamily: "Roboto-Condensed-Bold",
               },
               headerTintColor: "white",
               headerTitleStyle: {
