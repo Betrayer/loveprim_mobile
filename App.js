@@ -76,6 +76,10 @@ export default function App() {
                 fontFamily: "Roboto-Condensed-Bold",
               },
               headerTintColor: "white",
+              headerTitleStyle: {
+                fontFamily: "Fjalla",
+                fontSize: 26
+              },
             }}
             name="MainScreen"
             component={MainScreen}
