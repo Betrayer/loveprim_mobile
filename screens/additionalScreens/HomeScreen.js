@@ -80,6 +80,7 @@ export const HomeScreen = () => {
           alignItems: "center",
           flexDirection: "row",
           // marginBottom: -20
+          marginHorizontal: 20,
         }}
       >
         <Image source={require("../../image/icons8-search-40.png")} />
@@ -97,6 +98,8 @@ export const HomeScreen = () => {
         showsVerticalScrollIndicator={false}
         activeOpacity={0.7}
         data={filteredItems}
+        numColumns={2}
+        horizontal={false}
         keyExtractor={(item, index) => index.toString()}
         ItemSeparatorComponent={renderedSeparator}
         renderItem={({ item }) => {
@@ -132,11 +135,11 @@ const styles = StyleSheet.create({
   },
   pic: {
     width: "100%",
-    height: 200,
+    height: 280,
   },
-  separator: {
-    height: 1,
-    width: "100%",
-    backgroundColor: "black",
-  },
+  // separator: {
+  //   height: 1,
+  //   width: "100%",
+  //   backgroundColor: "black",
+  // },
 });
