@@ -78,40 +78,28 @@ export const HomeScreen = () => {
         style={{
           // justifyContent: "center",
           alignItems: "center",
+          flexDirection: "row",
           // marginBottom: -20
           marginHorizontal: 20,
         }}
       >
-        <TouchableOpacity
-          onPress={() => {
-            toggleSearch();
-          }}
-        >
-          <Image source={require("../../image/icons8-search-40.png")} />
-        </TouchableOpacity>
-        {search ? (
-          <>
-            <View>
-              <View style={{ ...StyleSheet.absoluteFill }}></View>
-              <TextInput
-                style={styles.txtInput}
-                placeholder="Искать..."
-                value={searchValue}
-                onChangeText={(value) => setSearchValue(value)}
-              />
-            </View>
-          </>
-        ) : (
-          <></>
-        )}
+        <Image source={require("../../image/icons8-search-40.png")} />
+        <TextInput
+          style={{ paddingLeft: 10, width: "100%" }}
+          placeholder="Искать..."
+          value={searchValue}
+          onChangeText={(value) => setSearchValue(value)}
+        />
       </View>
+      <View style={{ height: 1, width: "100%", backgroundColor: "#6CC4C7" }} />
+
 
       <FlatList
         showsVerticalScrollIndicator={false}
         activeOpacity={0.7}
+        data={filteredItems}
         numColumns={2}
         horizontal={false}
-        data={allProducts}
         keyExtractor={(item, index) => index.toString()}
         ItemSeparatorComponent={renderedSeparator}
         renderItem={({ item }) => {
@@ -139,11 +127,9 @@ export const HomeScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    // fontFamily: "ubuntu-regular",
     backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "center",
-    // height: 300,
     width: "100%",
     padding: 10,
   },
