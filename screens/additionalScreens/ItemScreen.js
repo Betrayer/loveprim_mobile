@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef, Component } from "react";
 import { Container, Header, Fab, Icon } from "native-base";
+import { Dimensions } from 'react-native';
 import { useSelector } from "react-redux";
 import { firestore } from "../../firebase/config";
 import {
@@ -71,6 +72,7 @@ const shoeSize = [
   "44",
   "45",
 ];
+  const win = Dimensions.get('window');
 
 export const ItemScreen = ({ route, navigation }) => {
   const good = route.params.info;
@@ -302,13 +304,43 @@ export const ItemScreen = ({ route, navigation }) => {
       <View style={styles.container}>
         {console.log("chosenSizes", chosenSizes)}
         <Image style={styles.itemImage} source={{ uri: good.image }} />
-        <Text style={{ marginBottom: 20 }}>{good.name}</Text>
-        <Text>{price} грн</Text>
-        <Text>{good.text}</Text>
-        <Text>{translatedCatagory}</Text>
-        <View>
+        <View style={styles.textWrapper}>
+        {good.sale ? <Text style={styles.goodSale}>Скидка%</Text> : <></>}
+        <Text style={styles.name}>{good.name}</Text>
+        <Text style={styles.price}>
+          {price}
+          <Text style={styles.text}>грн</Text>
+        </Text>
+        <Text style={styles.text}>{good.text}</Text>
+        {/* <Text style={styles.text}>{translatedCatagory}</Text> */}
+        <View style={{ marginTop: 6 }}>
+        {good.sizes[0] !== undefined &&
+                good.sizes[0] !== "" &&
+                good.sizes[0] !== null ? (
+                  <View className={styles.goodInfoText}>
+                    {!good.sizes.some((r) => sizes.indexOf(r) >= 0) &&
+                    !good.sizes.some((r) => kidsSizes.indexOf(r) >= 0) &&
+                    good.category !== "womanShoes" &&
+                    good.category !== "manShoes" &&
+                    good.category !== "kidsShoes" ? (
+                      <Text style={styles.text}>Европейские размеры:</Text>
+                    ) : (
+                      <></>
+                    )}
+                    {good.sizes.some((r) => kidsSizes.indexOf(r) >= 0) ? (
+                      <Text style={styles.text}>Ростовые размеры:</Text>
+                    ) : (
+                      <></>
+                    )}
+                  </View>
+                ) : (
+                  <></>
+                )}
           <FlatList
             showsVerticalScrollIndicator={false}
+            numColumns={7}
+            style={{marginTop: 10}}
+            horizontal={false}
             activeOpacity={0.1}
             data={goodsSorted}
             keyExtractor={(item, index) => index.toString()}
@@ -316,19 +348,19 @@ export const ItemScreen = ({ route, navigation }) => {
             renderItem={({ item }) => {
               return (
                 <>
-                  {console.log("emptySize", emptySize)}
+                  {/* {console.log("emptySize", emptySize)} */}
                   {/* {chekedSizes(item)} */}
                   <TouchableOpacity
-                    style={stylesSizes}
+                    style={ styles.sizes }
                     onPress={() => setSizes(item)}
                   >
-                    <Text>{item}</Text>
+                    <Text style={chosenSizes === item ? styles.chosenSizes : styles.size}>{item}</Text>
                   </TouchableOpacity>
                 </>
               );
             }}
           />
-        </View>
+        </View></View>
         {/* <TouchableOpacity
           style={styles.container}
           onPress={() => navigation.navigate("ItemScreen", { info: item })}
@@ -345,25 +377,29 @@ export const ItemScreen = ({ route, navigation }) => {
             position="bottomRight"
             onPress={() => setActive(!active)}
           >
-            <Icon color='#fff'  name="md-share" />
-            <Button style={{ backgroundColor: "#34A34F" }}
-            onPress={onShare} title='Share'>
-              <Icon color='#fff'  name="logo-whatsapp" />
+            <Icon color="#fff" name="md-share" />
+            <Button
+              style={{ backgroundColor: "#34A34F" }}
+              onPress={onShare}
+              title="Share"
+            >
+              <Icon color="#fff" name="logo-whatsapp" />
             </Button>
             <Button style={{ backgroundColor: "#3B5998" }}>
-              <Icon color='#fff'  name="logo-facebook" />
+              <Icon color="#fff" name="logo-facebook" />
             </Button>
             <Button disabled style={{ backgroundColor: "#DD5144" }}>
-              <Icon color='#fff' name="md-mail" />
+              <Icon color="#fff" name="md-mail" />
             </Button>
           </Fab>
         </View>
-
-        <Button
-          style={styles.cartButton}
-          title="В корзину"
-          onPress={() => ddd()}
-        />
+        <TouchableOpacity
+        disabled={good.sizes[0] && !chosenSizes}
+        style={good.sizes[0] && !chosenSizes ? styles.cartButtonDisabled : styles.cartButton}
+        onPress={() => ddd()}
+      >
+        <Text style={styles.cartButtonText}>В корзину</Text>
+      </TouchableOpacity>
       </View>
     </>
   );
@@ -374,26 +410,67 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#fff",
     alignItems: "center",
-    justifyContent: "center",
-    paddingTop: 280,
+    // justifyContent: "center",
+    // paddingTop: 300,
+    paddingHorizontal:30
+  },
+  textWrapper:{
+    marginTop: 6,
+    alignSelf: 'stretch',
+    paddingHorizontal: 20,
   },
   itemImage: {
-    height: 400,
-    width: 300,
+    height: win.height/2,
+    alignSelf: 'stretch',
     marginTop: 20,
     borderRadius: 10,
   },
-  // sizes: {
-  //   height: 30,
-  //   width: 30,
-  //   fontSize: 30,
-  //   // backgroundColor: "#6CC4C7",
-  //   borderColor: "#6CC4C7",
-  //   borderRadius: 5,
-  //   borderWidth: 2,
-  //   justifyContent: "center",
-  //   alignItems: "center",
-  // },
+  goodSale: {
+    color: "tomato",
+    fontFamily: "Roboto-Condensed-Regular",
+    fontSize: 15,
+  },
+  name: {
+    fontFamily: "Roboto-Condensed-Regular",
+    fontSize: 22,
+  },
+  price: {
+    marginTop: 2,
+    fontFamily: "Roboto-Condensed-Bold",
+    fontSize: 24,
+  },
+  text: {
+    fontFamily: "Roboto-Condensed-Regular",
+    fontSize: 18,
+    marginTop: 12,
+  },
+  size: {
+    fontFamily: "Roboto-Condensed-Regular",
+    fontSize: 18,
+    paddingVertical: 4,
+    paddingHorizontal: 6,
+    color: '#6cc4c7',
+  },
+  chosenSizes:{
+    fontFamily: "Roboto-Condensed-Regular",
+    fontSize: 18,
+    paddingVertical: 4,
+    paddingHorizontal: 6,
+    backgroundColor: "#6cc4c7",
+    color: "#fff",
+  },
+  sizes: {
+    //   height: 30,
+    //   width: 30,
+    fontSize: 30,
+    // backgroundColor: "#6CC4C7",
+    borderColor: "#6CC4C7",
+    borderRadius: 5,
+    borderWidth: 2,
+    justifyContent: "center",
+    alignItems: "center",
+    marginHorizontal: 4,
+  },
   sizesView: {
     // flexDirection: "row",
     // justifyContent: "center",
@@ -403,5 +480,27 @@ const styles = StyleSheet.create({
     position: "absolute",
     bottom: 10,
     right: 10,
+  },
+  cartButton:{
+    backgroundColor: "#6cc4c7",
+    alignSelf: 'stretch',
+    paddingVertical: 10,
+    borderRadius: 5,
+    marginTop:20,
+    marginHorizontal: 10,
+  },
+  cartButtonDisabled:{
+    backgroundColor: "#aaa",
+    alignSelf: 'stretch',
+    paddingVertical: 10,
+    borderRadius: 5,
+    marginTop:20,
+    marginHorizontal: 10,
+  },
+  cartButtonText:{
+    color: '#fff',
+    textAlign: 'center',
+    fontSize: 20, 
+    fontFamily: "Roboto-Condensed-Regular",
   },
 });
