@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, Component } from "react";
 import { Container, Header, Fab, Icon } from "native-base";
-import { Dimensions } from 'react-native';
+import { Dimensions } from "react-native";
 import { useSelector } from "react-redux";
 import { firestore } from "../../firebase/config";
 import {
@@ -72,7 +72,7 @@ const shoeSize = [
   "44",
   "45",
 ];
-  const win = Dimensions.get('window');
+const win = Dimensions.get("window");
 
 export const ItemScreen = ({ route, navigation }) => {
   const good = route.params.info;
@@ -305,62 +305,71 @@ export const ItemScreen = ({ route, navigation }) => {
         {console.log("chosenSizes", chosenSizes)}
         <Image style={styles.itemImage} source={{ uri: good.image }} />
         <View style={styles.textWrapper}>
-        {good.sale ? <Text style={styles.goodSale}>Скидка%</Text> : <></>}
-        <Text style={styles.name}>{good.name}</Text>
-        <Text style={styles.price}>
-          {price}
-          <Text style={styles.text}>грн</Text>
-        </Text>
-        <Text style={styles.text}>{good.text}</Text>
-        {/* <Text style={styles.text}>{translatedCatagory}</Text> */}
-        <View style={{ marginTop: 6 }}>
-        {good.sizes[0] !== undefined &&
-                good.sizes[0] !== "" &&
-                good.sizes[0] !== null ? (
-                  <View className={styles.goodInfoText}>
-                    {!good.sizes.some((r) => sizes.indexOf(r) >= 0) &&
-                    !good.sizes.some((r) => kidsSizes.indexOf(r) >= 0) &&
-                    good.category !== "womanShoes" &&
-                    good.category !== "manShoes" &&
-                    good.category !== "kidsShoes" ? (
-                      <Text style={styles.text}>Европейские размеры:</Text>
-                    ) : (
-                      <></>
-                    )}
-                    {good.sizes.some((r) => kidsSizes.indexOf(r) >= 0) ? (
-                      <Text style={styles.text}>Ростовые размеры:</Text>
-                    ) : (
-                      <></>
-                    )}
-                  </View>
+          {good.sale ? <Text style={styles.goodSale}>Скидка%</Text> : <></>}
+          <Text style={styles.name}>{good.name}</Text>
+          <Text style={styles.price}>
+            {price}
+            <Text style={styles.text}>грн</Text>
+          </Text>
+          <Text style={styles.text}>{good.text}</Text>
+          {/* <Text style={styles.text}>{translatedCatagory}</Text> */}
+          <View style={{ marginTop: 6 }}>
+            {good.sizes[0] !== undefined &&
+            good.sizes[0] !== "" &&
+            good.sizes[0] !== null ? (
+              <View className={styles.goodInfoText}>
+                {!good.sizes.some((r) => sizes.indexOf(r) >= 0) &&
+                !good.sizes.some((r) => kidsSizes.indexOf(r) >= 0) &&
+                good.category !== "womanShoes" &&
+                good.category !== "manShoes" &&
+                good.category !== "kidsShoes" ? (
+                  <Text style={styles.text}>Европейские размеры:</Text>
                 ) : (
                   <></>
                 )}
-          <FlatList
-            showsVerticalScrollIndicator={false}
-            numColumns={7}
-            style={{marginTop: 10}}
-            horizontal={false}
-            activeOpacity={0.1}
-            data={goodsSorted}
-            keyExtractor={(item, index) => index.toString()}
-            ItemSeparatorComponent={renderedSeparator}
-            renderItem={({ item }) => {
-              return (
-                <>
-                  {/* {console.log("emptySize", emptySize)} */}
-                  {/* {chekedSizes(item)} */}
-                  <TouchableOpacity
-                    style={ styles.sizes }
-                    onPress={() => setSizes(item)}
-                  >
-                    <Text style={chosenSizes === item ? styles.chosenSizes : styles.size}>{item}</Text>
-                  </TouchableOpacity>
-                </>
-              );
-            }}
-          />
-        </View></View>
+                {good.sizes.some((r) => kidsSizes.indexOf(r) >= 0) ? (
+                  <Text style={styles.text}>Ростовые размеры:</Text>
+                ) : (
+                  <></>
+                )}
+              </View>
+            ) : (
+              <></>
+            )}
+            <FlatList
+              showsVerticalScrollIndicator={false}
+              numColumns={7}
+              style={{ marginTop: 10 }}
+              horizontal={false}
+              activeOpacity={0.1}
+              data={goodsSorted}
+              keyExtractor={(item, index) => index.toString()}
+              ItemSeparatorComponent={renderedSeparator}
+              renderItem={({ item }) => {
+                return (
+                  <>
+                    {/* {console.log("emptySize", emptySize)} */}
+                    {/* {chekedSizes(item)} */}
+                    <TouchableOpacity
+                      style={styles.sizes}
+                      onPress={() => setSizes(item)}
+                    >
+                      <Text
+                        style={
+                          chosenSizes === item
+                            ? styles.chosenSizes
+                            : styles.size
+                        }
+                      >
+                        {item}
+                      </Text>
+                    </TouchableOpacity>
+                  </>
+                );
+              }}
+            />
+          </View>
+        </View>
         {/* <TouchableOpacity
           style={styles.container}
           onPress={() => navigation.navigate("ItemScreen", { info: item })}
@@ -370,36 +379,27 @@ export const ItemScreen = ({ route, navigation }) => {
 
         <View style={styles.shareFab}>
           <Fab
-            active={active}
+            active={!active}
             direction="up"
             containerStyle={{}}
             style={{ backgroundColor: "#5067FF" }}
             position="bottomRight"
-            onPress={() => setActive(!active)}
+            onPress={onShare}
           >
             <Icon color="#fff" name="md-share" />
-            <Button
-              style={{ backgroundColor: "#34A34F" }}
-              onPress={onShare}
-              title="Share"
-            >
-              <Icon color="#fff" name="logo-whatsapp" />
-            </Button>
-            <Button style={{ backgroundColor: "#3B5998" }}>
-              <Icon color="#fff" name="logo-facebook" />
-            </Button>
-            <Button disabled style={{ backgroundColor: "#DD5144" }}>
-              <Icon color="#fff" name="md-mail" />
-            </Button>
           </Fab>
         </View>
         <TouchableOpacity
-        disabled={good.sizes[0] && !chosenSizes}
-        style={good.sizes[0] && !chosenSizes ? styles.cartButtonDisabled : styles.cartButton}
-        onPress={() => ddd()}
-      >
-        <Text style={styles.cartButtonText}>В корзину</Text>
-      </TouchableOpacity>
+          disabled={good.sizes[0] && !chosenSizes}
+          style={
+            good.sizes[0] && !chosenSizes
+              ? styles.cartButtonDisabled
+              : styles.cartButton
+          }
+          onPress={() => ddd()}
+        >
+          <Text style={styles.cartButtonText}>В корзину</Text>
+        </TouchableOpacity>
       </View>
     </>
   );
@@ -412,16 +412,16 @@ const styles = StyleSheet.create({
     alignItems: "center",
     // justifyContent: "center",
     // paddingTop: 300,
-    paddingHorizontal:30
+    paddingHorizontal: 30,
   },
-  textWrapper:{
+  textWrapper: {
     marginTop: 6,
-    alignSelf: 'stretch',
+    alignSelf: "stretch",
     paddingHorizontal: 20,
   },
   itemImage: {
-    height: win.height/2,
-    alignSelf: 'stretch',
+    height: win.height / 2,
+    alignSelf: "stretch",
     marginTop: 20,
     borderRadius: 10,
   },
@@ -449,9 +449,9 @@ const styles = StyleSheet.create({
     fontSize: 18,
     paddingVertical: 4,
     paddingHorizontal: 6,
-    color: '#6cc4c7',
+    color: "#6cc4c7",
   },
-  chosenSizes:{
+  chosenSizes: {
     fontFamily: "Roboto-Condensed-Regular",
     fontSize: 18,
     paddingVertical: 4,
@@ -481,26 +481,26 @@ const styles = StyleSheet.create({
     bottom: 10,
     right: 10,
   },
-  cartButton:{
+  cartButton: {
     backgroundColor: "#6cc4c7",
-    alignSelf: 'stretch',
+    alignSelf: "stretch",
     paddingVertical: 10,
     borderRadius: 5,
-    marginTop:20,
+    marginTop: 20,
     marginHorizontal: 10,
   },
-  cartButtonDisabled:{
+  cartButtonDisabled: {
     backgroundColor: "#aaa",
-    alignSelf: 'stretch',
+    alignSelf: "stretch",
     paddingVertical: 10,
     borderRadius: 5,
-    marginTop:20,
+    marginTop: 20,
     marginHorizontal: 10,
   },
-  cartButtonText:{
-    color: '#fff',
-    textAlign: 'center',
-    fontSize: 20, 
+  cartButtonText: {
+    color: "#fff",
+    textAlign: "center",
+    fontSize: 20,
     fontFamily: "Roboto-Condensed-Regular",
   },
 });
