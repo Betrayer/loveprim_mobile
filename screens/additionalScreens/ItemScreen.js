@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef, Component } from "react";
 import { Container, Header, Fab, Icon } from "native-base";
 import { Dimensions } from "react-native";
 import { useSelector } from "react-redux";
+import Modal from "react-native-modal";
 import { firestore } from "../../firebase/config";
 import {
   StyleSheet,
@@ -13,6 +14,7 @@ import {
   FlatList,
   Alert,
   Share,
+  TouchableWithoutFeedback,
 } from "react-native";
 
 const sizes = ["2XS", "XS", "S", "M", "L", "XL", "2XL", "3XL"];
@@ -86,6 +88,7 @@ export const ItemScreen = ({ route, navigation }) => {
   const [translatedCatagory, setTranslatedCatagory] = useState("");
   const [exchange, setExchange] = useState(27);
   const [active, setActive] = useState(false);
+  const [isModalVisible, setModalVisible] = useState(false);
   const [price, setPrice] = useState(
     Math.ceil(good.price * 1.15 * Number(exchange) + Number(good.charge) + 2)
   );
@@ -299,10 +302,83 @@ export const ItemScreen = ({ route, navigation }) => {
       .then(alert("Товар добавлен в корзину"));
   };
 
+  const toggleModal = () => {
+    setModalVisible(!isModalVisible);
+  };
+
   return (
     <>
       <View style={styles.container}>
-        {console.log("chosenSizes", chosenSizes)}
+        <Modal
+          style={{justifyContent: "flex-end"}}
+          isVisible={isModalVisible}
+          animationIn="slideInUp"
+          animationInTiming={500}
+          hasBackdrop={true}
+          backdropOpacity={0.7}
+          backdropTransitionOutTiming={10}
+          onBackdropPress={() => toggleModal()}
+          swipeDirection="down"
+        >
+         
+            <View style={styles.sizesModalWrapper}>
+              {good.sizes[0] !== undefined &&
+              good.sizes[0] !== "" &&
+              good.sizes[0] !== null ? (
+                <View className={styles.goodInfoText}>
+                  {!good.sizes.some((r) => sizes.indexOf(r) >= 0) &&
+                  !good.sizes.some((r) => kidsSizes.indexOf(r) >= 0) &&
+                  good.category !== "womanShoes" &&
+                  good.category !== "manShoes" &&
+                  good.category !== "kidsShoes" ? (
+                    <Text style={styles.sizesText}>Европейские размеры:</Text>
+                  ) : (
+                    <></>
+                  )}
+                  {good.sizes.some((r) => kidsSizes.indexOf(r) >= 0) ? (
+                    <Text style={styles.sizesText}>Ростовые размеры:</Text>
+                  ) : (
+                    <></>
+                  )}
+                </View>
+              ) : (
+                <></>
+              )}
+              <FlatList
+                showsVerticalScrollIndicator={false}
+                style={{ marginTop: 10 }}
+                horizontal={false}
+                activeOpacity={0.1}
+                data={goodsSorted}
+                keyExtractor={(item, index) => index.toString()}
+                ItemSeparatorComponent={renderedSeparator}
+                renderItem={({ item }) => {
+                  return (
+                    <>
+                      {/* {console.log("emptySize", emptySize)} */}
+                      {/* {chekedSizes(item)} */}
+                      <TouchableOpacity
+                        style={styles.sizes}
+                        onPress={() => setSizes(item)}
+                      >
+                        <Text
+                          style={
+                            chosenSizes === item
+                              ? styles.chosenSizes
+                              : styles.size
+                          }
+                        >
+                          {item}
+                        </Text>
+                      </TouchableOpacity>
+                    </>
+                  );
+                }}
+              />
+            </View>
+          
+        </Modal>
+        {/* {console.log("chosenSizes", chosenSizes)} */}
         <Image style={styles.itemImage} source={{ uri: good.image }} />
         <View style={styles.textWrapper}>
           {good.sale ? <Text style={styles.goodSale}>Скидка%</Text> : <></>}
@@ -312,63 +388,13 @@ export const ItemScreen = ({ route, navigation }) => {
             <Text style={styles.text}>грн</Text>
           </Text>
           <Text style={styles.text}>{good.text}</Text>
+          <TouchableOpacity
+            style={styles.sizesBtn}
+            onPress={() => toggleModal()}
+          >
+            <Text style={styles.sizesTxt}>Выберите размер</Text>
+          </TouchableOpacity>
           {/* <Text style={styles.text}>{translatedCatagory}</Text> */}
-          <View style={{ marginTop: 6 }}>
-            {good.sizes[0] !== undefined &&
-            good.sizes[0] !== "" &&
-            good.sizes[0] !== null ? (
-              <View className={styles.goodInfoText}>
-                {!good.sizes.some((r) => sizes.indexOf(r) >= 0) &&
-                !good.sizes.some((r) => kidsSizes.indexOf(r) >= 0) &&
-                good.category !== "womanShoes" &&
-                good.category !== "manShoes" &&
-                good.category !== "kidsShoes" ? (
-                  <Text style={styles.text}>Европейские размеры:</Text>
-                ) : (
-                  <></>
-                )}
-                {good.sizes.some((r) => kidsSizes.indexOf(r) >= 0) ? (
-                  <Text style={styles.text}>Ростовые размеры:</Text>
-                ) : (
-                  <></>
-                )}
-              </View>
-            ) : (
-              <></>
-            )}
-            <FlatList
-              showsVerticalScrollIndicator={false}
-              numColumns={7}
-              style={{ marginTop: 10 }}
-              horizontal={false}
-              activeOpacity={0.1}
-              data={goodsSorted}
-              keyExtractor={(item, index) => index.toString()}
-              ItemSeparatorComponent={renderedSeparator}
-              renderItem={({ item }) => {
-                return (
-                  <>
-                    {/* {console.log("emptySize", emptySize)} */}
-                    {/* {chekedSizes(item)} */}
-                    <TouchableOpacity
-                      style={styles.sizes}
-                      onPress={() => setSizes(item)}
-                    >
-                      <Text
-                        style={
-                          chosenSizes === item
-                            ? styles.chosenSizes
-                            : styles.size
-                        }
-                      >
-                        {item}
-                      </Text>
-                    </TouchableOpacity>
-                  </>
-                );
-              }}
-            />
-          </View>
         </View>
         {/* <TouchableOpacity
           style={styles.container}
@@ -407,7 +433,7 @@ export const ItemScreen = ({ route, navigation }) => {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flex: 2,
     backgroundColor: "#fff",
     alignItems: "center",
     // justifyContent: "center",
@@ -447,7 +473,7 @@ const styles = StyleSheet.create({
   size: {
     fontFamily: "Roboto-Condensed-Regular",
     fontSize: 18,
-    paddingVertical: 4,
+    paddingVertical: 6,
     paddingHorizontal: 6,
     color: "#6cc4c7",
   },
@@ -460,16 +486,19 @@ const styles = StyleSheet.create({
     color: "#fff",
   },
   sizes: {
+    flexDirection: "column",
     //   height: 30,
-    //   width: 30,
-    fontSize: 30,
+    // //   width: 30,
+    // fontSize: 18,
     // backgroundColor: "#6CC4C7",
     borderColor: "#6CC4C7",
+    marginBottom: 6,
     borderRadius: 5,
     borderWidth: 2,
     justifyContent: "center",
     alignItems: "center",
-    marginHorizontal: 4,
+    marginHorizontal: 60,
+    alignSelf: "stretch",
   },
   sizesView: {
     // flexDirection: "row",
@@ -525,5 +554,18 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontSize: 20,
     fontFamily: "Roboto-Condensed-Regular",
+  },
+  sizesModalWrapper: {
+    flex: 0.7,
+    backgroundColor: "#fff",
+    borderRadius: 10,
+  },
+  
+
+  sizesText: {
+    fontSize: 20,
+    fontFamily: "Roboto-Condensed-Regular",
+    textAlign: "center",
+    marginVertical: 10,
   },
 });
