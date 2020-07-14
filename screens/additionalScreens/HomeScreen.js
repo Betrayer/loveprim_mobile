@@ -86,6 +86,7 @@ export const HomeScreen = () => {
           // justifyContent: "center",
           alignItems: "center",
           // marginBottom: -20
+          marginHorizontal: 20,
         }}
       >
         {/* {console.log(search)} */}
@@ -115,6 +116,8 @@ export const HomeScreen = () => {
       <FlatList
         showsVerticalScrollIndicator={false}
         activeOpacity={0.7}
+        numColumns={2}
+        horizontal={false}
         data={allProducts}
         keyExtractor={(item, index) => index.toString()}
         ItemSeparatorComponent={renderedSeparator}
@@ -153,11 +156,11 @@ const styles = StyleSheet.create({
   },
   pic: {
     width: "100%",
-    height: 200,
+    height: 280,
   },
-  separator: {
-    height: 1,
-    width: "100%",
-    backgroundColor: "black",
-  },
+  // separator: {
+  //   height: 1,
+  //   width: "100%",
+  //   backgroundColor: "black",
+  // },
 });

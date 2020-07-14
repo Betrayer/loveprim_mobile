@@ -480,6 +480,7 @@ const styles = StyleSheet.create({
     position: "absolute",
     bottom: 10,
     right: 10,
+    zIndex: 2,
   },
   cartButton:{
     backgroundColor: "#6cc4c7",

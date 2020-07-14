@@ -73,9 +73,12 @@ export default function App() {
               headerTitle: "LovePRIM",
               headerStyle: {
                 backgroundColor: "#6CC4C7",
-                fontFamily: "Roboto-Condensed-Bold",
               },
               headerTintColor: "white",
+              headerTitleStyle: {
+                fontFamily: "Fjalla",
+                fontSize: 26
+              },
             }}
             name="MainScreen"
             component={MainScreen}
