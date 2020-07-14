@@ -9,13 +9,15 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
-
+import { logoutUser } from "../../redux/operations";
 import { firestore } from "../../firebase/config";
 import { ProfileOrderScreen } from "./ProfileOrderScreen";
 
 export const ProfileScreen = ({ navigation, route }) => {
   const [user, setUser] = useState("");
-  const { userId, admin, userName, userEmail } = useSelector((state) => state.user);
+  const { userId, admin, userName, userEmail } = useSelector(
+    (state) => state.user
+  );
   const dispatch = useDispatch();
   const [orderList, setOrderList] = useState([]);
   const [username, setUsername] = useState("user");
@@ -24,14 +26,11 @@ export const ProfileScreen = ({ navigation, route }) => {
   const [address, setAddress] = useState("");
   const [delivery, setDelivery] = useState("");
   const [newPassword, setNewPassword] = useState("");
-  // const text = this.props.navigation.getParam("text", "nothing sent");
 
   const logout = () => {
     console.log("LOGOUT");
     dispatch(logoutUser());
   };
-
-  
 
   useEffect(() => {
     getUser();
@@ -72,7 +71,7 @@ export const ProfileScreen = ({ navigation, route }) => {
     setAddress(user.userAdress);
     if (user.delivery) {
       setDelivery(user.delivery);
-    }else{
+    } else {
       setDelivery("novaPoshta");
     }
   };
@@ -171,38 +170,9 @@ export const ProfileScreen = ({ navigation, route }) => {
     setUserTel(number);
     phoneTranslate(number);
   };
-  
 
   return (
-    <View>
-      {/* {console.log(route)} */}
-      <Text>I am profile</Text>
-      <View
-        style={{
-          // justifyContent: "center",
-          alignItems: "center",
-          // marginBottom: -20
-        }}
-      >
-        {userId ? (
-          <TouchableOpacity
-            style={styles.buttonStl}
-            onPress={() => {
-              navigation.navigate("AdminPageScreen");
-            }}
-          >
-            <Text style={styles.buttonStlText}>ПАНЕЛЬ АДМИНИСТРАТОРА</Text>
-          </TouchableOpacity>
-        ) : (
-          <></>
-        )}
-      </View>
-      {/* <Button title="LOGOUT" onPress={logout} />
-      <Button
-        title="login"
-        // onPress={() => navigation.navigate("LoginScreen")}
-      /> */}
-      <View>{/* <Text>{text}</Text> */}</View>
+    <View style={styles.container}>
       <View style={styles.inputWrapper}>
         <Text>Имя</Text>
         <TextInput
@@ -264,13 +234,13 @@ export const ProfileScreen = ({ navigation, route }) => {
           <Text style={styles.btn}>Внести изменения</Text>
         </TouchableOpacity>
       </View>
-      <FlatList
-        data={orderList}
-        keyExtractor={(item, indx) => indx.toString()}
-        renderItem={({ item }) => {
-          return <ProfileOrderScreen order={item} />;
-        }}
-      />
+      <TouchableOpacity style={styles.buttonLog} title="ВЫЙТИ" onPress={logout}>
+        <Text style={styles.btnLog}>Выйти</Text>
+      </TouchableOpacity>
+      {/* <Button
+        title=""
+        // onPress={() => navigation.navigate("LoginScreen")}
+      /> */}
     </View>
   );
 };
@@ -278,7 +248,6 @@ export const ProfileScreen = ({ navigation, route }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    fontFamily: "ubuntu-regular",
     backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "center",
@@ -293,13 +262,23 @@ const styles = StyleSheet.create({
     // marginBottom: -40,
     marginTop: 20,
   },
+  buttonLog: {
+    width: "80%",
+    height: 30,
+    borderRadius: 10,
+    backgroundColor: "red",
+    justifyContent: "center",
+    alignItems: "center",
+    // marginBottom: -40,
+    marginTop: 20,
+  },
   inputWrapper: {
-    width: 200,
+    width: "80%",
     marginHorizontal: 20,
     marginTop: 10,
   },
   input: {
-    height: 30,
+    height: 40,
     borderColor: "gray",
     borderWidth: 1,
     paddingHorizontal: 6,
@@ -310,6 +289,12 @@ const styles = StyleSheet.create({
     textAlign: "center",
     alignItems: "center",
     backgroundColor: "#DDDDDD",
+    padding: 10,
+  },
+  btnLog: {
+    textAlign: "center",
+    alignItems: "center",
+    // backgroundColor: "#DDDDDD",
     padding: 10,
   },
 });

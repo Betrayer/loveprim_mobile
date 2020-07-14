@@ -20,10 +20,13 @@ import Constants from "expo-constants";
 import firebase from "firebase"; // Богдан тест
 import { useDispatch, useSelector } from "react-redux";
 import { logoutUser } from "../redux/operations";
-import { ProfileScreen } from "./additionalScreens/ProfileScreen";
+import { MainProfileScreen } from "./additionalScreens/MainProfileScreen";
 import { BacketScreen } from "./additionalScreens/BacketScreen";
+import { AuthScreen } from "./AuthScreen";
+import { NotificationScreen } from "./additionalScreens/NotificationScreen";
+import { CatalogScreen } from "./additionalScreens/CatalogScreen";
 import { HomeScreen } from "./additionalScreens/HomeScreen";
-import { Ionicons } from '@expo/vector-icons';
+import { Ionicons } from "@expo/vector-icons";
 
 const Tab = createBottomTabNavigator();
 
@@ -49,7 +52,7 @@ export const MainScreen = ({ navigation, route }) => {
       <Text
         style={styles.register}
         onPress={() => {
-          !userId ? navigation.navigate("LoginScreen") : logout();
+          !userId ? navigation.navigate("AuthScreen") : logout();
         }}
       >
         {!userId ? "Login" : "LOGOUT"}
@@ -65,8 +68,6 @@ export const MainScreen = ({ navigation, route }) => {
   const toggleDrawer = () => {
     setDrawer(!drawer);
   };
-
-
 
   const getUser = async () => {
     await firebase
@@ -138,9 +139,9 @@ export const MainScreen = ({ navigation, route }) => {
   };
 
   const toBoys = () => {
-    navigation.navigate("BoysScreen")
-    toggleDrawer()
-  }
+    navigation.navigate("BoysScreen");
+    toggleDrawer();
+  };
   // -=-=-=-=-=-=-=-=-=
 
   const registerForPushNotificationsAsync = async () => {
@@ -205,8 +206,6 @@ export const MainScreen = ({ navigation, route }) => {
 
   return (
     <>
- 
-
       <Tab.Navigator
         tabBarOptions={{
           showLabel: true,
@@ -229,6 +228,19 @@ export const MainScreen = ({ navigation, route }) => {
           options={{
             tabBarIcon: ({ focused, size, color }) => (
               <Ionicons
+                name="ios-albums"
+                size={focused ? 40 : 30}
+                color={!focused ? "#aaa" : "tomato"}
+              />
+            ),
+          }}
+          name="Catalog"
+          component={CatalogScreen}
+        />
+        <Tab.Screen
+          options={{
+            tabBarIcon: ({ focused, size, color }) => (
+              <Ionicons
                 name="ios-basket"
                 size={focused ? 40 : 30}
                 color={!focused ? "#aaa" : "tomato"}
@@ -242,15 +254,44 @@ export const MainScreen = ({ navigation, route }) => {
           options={{
             tabBarIcon: ({ focused, size, color }) => (
               <Ionicons
-                name="ios-contact"
+                name="ios-notifications"
                 size={focused ? 40 : 30}
                 color={!focused ? "#aaa" : "tomato"}
               />
             ),
           }}
-          name="Profile"
-          component={ProfileScreen}
+          name="Notification"
+          component={NotificationScreen}
         />
+        {userId ? (
+          <Tab.Screen
+            options={{
+              tabBarIcon: ({ focused, size, color }) => (
+                <Ionicons
+                  name="ios-contact"
+                  size={focused ? 40 : 30}
+                  color={!focused ? "#aaa" : "tomato"}
+                />
+              ),
+            }}
+            name="Profile"
+            component={MainProfileScreen}
+          />
+        ) : (
+          <Tab.Screen
+            options={{
+              tabBarIcon: ({ focused, size, color }) => (
+                <Ionicons
+                  name="ios-log-in"
+                  size={focused ? 40 : 30}
+                  color={!focused ? "#aaa" : "tomato"}
+                />
+              ),
+            }}
+            name="AuthScreen"
+            component={AuthScreen}
+          />
+        )}
       </Tab.Navigator>
       {drawer ? (
         <View style={styles.menu}>
@@ -296,7 +337,7 @@ export const MainScreen = ({ navigation, route }) => {
           <TouchableOpacity onPress={() => toSales()} style={styles.menuItem}>
             <Text>Скидки</Text>
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => toBoys()} style={styles.menuItem}> 
+          <TouchableOpacity onPress={() => toBoys()} style={styles.menuItem}>
             <Text>Мальчикам</Text>
           </TouchableOpacity>
         </View>
@@ -331,5 +372,4 @@ const styles = StyleSheet.create({
     width: "100%",
     height: "100%",
   },
-
 });

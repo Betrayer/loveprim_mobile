@@ -112,11 +112,11 @@ export const MenScreen = () => {
 };
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    fontFamily: "ubuntu-regular",
     backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "center",
+    width: "100%",
+    padding: 10,
   },
   pic: {
     width: "100%",
