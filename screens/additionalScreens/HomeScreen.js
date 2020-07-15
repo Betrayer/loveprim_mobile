@@ -73,13 +73,13 @@ export const HomeScreen = () => {
   };
 
   return (
-    <>
+    <View style={{
+      marginHorizontal: 10}}>
       <View
         style={{
           // justifyContent: "center",
           alignItems: "center",
           // marginBottom: -20
-          marginHorizontal: 20,
         }}
       >
         <TouchableOpacity
@@ -132,7 +132,7 @@ export const HomeScreen = () => {
           );
         }}
       />
-    </>
+    </View>
   );
 };
 
