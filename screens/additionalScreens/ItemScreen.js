@@ -411,7 +411,7 @@ export const ItemScreen = ({ route, navigation }) => {
             active={!active}
             direction="up"
             containerStyle={{}}
-            style={{ backgroundColor: "#5067FF" }}
+            style={{ backgroundColor: "#2f8f85" }}
             position="bottomRight"
             onPress={onShare}
           >
@@ -525,8 +525,8 @@ const styles = StyleSheet.create({
   },
   shareFab: {
     position: "absolute",
-    bottom: 10,
-    right: 10,
+    top: win.height / 2 + 62,
+    right: 0,
     zIndex: 2,
   },
   cartButton: {
