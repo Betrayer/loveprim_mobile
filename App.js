@@ -307,7 +307,7 @@ export default function App() {
               name="SalesScreen"
               component={SalesScreen}
             />
-            <Stack.Screen // TESTING
+            <Stack.Screen 
               options={{
                 headerTitleAlign: "center",
                 headerTitle: "Мальчикам",

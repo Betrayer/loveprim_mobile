@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
+import { Container, Header, Item, Input, Icon } from "native-base";
 import {
   StyleSheet,
   Text,
@@ -18,6 +19,7 @@ export const HomeScreen = () => {
   const [filteredItems, setFilteredItems] = useState([]);
   const [exchange, setExchange] = useState(27);
   const [rate, setRate] = useState(27);
+
 
   useEffect(() => {
     getCollection();
@@ -85,24 +87,41 @@ export const HomeScreen = () => {
   };
 
   return (
-    <>
+    <View style={{
+      paddingHorizontal: 10, alignSelf: 'stretch', backgroundColor: "#fff",}}>
       <View
         style={{
           alignItems: "center",
           flexDirection: "row",
-          marginHorizontal: 20,
+          // marginBottom: -20
         }}
       >
-        <Image source={require("../../image/icons8-search-40.png")} />
-
+        {/* <Image source={require("../../image/icons8-search-40.png")} />
         <TextInput
           style={{ paddingLeft: 10, width: "100%" }}
           placeholder="Искать..."
           value={searchValue}
           onChangeText={(value) => setSearchValue(value)}
-        />
+        /> */}
+        <Container style={{ height: 50, backgroundColor: "#fff"}}>
+          <Item
+            searchBar
+            style={{
+              backgroundColor: "#fff"
+            }}
+          >
+            <Icon name="ios-search"/>
+            <Input
+              placeholder="Искать..."
+              value={searchValue}
+              onChangeText={(value) => setSearchValue(value)}
+            />
+          </Item>
+        </Container>
       </View>
       <View style={{ height: 1, width: "100%", backgroundColor: "#6CC4C7" }} />
+
+      <View style={{ height: 1, width: "100%", backgroundColor: "#EEE" }} />
 
       <FlatList
         showsVerticalScrollIndicator={false}
@@ -131,17 +150,16 @@ export const HomeScreen = () => {
                   uri: item.image,
                 }}
               />
-              <Text>{item.name}</Text>
-              <Text>
-                {Math.ceil(
-                  item.price * 1.15 * Number(exchange) + Number(item.charge) + 2
-                )}
-              </Text>
+              <Text style={styles.name}>{item.name}</Text>
+              <Text style={styles.category}>{item.category}</Text>
+              <Text style={styles.price}>
+            {item.price}
+            <Text style={styles.text}>грн</Text></Text>
             </TouchableOpacity>
           );
         }}
       />
-    </>
+    </View>
   );
 };
 
@@ -151,24 +169,26 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "center",
-    width: "100%",
     padding: 10,
+    alignSelf: 'stretch',
   },
   pic: {
     width: "100%",
     height: 280,
   },
-  sale: {
-    position: "absolute",
-    backgroundColor: "tomato",
-    top: 24,
-    left: 9,
-    zIndex: 3,
-  },
-  salesText: {
-    color: "#fff",
-    padding: 2,
-    fontSize: 21,
+  name: {
     fontFamily: "Roboto-Condensed-Regular",
+    fontSize: 18,
+    marginBottom: 2,
   },
+  price: {
+    marginTop: 2,
+    fontFamily: "Roboto-Condensed-Regular",
+    fontSize: 17,
+  },
+  // separator: {
+  //   height: 1,
+  //   width: "100%",
+  //   backgroundColor: "black",
+  // },
 });
