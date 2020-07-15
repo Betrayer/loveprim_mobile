@@ -83,9 +83,6 @@ export const HomeScreen = () => {
           alignItems: "center",
           flexDirection: "row",
           // marginBottom: -20
-          // marginHorizontal: 20,
-          paddingHorizontal: 20,
-          backgroundColor: "#fff",
         }}
       >
         {/* <Image source={require("../../image/icons8-search-40.png")} />
