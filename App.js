@@ -82,7 +82,7 @@ export default function App() {
             <Stack.Screen
               options={{
                 headerTitleAlign: "center",
-                headerTitle: "Log in",
+                headerTitle: "Войти",
                 headerStyle: {
                   backgroundColor: "#6CC4C7",
                 },
@@ -118,7 +118,7 @@ export default function App() {
             <Stack.Screen
               options={{
                 headerTitleAlign: "center",
-                headerTitle: "Item",
+                headerTitle: "Товар",
                 headerStyle: {
                   backgroundColor: "#6CC4C7",
                 },
@@ -166,7 +166,7 @@ export default function App() {
             <Stack.Screen
               options={{
                 headerTitleAlign: "center",
-                headerTitle: "FAQ",
+                headerTitle: "ЧаВо",
                 headerStyle: {
                   backgroundColor: "#6CC4C7",
                 },
@@ -214,7 +214,7 @@ export default function App() {
             <Stack.Screen
               options={{
                 headerTitleAlign: "center",
-                headerTitle: "Дети",
+                headerTitle: "Девочкам",
                 headerStyle: {
                   backgroundColor: "#6CC4C7",
                 },
@@ -226,7 +226,7 @@ export default function App() {
             <Stack.Screen
               options={{
                 headerTitleAlign: "center",
-                headerTitle: "Мужчины",
+                headerTitle: "Мужчинам",
                 headerStyle: {
                   backgroundColor: "#6CC4C7",
                 },
@@ -238,7 +238,7 @@ export default function App() {
             <Stack.Screen
               options={{
                 headerTitleAlign: "center",
-                headerTitle: "Женщины",
+                headerTitle: "Женщинам",
                 headerStyle: {
                   backgroundColor: "#6CC4C7",
                 },

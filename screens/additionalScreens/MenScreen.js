@@ -7,6 +7,7 @@ import {
   FlatList,
   TouchableOpacity,
   Image,
+  TextInput,
 } from "react-native";
 import AsyncStorage from "@react-native-community/async-storage";
 import { firestore } from "../../firebase/config";
@@ -16,6 +17,29 @@ export const MenScreen = () => {
   const [exchange, setExchange] = useState("27");
   const [rate, setRate] = useState("27");
   const [allProducts, setAllProducts] = useState([]);
+  const [searchValue, setSearchValue] = useState("");
+  const [filteredItems, setFilteredItems] = useState([]);
+
+  useEffect(() => {
+    if (allProducts) {
+      headerFilter(searchValue);
+    }
+  }, [searchValue, allProducts]);
+
+  const headerFilter = (searchValue) => {
+    if (searchValue !== "") {
+      const settingUpFilter = allProducts.filter((product) =>
+        product.name.toLowerCase().includes(searchValue.toLowerCase())
+      );
+      if (settingUpFilter[0]) {
+        setFilteredItems(settingUpFilter);
+      } else {
+        setFilteredItems([1]);
+      }
+    } else {
+      setFilteredItems(allProducts);
+    }
+  };
 
   const renderedSeparator = () => {
     return <View style={styles.separator} />;
@@ -84,30 +108,50 @@ export const MenScreen = () => {
   };
 
   return (
-    <FlatList
-      showsVerticalScrollIndicator={false}
-      activeOpacity={0.7}
-      data={allProducts}
-      keyExtractor={(item, index) => index.toString()}
-      ItemSeparatorComponent={renderedSeparator}
-      renderItem={({ item }) => {
-        return (
-          <TouchableOpacity
-            style={styles.container}
-            onPress={() => navigation.navigate("ItemScreen", { info: item })}
-          >
-            <Image
-              style={styles.pic}
-              source={{
-                uri: item.image,
-              }}
-            />
-            <Text>{item.name}</Text>
-            <Text>{item.price}</Text>
-          </TouchableOpacity>
-        );
-      }}
-    />
+    <>
+      <View
+        style={{
+          // justifyContent: "center",
+          alignItems: "center",
+          flexDirection: "row",
+          // marginBottom: -20
+          marginHorizontal: 20,
+        }}
+      >
+        <Image source={require("../../image/icons8-search-40.png")} />
+        <TextInput
+          style={{ paddingLeft: 10, width: "100%" }}
+          placeholder="Искать..."
+          value={searchValue}
+          onChangeText={(value) => setSearchValue(value)}
+        />
+      </View>
+      <View style={{ height: 1, width: "100%", backgroundColor: "#6CC4C7" }} />
+      <FlatList
+        showsVerticalScrollIndicator={false}
+        activeOpacity={0.7}
+        data={filteredItems}
+        keyExtractor={(item, index) => index.toString()}
+        ItemSeparatorComponent={renderedSeparator}
+        renderItem={({ item }) => {
+          return (
+            <TouchableOpacity
+              style={styles.container}
+              onPress={() => navigation.navigate("ItemScreen", { info: item })}
+            >
+              <Image
+                style={styles.pic}
+                source={{
+                  uri: item.image,
+                }}
+              />
+              <Text>{item.name}</Text>
+              <Text>{item.price}</Text>
+            </TouchableOpacity>
+          );
+        }}
+      />
+    </>
   );
 };
 const styles = StyleSheet.create({
