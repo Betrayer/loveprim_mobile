@@ -310,7 +310,7 @@ export const ItemScreen = ({ route, navigation }) => {
     <>
       <View style={styles.container}>
         <Modal
-          style={{justifyContent: "flex-end"}}
+          style={{ justifyContent: "flex-end" }}
           isVisible={isModalVisible}
           animationIn="slideInUp"
           animationInTiming={500}
@@ -320,63 +320,63 @@ export const ItemScreen = ({ route, navigation }) => {
           onBackdropPress={() => toggleModal()}
           swipeDirection="down"
         >
-         
-            <View style={styles.sizesModalWrapper}>
-              {good.sizes[0] !== undefined &&
-              good.sizes[0] !== "" &&
-              good.sizes[0] !== null ? (
-                <View className={styles.goodInfoText}>
-                  {!good.sizes.some((r) => sizes.indexOf(r) >= 0) &&
-                  !good.sizes.some((r) => kidsSizes.indexOf(r) >= 0) &&
-                  good.category !== "womanShoes" &&
-                  good.category !== "manShoes" &&
-                  good.category !== "kidsShoes" ? (
-                    <Text style={styles.sizesText}>Европейские размеры:</Text>
-                  ) : (
-                    <></>
-                  )}
-                  {good.sizes.some((r) => kidsSizes.indexOf(r) >= 0) ? (
-                    <Text style={styles.sizesText}>Ростовые размеры:</Text>
-                  ) : (
-                    <></>
-                  )}
-                </View>
-              ) : (
-                <></>
-              )}
-              <FlatList
-                showsVerticalScrollIndicator={false}
-                style={{ marginTop: 10 }}
-                horizontal={false}
-                activeOpacity={0.1}
-                data={goodsSorted}
-                keyExtractor={(item, index) => index.toString()}
-                ItemSeparatorComponent={renderedSeparator}
-                renderItem={({ item }) => {
-                  return (
-                    <>
-                      {/* {console.log("emptySize", emptySize)} */}
-                      {/* {chekedSizes(item)} */}
-                      <TouchableOpacity
-                        style={styles.sizes}
-                        onPress={() => setSizes(item)}
+          <View style={styles.sizesModalWrapper}>
+            {good.sizes[0] !== undefined &&
+            good.sizes[0] !== "" &&
+            good.sizes[0] !== null ? (
+              <View className={styles.goodInfoText}>
+                {!good.sizes.some((r) => sizes.indexOf(r) >= 0) &&
+                !good.sizes.some((r) => kidsSizes.indexOf(r) >= 0) &&
+                good.category !== "womanShoes" &&
+                good.category !== "manShoes" &&
+                good.category !== "kidsShoes" ? (
+                  <Text style={styles.sizesText}>Европейские размеры:</Text>
+                ) : (
+                  <></>
+                )}
+                {good.sizes.some((r) => kidsSizes.indexOf(r) >= 0) ? (
+                  <Text style={styles.sizesText}>Ростовые размеры:</Text>
+                ) : (
+                  <></>
+                )}
+              </View>
+            ) : (
+              <></>
+            )}
+            <FlatList
+              showsVerticalScrollIndicator={false}
+              style={{ marginTop: 10 }}
+              horizontal={false}
+              activeOpacity={0.1}
+              data={goodsSorted}
+              keyExtractor={(item, index) => index.toString()}
+              ItemSeparatorComponent={renderedSeparator}
+              renderItem={({ item }) => {
+                return (
+                  <>
+                    {/* {console.log("emptySize", emptySize)} */}
+                    {/* {chekedSizes(item)} */}
+                    <TouchableOpacity
+                      style={
+                        chosenSizes === item ? styles.activeSizes : styles.sizes
+                      }
+                      onPress={() => setSizes(item)}
+                    >
+                      <Text
+                        style={
+                          chosenSizes === item
+                            ? styles.chosenSizes
+                            : styles.size
+                        }
                       >
-                        <Text
-                          style={
-                            chosenSizes === item
-                              ? styles.chosenSizes
-                              : styles.size
-                          }
-                        >
-                          {item}
-                        </Text>
-                      </TouchableOpacity>
-                    </>
-                  );
-                }}
-              />
-            </View>
-          
+                        {item}
+                      </Text>
+                    </TouchableOpacity>
+                  </>
+                );
+              }}
+            />
+          </View>
         </Modal>
         {/* {console.log("chosenSizes", chosenSizes)} */}
         <Image style={styles.itemImage} source={{ uri: good.image }} />
@@ -388,12 +388,15 @@ export const ItemScreen = ({ route, navigation }) => {
             <Text style={styles.text}>грн</Text>
           </Text>
           <Text style={styles.text}>{good.text}</Text>
+          {good.sizes[0] ? 
           <TouchableOpacity
             style={styles.sizesBtn}
             onPress={() => toggleModal()}
           >
-            <Text style={styles.sizesTxt}>Выберите размер</Text>
-          </TouchableOpacity>
+            <Text style={styles.sizesTxt}>
+              {chosenSizes ? chosenSizes : "Выберите размер"}
+            </Text>
+          </TouchableOpacity> : <></>}
           {/* <Text style={styles.text}>{translatedCatagory}</Text> */}
         </View>
         {/* <TouchableOpacity
@@ -480,7 +483,7 @@ const styles = StyleSheet.create({
   chosenSizes: {
     fontFamily: "Roboto-Condensed-Regular",
     fontSize: 18,
-    paddingVertical: 4,
+    paddingVertical: 6,
     paddingHorizontal: 6,
     backgroundColor: "#6cc4c7",
     color: "#fff",
@@ -491,6 +494,21 @@ const styles = StyleSheet.create({
     // //   width: 30,
     // fontSize: 18,
     // backgroundColor: "#6CC4C7",
+    borderColor: "#6CC4C7",
+    marginBottom: 6,
+    borderRadius: 5,
+    borderWidth: 2,
+    justifyContent: "center",
+    alignItems: "center",
+    marginHorizontal: 60,
+    alignSelf: "stretch",
+  },
+  activeSizes: {
+    flexDirection: "column",
+    //   height: 30,
+    // //   width: 30,
+    // fontSize: 18,
+    backgroundColor: "#6CC4C7",
     borderColor: "#6CC4C7",
     marginBottom: 6,
     borderRadius: 5,
@@ -560,12 +578,19 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     borderRadius: 10,
   },
-  
-
+  sizesBtn: {
+    marginTop: 16,
+    paddingVertical: 10,
+    paddingHorizontal: 4,
+    alignSelf: "stretch",
+    borderColor: "#eee",
+    borderWidth: 1,
+    borderRadius: 4,
+  },
   sizesText: {
+    marginVertical: 10,
     fontSize: 20,
     fontFamily: "Roboto-Condensed-Regular",
     textAlign: "center",
-    marginVertical: 10,
   },
 });

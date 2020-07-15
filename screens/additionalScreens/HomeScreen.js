@@ -20,6 +20,7 @@ export const HomeScreen = () => {
   const [search, setSearch] = useState(false);
   const [filteredItems, setFilteredItems] = useState([]);
 
+
   useEffect(() => {
     getCollection();
   }, []);
@@ -74,7 +75,8 @@ export const HomeScreen = () => {
   };
 
   return (
-    <>
+    <View style={{
+      paddingHorizontal: 10, alignSelf: 'stretch', backgroundColor: "#fff",}}>
       <View
         style={{
           // justifyContent: "center",
@@ -132,13 +134,16 @@ export const HomeScreen = () => {
                   uri: item.image,
                 }}
               />
-              <Text>{item.name}</Text>
-              <Text>{item.price}</Text>
+              <Text style={styles.name}>{item.name}</Text>
+              <Text style={styles.category}>{item.category}</Text>
+              <Text style={styles.price}>
+            {item.price}
+            <Text style={styles.text}>грн</Text></Text>
             </TouchableOpacity>
           );
         }}
       />
-    </>
+    </View>
   );
 };
 
@@ -148,12 +153,22 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "center",
-    width: "100%",
     padding: 10,
+    alignSelf: 'stretch',
   },
   pic: {
     width: "100%",
     height: 280,
+  },
+  name: {
+    fontFamily: "Roboto-Condensed-Regular",
+    fontSize: 18,
+    marginBottom: 2,
+  },
+  price: {
+    marginTop: 2,
+    fontFamily: "Roboto-Condensed-Regular",
+    fontSize: 17,
   },
   // separator: {
   //   height: 1,
