@@ -16,7 +16,7 @@ export const CatalogScreen = ({ navigation }) => {
   };
 
   const toChildren = () => {
-    navigation.navigate("ChildrenScreen");
+    navigation.navigate("GirlsScreen");
   };
 
   const toMen = () => {

@@ -60,7 +60,6 @@ export const NotificationScreen = ({ navigation }) => {
   };
   const renderHiddenItem = (data, rowMap) => (
     <View style={styles.rowBack}>
-      {/* <Text>Left</Text> */}
       <TouchableOpacity
         style={[styles.backRightBtn, styles.backRightBtnRight]}
         onPress={() => deleteRow(rowMap, data.item.key, data.item.id)}
@@ -71,16 +70,13 @@ export const NotificationScreen = ({ navigation }) => {
   );
   const renderItem = (item) => (
     <View style={styles.rowFront} underlayColor={"#AAA"}>
-      {console.log("item", item)}
       <Text style={styles.notif}>
         {item.item.notification}
         <Text styles={styles.notifTextNo}>No{item.item.orderNo}</Text>
       </Text>
     </View>
   );
-  const onRowDidOpen = (rowKey) => {
-    console.log("This row opened", rowKey);
-  };
+
   return (
     <View style={styles.container}>
 
@@ -94,7 +90,6 @@ export const NotificationScreen = ({ navigation }) => {
         previewRowKey={"0"}
         previewOpenValue={-40}
         previewOpenDelay={3000}
-        onRowDidOpen={onRowDidOpen}
       />
     </View>
   );
