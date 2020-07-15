@@ -17,7 +17,7 @@ import { SizeChartScreen } from "./screens/additionalScreens/sizeChart/SizeChart
 import { FAQScreen } from "./screens/additionalScreens/FAQScreen";
 import { AddReviewsScreen } from "./screens/additionalScreens/ReviewsScreenAdd";
 import { CommentImg } from "./screens/additionalScreens/commentImg";
-import { ChildrenScreen } from "./screens/additionalScreens/ChildrenScreen";
+import { GirlsScreen } from "./screens/additionalScreens/GirlsScreen/GirlsScreen";
 import { MenScreen } from "./screens/additionalScreens/MenScreen";
 import { WomenScreen } from "./screens/additionalScreens/WomenScreen";
 import { ShoesScreen } from "./screens/additionalScreens/shoesScreen/ShoesScreen";
@@ -52,7 +52,7 @@ export default function App() {
   if (!fontsLoaded) {
     return (
       <Image
-        style={{ alignSelf: "stretch", height: 300, marginTop: 250 }}
+        style={{ alignSelf: "stretch", height: 300, marginTop: 200 }}
         source={{
           uri:
             "https://i.pinimg.com/originals/78/e8/26/78e826ca1b9351214dfdd5e47f7e2024.gif",
@@ -82,7 +82,7 @@ export default function App() {
             <Stack.Screen
               options={{
                 headerTitleAlign: "center",
-                headerTitle: "Log in",
+                headerTitle: "Войти",
                 headerStyle: {
                   backgroundColor: "#6CC4C7",
                 },
@@ -118,7 +118,7 @@ export default function App() {
             <Stack.Screen
               options={{
                 headerTitleAlign: "center",
-                headerTitle: "Item",
+                headerTitle: "Товар",
                 headerStyle: {
                   backgroundColor: "#6CC4C7",
                 },
@@ -166,7 +166,7 @@ export default function App() {
             <Stack.Screen
               options={{
                 headerTitleAlign: "center",
-                headerTitle: "FAQ",
+                headerTitle: "ЧаВо",
                 headerStyle: {
                   backgroundColor: "#6CC4C7",
                 },
@@ -214,19 +214,19 @@ export default function App() {
             <Stack.Screen
               options={{
                 headerTitleAlign: "center",
-                headerTitle: "Дети",
+                headerTitle: "Девочкам",
                 headerStyle: {
                   backgroundColor: "#6CC4C7",
                 },
                 headerTintColor: "white",
               }}
-              name="ChildrenScreen"
-              component={ChildrenScreen}
+              name="GirlsScreen"
+              component={GirlsScreen}
             />
             <Stack.Screen
               options={{
                 headerTitleAlign: "center",
-                headerTitle: "Мужчины",
+                headerTitle: "Мужчинам",
                 headerStyle: {
                   backgroundColor: "#6CC4C7",
                 },
@@ -238,7 +238,7 @@ export default function App() {
             <Stack.Screen
               options={{
                 headerTitleAlign: "center",
-                headerTitle: "Женщины",
+                headerTitle: "Женщинам",
                 headerStyle: {
                   backgroundColor: "#6CC4C7",
                 },
@@ -307,7 +307,7 @@ export default function App() {
               name="SalesScreen"
               component={SalesScreen}
             />
-            <Stack.Screen // TESTING
+            <Stack.Screen 
               options={{
                 headerTitleAlign: "center",
                 headerTitle: "Мальчикам",

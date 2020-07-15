@@ -94,7 +94,6 @@ export const NotificationScreen = ({ navigation }) => {
         previewRowKey={"0"}
         previewOpenValue={-40}
         previewOpenDelay={3000}
-        onRowDidOpen={onRowDidOpen}
       />
     </View>
   );
