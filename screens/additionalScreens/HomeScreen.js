@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
+import { Container, Header, Item, Input, Icon } from "native-base";
 import {
   StyleSheet,
   Text,
@@ -82,18 +83,36 @@ export const HomeScreen = () => {
           alignItems: "center",
           flexDirection: "row",
           // marginBottom: -20
+          // marginHorizontal: 20,
+          paddingHorizontal: 20,
+          backgroundColor: "#fff",
         }}
       >
-        <Image source={require("../../image/icons8-search-40.png")} />
+        {/* <Image source={require("../../image/icons8-search-40.png")} />
         <TextInput
           style={{ paddingLeft: 10, width: "100%" }}
           placeholder="Искать..."
           value={searchValue}
           onChangeText={(value) => setSearchValue(value)}
-        />
+        /> */}
+        <Container style={{ height: 50, backgroundColor: "#fff"}}>
+          <Item
+            searchBar
+            style={{
+              backgroundColor: "#fff"
+            }}
+          >
+            <Icon name="ios-search"/>
+            <Input
+              placeholder="Искать..."
+              value={searchValue}
+              onChangeText={(value) => setSearchValue(value)}
+            />
+          </Item>
+        </Container>
       </View>
-      <View style={{ height: 1, width: "100%", backgroundColor: "#6CC4C7" }} />
 
+      <View style={{ height: 1, width: "100%", backgroundColor: "#EEE" }} />
 
       <FlatList
         showsVerticalScrollIndicator={false}
