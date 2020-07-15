@@ -17,7 +17,7 @@ import { SizeChartScreen } from "./screens/additionalScreens/sizeChart/SizeChart
 import { FAQScreen } from "./screens/additionalScreens/FAQScreen";
 import { AddReviewsScreen } from "./screens/additionalScreens/ReviewsScreenAdd";
 import { CommentImg } from "./screens/additionalScreens/commentImg";
-import { ChildrenScreen } from "./screens/additionalScreens/ChildrenScreen";
+import { GirlsScreen } from "./screens/additionalScreens/GirlsScreen/GirlsScreen";
 import { MenScreen } from "./screens/additionalScreens/MenScreen";
 import { WomenScreen } from "./screens/additionalScreens/WomenScreen";
 import { ShoesScreen } from "./screens/additionalScreens/shoesScreen/ShoesScreen";
@@ -220,8 +220,8 @@ export default function App() {
                 },
                 headerTintColor: "white",
               }}
-              name="ChildrenScreen"
-              component={ChildrenScreen}
+              name="GirlsScreen"
+              component={GirlsScreen}
             />
             <Stack.Screen
               options={{

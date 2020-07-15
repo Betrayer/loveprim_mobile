@@ -16,7 +16,7 @@ export const CatalogScreen = ({ navigation }) => {
   };
 
   const toChildren = () => {
-    navigation.navigate("ChildrenScreen");
+    navigation.navigate("GirlsScreen");
   };
 
   const toMen = () => {
@@ -101,11 +101,11 @@ export const CatalogScreen = ({ navigation }) => {
           <Text>Декор</Text>
         </TouchableOpacity>
         <TouchableOpacity onPress={() => toStock()} style={styles.menuItem}>
-          <Image style={styles.pic} source={require("../../image/girl.png")} />
+          <Image style={styles.pic} source={require("../../image/stock.png")} />
           <Text>В наличии</Text>
         </TouchableOpacity>
         <TouchableOpacity onPress={() => toSales()} style={styles.menuItem}>
-          <Image style={styles.pic} source={require("../../image/stock.png")} />
+          <Image style={styles.pic} source={require("../../image/sales.png")} />
           <Text>Скидки</Text>
         </TouchableOpacity>
       </View>
