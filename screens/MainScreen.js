@@ -20,8 +20,11 @@ import Constants from "expo-constants";
 import firebase from "firebase"; // Богдан тест
 import { useDispatch, useSelector } from "react-redux";
 import { logoutUser } from "../redux/operations";
-import { ProfileScreen } from "./additionalScreens/ProfileScreen";
+import { MainProfileScreen } from "./additionalScreens/MainProfileScreen";
 import { BacketScreen } from "./additionalScreens/BacketScreen";
+import { AuthScreen } from "./AuthScreen";
+import { NotificationScreen } from "./additionalScreens/NotificationScreen";
+import { CatalogScreen } from "./additionalScreens/CatalogScreen";
 import { HomeScreen } from "./additionalScreens/HomeScreen";
 import { Ionicons } from '@expo/vector-icons';
 
@@ -29,42 +32,14 @@ const Tab = createBottomTabNavigator();
 
 export const MainScreen = ({ navigation, route }) => {
   const { userId, admin, userName } = useSelector((state) => state.user);
-  const dispatch = useDispatch();
   const [allProducts, setAllProducts] = useState([]);
   const [user, setUser] = useState({});
   const [drawer, setDrawer] = useState(false);
-
-  const logout = () => {
-    console.log("LOGOUT");
-    dispatch(logoutUser());
-  };
 
   useEffect(() => {
     setDrawer(false);
     getUser();
   }, []);
-
-  navigation.setOptions({
-    headerRight: () => (
-      <Text
-        style={styles.register}
-        onPress={() => {
-          !userId ? navigation.navigate("LoginScreen") : logout();
-        }}
-      >
-        {!userId ? "Login" : "LOGOUT"}
-      </Text>
-    ),
-    headerLeft: () => (
-      <Text style={styles.register} onPress={() => toggleDrawer()}>
-        Меню
-      </Text>
-    ),
-  });
-
-  const toggleDrawer = () => {
-    setDrawer(!drawer);
-  };
 
 
 
@@ -82,66 +57,7 @@ export const MainScreen = ({ navigation, route }) => {
         );
       });
   };
-  const toReviews = () => {
-    navigation.navigate("ReviewsScreen");
-    toggleDrawer();
-  };
 
-  const toFAQ = () => {
-    navigation.navigate("FAQScreen");
-    toggleDrawer();
-  };
-
-  const toSizeChart = () => {
-    navigation.navigate("SizeChartScreen");
-    toggleDrawer();
-  };
-
-  const toChildren = () => {
-    navigation.navigate("ChildrenScreen");
-    toggleDrawer();
-  };
-
-  const toMen = () => {
-    navigation.navigate("MenScreen");
-    toggleDrawer();
-  };
-
-  const toWomen = () => {
-    navigation.navigate("WomenScreen");
-    toggleDrawer();
-  };
-
-  const toShoes = () => {
-    navigation.navigate("ShoesScreen");
-    toggleDrawer();
-  };
-
-  const toAccesories = () => {
-    navigation.navigate("AccesoriesScreen");
-    toggleDrawer();
-  };
-
-  const toDecor = () => {
-    navigation.navigate("DecorationsScreen");
-    toggleDrawer();
-  };
-
-  const toStock = () => {
-    navigation.navigate("InStockScreen");
-    toggleDrawer();
-  };
-
-  const toSales = () => {
-    navigation.navigate("SalesScreen");
-    toggleDrawer();
-  };
-
-  const toBoys = () => {
-    navigation.navigate("BoysScreen")
-    toggleDrawer()
-  }
-  // -=-=-=-=-=-=-=-=-=
 
   const registerForPushNotificationsAsync = async () => {
     if (Constants.isDevice) {
@@ -176,17 +92,6 @@ export const MainScreen = ({ navigation, route }) => {
       // alert("Must use physical device for Push Notifications");
     }
 
-    //   if (Platform.OS === "android") {
-    //     Notifications.createChannelAndroidAsync("default", {
-    //       name: "default",
-    //       sound: true,
-    //       priority: "max",
-    //       vibrate: [0, 250, 250, 250],
-    //     });
-    //   }
-    // };
-
-    // // -=-=-=-=-=-=-=-=-=
 
     useEffect(() => {
       if (user) {
@@ -205,8 +110,6 @@ export const MainScreen = ({ navigation, route }) => {
 
   return (
     <>
- 
-
       <Tab.Navigator
         tabBarOptions={{
           showLabel: true,
@@ -229,6 +132,19 @@ export const MainScreen = ({ navigation, route }) => {
           options={{
             tabBarIcon: ({ focused, size, color }) => (
               <Ionicons
+                name="ios-albums"
+                size={focused ? 40 : 30}
+                color={!focused ? "#aaa" : "tomato"}
+              />
+            ),
+          }}
+          name="Catalog"
+          component={CatalogScreen}
+        />
+        <Tab.Screen
+          options={{
+            tabBarIcon: ({ focused, size, color }) => (
+              <Ionicons
                 name="ios-basket"
                 size={focused ? 40 : 30}
                 color={!focused ? "#aaa" : "tomato"}
@@ -242,67 +158,46 @@ export const MainScreen = ({ navigation, route }) => {
           options={{
             tabBarIcon: ({ focused, size, color }) => (
               <Ionicons
-                name="ios-contact"
+                name="ios-notifications"
                 size={focused ? 40 : 30}
                 color={!focused ? "#aaa" : "tomato"}
               />
             ),
           }}
-          name="Profile"
-          component={ProfileScreen}
+          name="Notification"
+          component={NotificationScreen}
         />
+        {userId ? (
+          <Tab.Screen
+            options={{
+              tabBarIcon: ({ focused, size, color }) => (
+                <Ionicons
+                  name="ios-contact"
+                  size={focused ? 40 : 30}
+                  color={!focused ? "#aaa" : "tomato"}
+                />
+              ),
+            }}
+            name="Profile"
+            component={MainProfileScreen}
+          />
+        ) : (
+          <Tab.Screen
+            options={{
+              tabBarIcon: ({ focused, size, color }) => (
+                <Ionicons
+                  name="ios-log-in"
+                  size={focused ? 40 : 30}
+                  color={!focused ? "#aaa" : "tomato"}
+                />
+              ),
+            }}
+            name="AuthScreen"
+            component={AuthScreen}
+          />
+        )}
       </Tab.Navigator>
-      {drawer ? (
-        <View style={styles.menu}>
-          <TouchableOpacity onPress={() => toReviews()} style={styles.menuItem}>
-            <Text>Отзывы</Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => toFAQ()} style={styles.menuItem}>
-            <Text>FAQ</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => toSizeChart()}
-            style={styles.menuItem}
-          >
-            <Text>Размерная сетка</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => toChildren()}
-            style={styles.menuItem}
-          >
-            <Text>Дети</Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => toMen()} style={styles.menuItem}>
-            <Text>Мужчины</Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => toWomen()} style={styles.menuItem}>
-            <Text>Женщинцы</Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => toShoes()} style={styles.menuItem}>
-            <Text>Обувь</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => toAccesories()}
-            style={styles.menuItem}
-          >
-            <Text>Аксессуары</Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => toDecor()} style={styles.menuItem}>
-            <Text>Декор</Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => toStock()} style={styles.menuItem}>
-            <Text>Товар в наличии</Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => toSales()} style={styles.menuItem}>
-            <Text>Скидки</Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => toBoys()} style={styles.menuItem}> 
-            <Text>Мальчикам</Text>
-          </TouchableOpacity>
-        </View>
-      ) : (
-        <></> // TESTING
-      )}
+      
     </>
   );
 };
@@ -331,5 +226,4 @@ const styles = StyleSheet.create({
     width: "100%",
     height: "100%",
   },
-
 });
