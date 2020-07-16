@@ -106,7 +106,7 @@ const styles = StyleSheet.create({
     // alignItems: "center",
     // justifyContent: "center",
     // width: "100%",
-    backgroundColor: "white",
+    backgroundColor: "#f7f9f9",
     flex: 1,
     paddingVertical: 10,
   },
@@ -126,6 +126,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     lineHeight: 25,
     color: "#444",
+    backgroundColor:'#fff',
   },
   notifTextNo: {
     color: "#2f8f85",

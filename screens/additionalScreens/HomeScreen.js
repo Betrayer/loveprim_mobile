@@ -144,7 +144,6 @@ export const HomeScreen = () => {
           </Item>
         </Container>
       </View>
-      <View style={{ height: 1, width: "100%", backgroundColor: "#6CC4C7" }} />
 
       <View style={{ height: 1, width: "100%", backgroundColor: "#EEE" }} />
       <View style={{ marginBottom: 100 }}>
@@ -176,9 +175,9 @@ export const HomeScreen = () => {
                   <View
                     style={{
                       position: "absolute",
-                      backgroundColor: "#6CC4C7",
-                      top: item.sale ? 58 : 24,
-                      left: 9,
+                      backgroundColor: "#5cbcbf",
+                      top: item.sale ? 54 : 24,
+                      left: 6,
                       zIndex: 3,
                     }}
                   >
@@ -218,7 +217,7 @@ export const HomeScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+    // backgroundColor: "#eee",
     alignItems: "center",
     justifyContent: "center",
     padding: 10,
@@ -242,13 +241,13 @@ const styles = StyleSheet.create({
     position: "absolute",
     backgroundColor: "tomato",
     top: 24,
-    left: 9,
+    left: 6,
     zIndex: 3,
   },
   salesText: {
     color: "#fff",
     padding: 2,
-    fontSize: 21,
+    fontSize: 20,
     fontFamily: "Roboto-Condensed-Regular",
   },
 });
