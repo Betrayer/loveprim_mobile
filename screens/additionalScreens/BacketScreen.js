@@ -1,6 +1,9 @@
 import React, { useState, useEffect, useRef } from "react";
 import { withRouter, useHistory } from "react-router-dom";
 import { useSelector } from "react-redux";
+import { Ionicons } from "@expo/vector-icons";
+import { Picker, Icon } from "native-base";
+import { SwipeListView } from "react-native-swipe-list-view";
 import { firestore } from "../../firebase/config";
 import {
   StyleSheet,
@@ -45,10 +48,13 @@ export const BacketScreen = ({ navigation }) => {
         ).map(function (x, i) {
           return i;
         });
-        setBonusArray(bonusArr);
+        setBonusArray(bonusArr)
       }
     }
   }, [myUser]);
+  useEffect(() => {
+    console.log('bonusArray', bonusArray)
+  }, [bonusArray])
 
   useEffect(() => {
     getBacket();
@@ -199,8 +205,8 @@ export const BacketScreen = ({ navigation }) => {
       .where("userId", "==", userID)
       .onSnapshot((data) => {
         setMyUser(
-          ...data.docs.map((doc) => {
-            return { ...doc.data(), id: doc.id };
+          ...data.docs.map((doc, ind) => {
+            return { ...doc.data(), id: doc.id, key: ind };
           })
         );
       });
@@ -216,12 +222,30 @@ export const BacketScreen = ({ navigation }) => {
       openSelectUser(false);
     }
   };
+  const deleteRow = (rowMap, rowKey, id) => {
+    closeRow(rowMap, rowKey);
+    const newData = [...backet];
+    const prevIndex = backet.findIndex((item) => item.key === rowKey);
+    newData.splice(prevIndex, 1);
+    setBacket(newData);
+    onDelBask(id);
+  };
+  const closeRow = (rowMap, rowKey) => {
+    if (rowMap[rowKey]) {
+      rowMap[rowKey].closeRow();
+    }
+  };
 
-  // const styles = {
-  //   sizeList: {
-  //     display: selectUser ? "block" : "none",
-  //   },
-  // };
+  const renderHiddenItem = (data, rowMap) => (
+    <View style={styles.rowBack}>
+      <TouchableOpacity
+        style={[styles.backRightBtn, styles.backRightBtnRight]}
+        onPress={() => deleteRow(rowMap, data.item.key, data.item.id)}
+      >
+        <Ionicons name="ios-trash" size={30} color="#fff"></Ionicons>
+      </TouchableOpacity>
+    </View>
+  );
 
   const renderedSeparator = () => {
     return <View style={styles.separator} />;
@@ -242,59 +266,103 @@ export const BacketScreen = ({ navigation }) => {
           </Text>
         </View>
       ) : (
-        <View style={styles.container}>
-          {console.log(bonusArray)}
-          <Text>Имя {userName}</Text>
-          <Text>Телефон {userPhone}</Text>
-          <Text>Всего товаров {backet.length} шт</Text>
-          <Text>Общая сумма {finalPrice - Number(discount)} грн</Text>
-          <Text>discount{discount}</Text>
-          <Text>Комментарий к заказу</Text>
-          <TextInput
-            style={styles.txtInput}
-            placeholder="Комментарий"
-            onChangeText={(value) => setComment(value)}
-          />
-          <Text>
-            *Стоимость заказа указана без учета стоимости доставки товара в
-            Украину, необходимой упаковки и доставки по Украине
-          </Text>
-          <FlatList
-            showsVerticalScrollIndicator={false}
-            activeOpacity={0.7}
-            data={backet}
-            keyExtractor={(item, index) => index.toString()}
-            ItemSeparatorComponent={renderedSeparator}
-            renderItem={({ item }) => {
-              return (
-                <View style={styles.container}>
-                  <Image
-                    style={styles.pic}
-                    source={{
-                      uri: item.image,
-                    }}
-                  />
-                  <Text>{item.name}</Text>
-                  <Text>
-                    {Math.ceil(
-                      item.price * 1.15 * Number(rate) + 2 + Number(item.charge)
-                    )}
-                    грн
-                  </Text>
-                  <Text>Размер {item.size}</Text>
-                  <TouchableOpacity
+        <View style={{ marginTop: 10 }}>
+          <View style={styles.container}>
+            <SwipeListView
+              data={backet}
+              style={{ width: "100%" }}
+              renderHiddenItem={renderHiddenItem}
+              leftOpenValue={0}
+              rightOpenValue={-50}
+              previewRowKey={"0"}
+              previewOpenValue={-40}
+              previewOpenDelay={3000}
+              // onRowDidOpen={onRowDidOpen}
+              renderItem={({ item }) => {
+                return (
+                  <View style={styles.productWrapper}>
+                    <Image
+                      style={styles.pic}
+                      source={{
+                        uri: item.image,
+                      }}
+                    />
+                    <View style={styles.textWrapper}>
+                      <Text style={styles.name}>{item.name}</Text>
+                      <Text style={styles.price}>
+                        {Math.ceil(
+                          item.price * 1.15 * Number(rate) +
+                            2 +
+                            Number(item.charge)
+                        )}
+                        <Text style={styles.text}>грн</Text>
+                      </Text>
+                      {item.size ? (
+                        <Text style={styles.size}>Размер {item.size}</Text>
+                      ) : (
+                        <></>
+                      )}
+                    </View>
+                    {/* <TouchableOpacity
                     style={styles.del}
                     onPress={() => onDelBask(item.id)}
                   >
                     <Text style={{ color: "white" }}>УДАЛИТЬ</Text>
-                  </TouchableOpacity>
-                </View>
-              );
-            }}
-          />
-          <TouchableOpacity style={styles.del} onPress={() => onBuyBtnClick()}>
-            <Text>КУПИТЬ</Text>
-          </TouchableOpacity>
+                  </TouchableOpacity> */}
+                  </View>
+                );
+              }}
+            />
+          </View>
+          <View style={styles.checkout}>
+            <Text style={styles.checkoutText}>
+              Всего товаров:{" "}
+              <Text style={styles.checkoutTextBold}>{backet.length} шт</Text>
+            </Text>
+            <Text style={styles.checkoutText}>
+              Цена:{" "}
+              <Text style={styles.checkoutTextBold}>{finalPrice} грн</Text>
+            </Text>
+            <Text style={styles.checkoutText}>
+            Скидка:{" "}
+            </Text>
+            {myUser.userBonus ? <Picker
+              mode="dropdown"
+              iosHeader="Скидка"
+              placeholder="Виберите скидку"
+              iosIcon={<Icon name="arrow-down" />}
+              style={{ marginHorizontal: 18, borderColor: "#eee", borderWidth: 1, marginBottom: 10 }}
+              selectedValue={discount}
+              onValueChange={(val) => setDiscount(val)}
+            >
+              {bonusArray.map((item, index) => {return (<Picker.Item label={item*15 + 'грн'} value={index*15} key={index}/>)} )}
+              
+            </Picker> : <></>}
+            <Text style={styles.checkoutText}>Комментарий к заказу: </Text>
+            <TextInput
+              style={styles.input}
+              multiline={true}
+              textAlignVertical={'top'}
+              maxLength={500}
+              placeholderTextColor={'#888'}
+              placeholder="Комментарий"
+              onChangeText={(value) => setComment(value)}
+            />
+            <Text style={styles.checkoutTextSum}>
+              Общая сумма: {finalPrice - Number(discount)} грн
+            </Text>
+            <Text>
+              *Стоимость заказа указана без учета стоимости доставки товара в
+              Украину, необходимой упаковки и доставки по Украине
+            </Text>
+
+            <TouchableOpacity
+              style={styles.del}
+              onPress={() => onBuyBtnClick()}
+            >
+              <Text>КУПИТЬ</Text>
+            </TouchableOpacity>
+          </View>
         </View>
       )}
     </ScrollView>
@@ -304,27 +372,111 @@ export const BacketScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: "#feffff",
     alignItems: "center",
     justifyContent: "center",
     width: "100%",
-    padding: 10,
+    // padding: 10,
   },
+  productWrapper: {
+    alignSelf: "stretch",
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "#fff",
+    borderBottomColor: "#eee",
+    borderBottomWidth: 1,
+    // justifyContent: "space-between",
+    paddingVertical: 10,
+    paddingHorizontal: 26,
+    // width: "100%"
+  },
+  checkout: {
+    alignSelf: "stretch",
+    backgroundColor: "#fff",
+    borderBottomColor: "#eee",
+    borderBottomWidth: 1,
+    // alignItems: "center",
+    paddingVertical: 20,
+    paddingHorizontal: 16,
+    marginTop: 16,
+  },
+  checkoutText: {
+    color: "#111",
+    fontFamily: "Roboto-Condensed-Regular",
+    fontSize: 17,
+    paddingHorizontal: 20,
+    marginBottom: 6
+  },
+  checkoutTextBold:{
+    fontFamily: "Roboto-Condensed-Bold",
+    fontSize: 16,
+  },
+  input: {
+    color: "#787472",
+    marginHorizontal: 20,
+    paddingHorizontal: 10, 
+    minHeight: 65, 
+    borderColor: '#eee', 
+    borderWidth: 1, 
+    backgroundColor: '#fff',
+    fontFamily: "Roboto-Condensed-Regular",
+    paddingTop:6,
+    fontSize: 16,
+},
   pic: {
-    width: 300,
-    height: 200,
+    width: 100,
+    height: 140,
   },
   separator: {
     height: 1,
     width: "100%",
     backgroundColor: "black",
   },
-  del: {
-    width: "50%",
-    height: 40,
-    color: "white",
-    backgroundColor: "#6CC4C7",
+  name: {
+    fontFamily: "Roboto-Condensed-Regular",
+    fontSize: 22,
+  },
+  price: {
+    marginTop: 4,
+    fontFamily: "Roboto-Condensed-Bold",
+    fontSize: 22,
+  },
+  text: {
+    fontFamily: "Roboto-Condensed-Regular",
+    fontSize: 18,
+    marginTop: 12,
+  },
+  size: {
+    fontFamily: "Roboto-Condensed-Regular",
+    fontSize: 18,
+    color: "#555",
+    marginTop: 16,
+  },
+  textWrapper: {
+    paddingHorizontal: 10,
+    height: "100%",
+    // justifyContent: 'space-around',
+  },
+  rowBack: {
     alignItems: "center",
+    backgroundColor: "#fff",
+    flex: 1,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    paddingLeft: 15,
+  },
+  backRightBtn: {
+    alignItems: "center",
+    bottom: 0,
     justifyContent: "center",
+    position: "absolute",
+    top: 0,
+    width: 50,
+  },
+
+  backRightBtnRight: {
+    backgroundColor: "tomato",
+    right: 0,
+    height: "100%",
   },
 });

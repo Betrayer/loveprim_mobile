@@ -11,7 +11,7 @@ import {
 } from "react-native";
 import { firestore } from "../../../../firebase/config";
 
-export const BoysSecondTab = () => {
+export const GirlsSecondTab = () => {
   const navigation = useNavigation();
   const [allProducts, setAllProducts] = useState([]);
   const [searchValue, setSearchValue] = useState("");
@@ -82,7 +82,7 @@ export const BoysSecondTab = () => {
           .map((doc) => {
             return { ...doc.data(), id: doc.id };
           })
-          .filter((cat) => cat.category === "boys2-8")
+          .filter((cat) => cat.category === "girls2-8")
           .sort(function (a, b) {
             if (a.numberOfProduct > b.numberOfProduct) {
               return -1;

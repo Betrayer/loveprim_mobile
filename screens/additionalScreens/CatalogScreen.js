@@ -16,7 +16,7 @@ export const CatalogScreen = ({ navigation }) => {
   };
 
   const toChildren = () => {
-    navigation.navigate("ChildrenScreen");
+    navigation.navigate("GirlsScreen");
   };
 
   const toMen = () => {
@@ -57,56 +57,56 @@ export const CatalogScreen = ({ navigation }) => {
         <TouchableOpacity onPress={() => toReviews()} style={styles.menuItem}>
           <Image
             style={styles.pic}
-            source={require("../../image/icons8-feedback-96.png")}
+            source={require("../../image/review.png")}
           />
-          <Text>Отзывы</Text>
+          <Text style={{ fontFamily: "Roboto-Condensed-Regular", fontSize: 16}}>Отзывы</Text>
         </TouchableOpacity>
         <TouchableOpacity onPress={() => toFAQ()} style={styles.menuItem}>
           <Image style={styles.pic} source={require("../../image/faq.png")} />
-          <Text>FAQ</Text>
+          <Text style={{ fontFamily: "Roboto-Condensed-Regular", fontSize: 16}}>FAQ</Text>
         </TouchableOpacity>
         <TouchableOpacity onPress={() => toSizeChart()} style={styles.menuItem}>
           <Image style={styles.pic} source={require("../../image/sizes.png")} />
-          <Text>Размеры</Text>
+          <Text style={{ fontFamily: "Roboto-Condensed-Regular", fontSize: 16}}>Размеры</Text>
         </TouchableOpacity>
         <TouchableOpacity onPress={() => toWomen()} style={styles.menuItem}>
           <Image style={styles.pic} source={require("../../image/woman.png")} />
-          <Text>Женщинам</Text>
+          <Text style={{ fontFamily: "Roboto-Condensed-Regular", fontSize: 16}}>Женщинам</Text>
         </TouchableOpacity>
         <TouchableOpacity onPress={() => toMen()} style={styles.menuItem}>
           <Image style={styles.pic} source={require("../../image/man.png")} />
-          <Text>Мужчинам</Text>
+          <Text style={{ fontFamily: "Roboto-Condensed-Regular", fontSize: 16}}>Мужчинам</Text>
         </TouchableOpacity>
         <TouchableOpacity onPress={() => toChildren()} style={styles.menuItem}>
           <Image style={styles.pic} source={require("../../image/girl.png")} />
-          <Text>Девочкам</Text>
+          <Text style={{ fontFamily: "Roboto-Condensed-Regular", fontSize: 16}}>Девочкам</Text>
         </TouchableOpacity>
         <TouchableOpacity onPress={() => toBoys()} style={styles.menuItem}>
           <Image style={styles.pic} source={require("../../image/boy.png")} />
-          <Text>Мальчикам</Text>
+          <Text style={{ fontFamily: "Roboto-Condensed-Regular", fontSize: 16}}>Мальчикам</Text>
         </TouchableOpacity>
         <TouchableOpacity onPress={() => toShoes()} style={styles.menuItem}>
           <Image style={styles.pic} source={require("../../image/shoes.png")} />
-          <Text>Обувь</Text>
+          <Text style={{ fontFamily: "Roboto-Condensed-Regular", fontSize: 16}}>Обувь</Text>
         </TouchableOpacity>
         <TouchableOpacity
           onPress={() => toAccesories()}
           style={styles.menuItem}
         >
           <Image style={styles.pic} source={require("../../image/accessory.png")} />
-          <Text>Аксессуары</Text>
+          <Text style={{ fontFamily: "Roboto-Condensed-Regular", fontSize: 16}}>Аксессуары</Text>
         </TouchableOpacity>
         <TouchableOpacity onPress={() => toDecor()} style={styles.menuItem}>
           <Image style={styles.pic} source={require("../../image/decor.png")} />
-          <Text>Декор</Text>
+          <Text style={{ fontFamily: "Roboto-Condensed-Regular", fontSize: 16}}>Декор</Text>
         </TouchableOpacity>
         <TouchableOpacity onPress={() => toStock()} style={styles.menuItem}>
-          <Image style={styles.pic} source={require("../../image/girl.png")} />
-          <Text>В наличии</Text>
+          <Image style={styles.pic} source={require("../../image/stock.png")} />
+          <Text style={{ fontFamily: "Roboto-Condensed-Regular", fontSize: 16}}>В наличии</Text>
         </TouchableOpacity>
         <TouchableOpacity onPress={() => toSales()} style={styles.menuItem}>
-          <Image style={styles.pic} source={require("../../image/stock.png")} />
-          <Text>Скидки</Text>
+          <Image style={styles.pic} source={require("../../image/sale.png")} />
+          <Text style={{ fontFamily: "Roboto-Condensed-Regular", fontSize: 16}}>Скидки</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -140,5 +140,6 @@ const styles = StyleSheet.create({
   pic: {
     width: 80,
     height: 80,
+    marginBottom: 6,
   },
 });
