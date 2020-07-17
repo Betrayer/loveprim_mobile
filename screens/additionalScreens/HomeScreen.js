@@ -144,7 +144,6 @@ export const HomeScreen = () => {
           </Item>
         </Container>
       </View>
-      <View style={{ height: 1, width: "100%", backgroundColor: "#6CC4C7" }} />
 
       <View style={{ height: 1, width: "100%", backgroundColor: "#EEE" }} />
       <View style={{ marginBottom: 100 }}>
