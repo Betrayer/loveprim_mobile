@@ -26,11 +26,12 @@ import { AuthScreen } from "./AuthScreen";
 import { NotificationScreen } from "./additionalScreens/NotificationScreen";
 import { CatalogScreen } from "./additionalScreens/CatalogScreen";
 import { HomeScreen } from "./additionalScreens/HomeScreen";
-import { Ionicons } from '@expo/vector-icons';
+import { Ionicons } from "@expo/vector-icons";
 
 const Tab = createBottomTabNavigator();
 
 export const MainScreen = ({ navigation, route }) => {
+  const [userToken, setUserToken] = useState("");
   const { userId, admin, userName } = useSelector((state) => state.user);
   const [allProducts, setAllProducts] = useState([]);
   const [user, setUser] = useState({});
@@ -40,8 +41,6 @@ export const MainScreen = ({ navigation, route }) => {
     setDrawer(false);
     getUser();
   }, []);
-
-
 
   const getUser = async () => {
     await firebase
@@ -57,7 +56,6 @@ export const MainScreen = ({ navigation, route }) => {
         );
       });
   };
-
 
   const registerForPushNotificationsAsync = async () => {
     if (Constants.isDevice) {
@@ -79,37 +77,63 @@ export const MainScreen = ({ navigation, route }) => {
       try {
         let token = await Notifications.getExpoPushTokenAsync();
         console.log("token", token);
-        // firebase
-        // .database()
-        // .ref("users/" + userId + "/push_token")
-        // .set(token);
+        firebase
+          .database()
+          .ref("users/" + userId + "/push_token")
+          .set(token);
+        setUserToken(token);
       } catch (error) {
         console.log("error", error);
       }
       // console.log(token);
       // this.setState({ expoPushToken: token });
     } else {
-      // alert("Must use physical device for Push Notifications");
+      alert("Must use physical device for Push Notifications");
     }
-
-
-    useEffect(() => {
-      if (user) {
-        async function pushNotify() {
-          try {
-            await registerForPushNotificationsAsync();
-          } catch (error) {
-            console.log("PushEror", error);
-          }
-        }
-        pushNotify();
-      }
-    }, [user]);
   };
   // =-=-=-=--=-=-=-=-=
 
+  useEffect(() => {
+    if (user) {
+      async function pushNotify() {
+        try {
+          await registerForPushNotificationsAsync();
+        } catch (error) {
+          console.log("PushEror", error);
+        }
+      }
+      pushNotify();
+    }
+  }, [user]);
+
+  async function sendPushNotification(expoPushToken) {
+    const message = {
+      to: expoPushToken,
+      sound: "default",
+      title: "Original Title",
+      body: "And here is the body!",
+      data: { data: "goes here" },
+    };
+
+    await fetch("https://exp.host/--/api/v2/push/send", {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Accept-encoding": "gzip, deflate",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(message),
+    });
+  }
+
   return (
     <>
+      <Button
+        title="Press to Send Notification"
+        onPress={async () => {
+          await sendPushNotification(userToken);
+        }}
+      />
       <Tab.Navigator
         tabBarOptions={{
           showLabel: true,
@@ -197,7 +221,6 @@ export const MainScreen = ({ navigation, route }) => {
           />
         )}
       </Tab.Navigator>
-      
     </>
   );
 };
