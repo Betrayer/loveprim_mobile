@@ -91,20 +91,20 @@ const toMain = () => {
           <Text>Email</Text>
           <TextInput
             style={styles.txtInput}
-            placeholder="Email"
+            placeholder="Почта"
             onChangeText={(value) =>
               setTextValue({ ...textValue, email: value })
             }
           />
-          <Text>Password</Text>
+          <Text>Пароль</Text>
           <TextInput
             style={styles.txtInput}
-            placeholder="Password"
+            placeholder="Пароль"
             onChangeText={(value) =>
               setTextValue({ ...textValue, password: value })
             }
           />
-          <Button title="Log In" onPress={loginUserAdd} />
+          <Button title="Вход" onPress={loginUserAdd} />
           {errorId ? <Text>{errorId}</Text> : <></>}
         </View>
       </KeyboardAvoidingView>

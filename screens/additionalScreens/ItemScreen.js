@@ -406,13 +406,13 @@ export const ItemScreen = ({ route, navigation }) => {
           <Text>{item}</Text>
         </TouchableOpacity> */}
 
-        <View style={styles.shareFab}>
+        <View>
           <Fab
             active={!active}
             direction="up"
             containerStyle={{}}
-            style={{ backgroundColor: "#2f8f85" }}
-            position="bottomRight"
+            style={{ backgroundColor: "#2f8f85", top: - win.height / 4 + 20, left: win.width / 2}}
+            position="topRight"
             onPress={onShare}
           >
             <Icon color="#fff" name="md-share" />
@@ -523,12 +523,12 @@ const styles = StyleSheet.create({
     // justifyContent: "center",
     // alignItems: "center",
   },
-  shareFab: {
-    position: "absolute",
-    top: win.height / 2 + 62,
-    right: 0,
-    zIndex: 2,
-  },
+  // shareFab: {
+  //   position: "absolute",
+  //   top: win.height / 2 + 62,
+  //   right: 0,
+  //   zIndex: 2,
+  // },
   cartButton: {
     backgroundColor: "#6cc4c7",
     alignSelf: "stretch",

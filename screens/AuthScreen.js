@@ -73,7 +73,7 @@ export const AuthScreen = ({ navigation, route }) => {
             //   />
             // ),
           }}
-          name="Login"
+          name="Вход"
           component={LoginScreen}
         />
         <Tab.Screen
@@ -86,7 +86,7 @@ export const AuthScreen = ({ navigation, route }) => {
             //   />
             // ),
           }}
-          name="Registration"
+          name="Регистрация"
           component={RegistrScreen}
         />
 

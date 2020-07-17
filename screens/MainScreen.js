@@ -34,9 +34,8 @@ const Tab = createBottomTabNavigator();
 export const MainScreen = ({ navigation, route }) => {
   const [userToken, setUserToken] = useState("");
   const { userId, admin, userName } = useSelector((state) => state.user);
-  const [allProducts, setAllProducts] = useState([]);
-  const [user, setUser] = useState({});
   const [drawer, setDrawer] = useState(false);
+  const [user, setUser] = useState("");
 
   const [notificationList, setNotificationList] = useState([]);
 
@@ -92,6 +91,7 @@ export const MainScreen = ({ navigation, route }) => {
       <Tab.Navigator
         tabBarOptions={{
           showLabel: true,
+          keyboardHidesTabBar: true
         }}
       >
         <Tab.Screen
@@ -104,7 +104,7 @@ export const MainScreen = ({ navigation, route }) => {
               />
             ),
           }}
-          name="Home"
+          name="Главная"
           component={HomeScreen}
         />
         <Tab.Screen
@@ -117,7 +117,7 @@ export const MainScreen = ({ navigation, route }) => {
               />
             ),
           }}
-          name="Catalog"
+          name="Каталог"
           component={CatalogScreen}
         />
         <Tab.Screen
@@ -130,7 +130,7 @@ export const MainScreen = ({ navigation, route }) => {
               />
             ),
           }}
-          name="Backet"
+          name="Корзина"
           component={BacketScreen}
         />
         <Tab.Screen
@@ -170,8 +170,7 @@ export const MainScreen = ({ navigation, route }) => {
               </View>
             ),
           }}
- 
-          name="Notification"
+          name="Уведомления"
           component={NotificationScreen}
         />
         {userId ? (
@@ -185,7 +184,7 @@ export const MainScreen = ({ navigation, route }) => {
                 />
               ),
             }}
-            name="Profile"
+            name="Профиль"
             component={MainProfileScreen}
           />
         ) : (
@@ -199,7 +198,7 @@ export const MainScreen = ({ navigation, route }) => {
                 />
               ),
             }}
-            name="AuthScreen"
+            name="Вход"
             component={AuthScreen}
           />
         )}
