@@ -7,7 +7,7 @@ import { ChildrenSizesTab } from "./sizeChartTabs/ChildrenSizesTab";
 
 export const SizeChartScreen = () => {
   return (
-    <Container>
+    <Container style={styles.container}>
       <Tabs tabBarPosition="bottom">
         <Tab heading="Woman">
           <WomenSizesTab />
@@ -26,9 +26,10 @@ export const SizeChartScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    fontFamily: "ubuntu-regular",
-    backgroundColor: "#fff",
+    fontFamily: "Roboto-Condensed-Regular",
+    backgroundColor: "#f5f7f7",
     alignItems: "center",
     justifyContent: "center",
+    paddingTop: 18,
   },
 });
