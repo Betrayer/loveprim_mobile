@@ -79,34 +79,35 @@ export const MainScreen = ({ navigation, route }) => {
       try {
         let token = await Notifications.getExpoPushTokenAsync();
         console.log("token", token);
-        // firebase
-        // .database()
-        // .ref("users/" + userId + "/push_token")
-        // .set(token);
+        firebase
+        .database()
+        .ref("users/" + userId + "/push_token")
+        .set(token);
       } catch (error) {
         console.log("error", error);
       }
       // console.log(token);
       // this.setState({ expoPushToken: token });
     } else {
-      // alert("Must use physical device for Push Notifications");
+      alert("Must use physical device for Push Notifications");
     }
 
 
-    useEffect(() => {
-      if (user) {
-        async function pushNotify() {
-          try {
-            await registerForPushNotificationsAsync();
-          } catch (error) {
-            console.log("PushEror", error);
-          }
-        }
-        pushNotify();
-      }
-    }, [user]);
+    
   };
   // =-=-=-=--=-=-=-=-=
+  useEffect(() => {
+    if (user) {
+      async function pushNotify() {
+        try {
+          await registerForPushNotificationsAsync();
+        } catch (error) {
+          console.log("PushEror", error);
+        }
+      }
+      pushNotify();
+    }
+  }, [user]);
 
   return (
     <>
