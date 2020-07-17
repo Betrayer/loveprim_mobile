@@ -60,6 +60,7 @@ export const NotificationScreen = ({ navigation }) => {
   };
   const renderHiddenItem = (data, rowMap) => (
     <View style={styles.rowBack}>
+      {/* <Text>Left</Text> */}
       <TouchableOpacity
         style={[styles.backRightBtn, styles.backRightBtnRight]}
         onPress={() => deleteRow(rowMap, data.item.key, data.item.id)}
@@ -70,13 +71,16 @@ export const NotificationScreen = ({ navigation }) => {
   );
   const renderItem = (item) => (
     <View style={styles.rowFront} underlayColor={"#AAA"}>
+      {console.log("item", item)}
       <Text style={styles.notif}>
         {item.item.notification}
         <Text styles={styles.notifTextNo}>No{item.item.orderNo}</Text>
       </Text>
     </View>
   );
-
+  const onRowDidOpen = (rowKey) => {
+    console.log("This row opened", rowKey);
+  };
   return (
     <View style={styles.container}>
 
@@ -102,7 +106,7 @@ const styles = StyleSheet.create({
     // alignItems: "center",
     // justifyContent: "center",
     // width: "100%",
-    backgroundColor: "white",
+    backgroundColor: "#f7f9f9",
     flex: 1,
     paddingVertical: 10,
   },
@@ -122,6 +126,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     lineHeight: 25,
     color: "#444",
+    backgroundColor:'#fff',
   },
   notifTextNo: {
     color: "#2f8f85",

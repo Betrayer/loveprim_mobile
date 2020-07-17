@@ -145,7 +145,7 @@ export const DecorationsScreen = () => {
           </Item>
         </Container>
       </View>
-      <View style={{ height: 1, width: "100%", backgroundColor: "#6CC4C7" }} />
+      
 
       <View style={{ height: 1, width: "100%", backgroundColor: "#EEE" }} />
       <View style={{ marginBottom: 100 }}>
@@ -177,13 +177,13 @@ export const DecorationsScreen = () => {
                   )}
                   {item.inStock ? (
                     <View
-                      style={{
-                        position: "absolute",
-                        backgroundColor: "#6CC4C7",
-                        top: item.sale ? 58 : 24,
-                        left: 9,
-                        zIndex: 3,
-                      }}
+                    style={{
+                      position: "absolute",
+                      backgroundColor: "#5cbcbf",
+                      top: item.sale ? 54 : 24,
+                      left: 6,
+                      zIndex: 3,
+                    }}
                     >
                       <Text style={styles.salesText}>В наличии</Text>
                     </View>
@@ -247,7 +247,7 @@ const styles = StyleSheet.create({
     position: "absolute",
     backgroundColor: "tomato",
     top: 24,
-    left: 9,
+    left: 6,
     zIndex: 3,
   },
   salesText: {

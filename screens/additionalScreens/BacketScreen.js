@@ -348,10 +348,10 @@ export const BacketScreen = ({ navigation }) => {
               placeholder="Комментарий"
               onChangeText={(value) => setComment(value)}
             />
-            <Text style={styles.checkoutTextSum}>
+            <Text style={styles.sum}>
               Общая сумма: {finalPrice - Number(discount)} грн
             </Text>
-            <Text>
+            <Text style={styles.additional}>
               *Стоимость заказа указана без учета стоимости доставки товара в
               Украину, необходимой упаковки и доставки по Украине
             </Text>
@@ -360,7 +360,7 @@ export const BacketScreen = ({ navigation }) => {
               style={styles.del}
               onPress={() => onBuyBtnClick()}
             >
-              <Text>КУПИТЬ</Text>
+              <Text style={styles.buyText}>КУПИТЬ</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -410,6 +410,18 @@ const styles = StyleSheet.create({
   checkoutTextBold:{
     fontFamily: "Roboto-Condensed-Bold",
     fontSize: 16,
+  },
+  sum:{
+    fontFamily: "Roboto-Condensed-Bold",
+    fontSize: 20,
+    paddingHorizontal: 20,
+    marginTop: 16,
+  },
+  additional:{
+    color: "#777",
+    fontFamily: "Roboto-Condensed-Light",
+    fontSize: 14,
+    marginTop: 6
   },
   input: {
     color: "#787472",
@@ -478,5 +490,17 @@ const styles = StyleSheet.create({
     backgroundColor: "tomato",
     right: 0,
     height: "100%",
+  },
+  del:{
+    alignSelf:'stretch',
+    backgroundColor: '#5bb3b6',
+    marginTop:10,
+  },
+  buyText:{
+    color:'#fff',
+    paddingVertical: 12,
+    textAlign: 'center',
+    fontFamily: "Roboto-Condensed-Bold",
+    fontSize: 18,
   },
 });
