@@ -52,9 +52,9 @@ export const BacketScreen = ({ navigation }) => {
       }
     }
   }, [myUser]);
-  useEffect(() => {
-    console.log('bonusArray', bonusArray)
-  }, [bonusArray])
+  // useEffect(() => {
+  //   console.log('bonusArray', bonusArray)
+  // }, [bonusArray])
 
   useEffect(() => {
     getBacket();

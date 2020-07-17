@@ -4,7 +4,6 @@ import {
   StyleSheet,
   Text,
   View,
-  Button,
   Image,
   TouchableWithoutFeedback,
   KeyboardAvoidingView,
@@ -12,12 +11,14 @@ import {
   Platform,
   TextInput,
 } from "react-native";
+// import { Container, Header, Content, Footer, FooterTab, Button, Icon, Text, Badge } from 'native-base';
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Notifications } from "expo"; // Богдан тест
 import * as Permissions from "expo-permissions";
 // import { FontAwesome5 } from "@expo/vector-icons";
 import Constants from "expo-constants";
 import firebase from "firebase"; // Богдан тест
+import { firestore } from "../firebase/config";
 import { useDispatch, useSelector } from "react-redux";
 import { logoutUser } from "../redux/operations";
 import { MainProfileScreen } from "./additionalScreens/MainProfileScreen";
@@ -33,7 +34,11 @@ const Tab = createBottomTabNavigator();
 export const MainScreen = ({ navigation, route }) => {
   const [userToken, setUserToken] = useState("");
   const { userId, admin, userName } = useSelector((state) => state.user);
+  const [allProducts, setAllProducts] = useState([]);
+  const [user, setUser] = useState({});
   const [drawer, setDrawer] = useState(false);
+
+  const [notificationList, setNotificationList] = useState([]);
 
   useEffect(() => {
     setDrawer(false);
@@ -55,28 +60,32 @@ export const MainScreen = ({ navigation, route }) => {
       });
   };
 
- 
- 
+  useEffect(() => {
+    getNotifications();
+  }, []);
 
-  async function sendPushNotification(expoPushToken) {
-    const message = {
-      to: expoPushToken,
-      sound: "default",
-      title: "Original Title",
-      body: "And here is the body!",
-      data: { data: "goes here" },
-    };
-
-    await fetch("https://exp.host/--/api/v2/push/send", {
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-        "Accept-encoding": "gzip, deflate",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(message),
-    });
-  }
+  const getNotifications = async () => {
+    await firestore
+      .collection("notifications")
+      .where("userId", "==", userId)
+      .onSnapshot((data) => {
+        setNotificationList(
+          data.docs
+            .map((doc, ind) => {
+              return { ...doc.data(), id: doc.id, key: { ind } };
+            })
+            .sort(function (a, b) {
+              if (a.date > b.date) {
+                return -1;
+              }
+              if (a.date < b.date) {
+                return 1;
+              }
+              return 0;
+            })
+        );
+      });
+  };
 
   return (
     <>
@@ -126,14 +135,42 @@ export const MainScreen = ({ navigation, route }) => {
         />
         <Tab.Screen
           options={{
-            tabBarIcon: ({ focused, size, color }) => (
-              <Ionicons
-                name="ios-notifications"
-                size={focused ? 40 : 30}
-                color={!focused ? "#aaa" : "tomato"}
-              />
+            tabBarIcon: ({ focused, color, size }) => (
+              <View>
+                <Ionicons
+                  name="ios-notifications"
+                  size={focused ? 40 : 30}
+                  color={!focused ? "#aaa" : "tomato"}
+                />
+                {notificationList.length > 0 && (
+                  <View
+                    style={{
+                      position: "absolute",
+                      right: -6,
+                      top: -3,
+                      backgroundColor: "red",
+                      borderRadius: 6,
+                      width: 16,
+                      height: 16,
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
+                  >
+                    <Text
+                      style={{
+                        color: "white",
+                        fontSize: 12,
+                        fontWeight: "bold",
+                      }}
+                    >
+                      {notificationList.length}
+                    </Text>
+                  </View>
+                )}
+              </View>
             ),
           }}
+ 
           name="Notification"
           component={NotificationScreen}
         />

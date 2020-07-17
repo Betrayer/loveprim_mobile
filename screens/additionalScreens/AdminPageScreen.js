@@ -9,6 +9,8 @@ import {
 } from "react-native";
 import React, { useState, useEffect, useRef } from "react";
 import { firestore } from "../../firebase/config";
+import { Container, Header, Item, Input, Icon } from "native-base";
+
 
 export const AdminPageScreen = ({ navigation }) => {
   const [orderList, setOrderList] = useState([]);
@@ -108,21 +110,43 @@ export const AdminPageScreen = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <Text>{exchange}</Text>
-      <View>
-        <View style={{ ...StyleSheet.absoluteFill }}></View>
+      <Text>Курс на сегодня {exchange}</Text>
+      {/* <View> */}
+
+      <View
+        style={{
+          alignItems: "center",
+          flexDirection: "row",
+        }}
+      >
+        <Container style={{ height: 50, backgroundColor: "#fff" }}>
+          <Item
+            searchBar
+            style={{
+              backgroundColor: "#fff",
+            }}
+          >
+            <Icon name="ios-search" />
+            <Input
+              placeholder="Искать..."
+              value={searchValue}
+              onChangeText={(value) => setSearchValue(value)}
+            />
+          </Item>
+        </Container>
+      </View>
+        {/* <View style={{ ...StyleSheet.absoluteFill }}></View>
         <TextInput
           style={styles.txtInput}
           placeholder="Искать по телефону"
           value={searchValue}
           onChangeText={(value) => setSearchValue(value)}
         />
-      </View>
+      </View> */}
       <Picker
         selectedValue={selectedValue}
         style={{ width: 200, height: 44, backgroundColor: "#fff" }}
           itemStyle={{ height: 44 }}
-        // onValueChange={(itemValue) => setSelectedValue(itemValue)}
         onValueChange={(itemValue) => filterOrders(itemValue)}
       >
         <Picker.Item label="Все" value="all" />
