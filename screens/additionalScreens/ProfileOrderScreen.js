@@ -38,6 +38,7 @@ export const ProfileOrderScreen = ({ order }) => {
         notification: "Не забудьте оплатить заказ ",
         orderNo: id,
         date: Date.now(),
+        userToken: user.userToken,
       });
     }
   };

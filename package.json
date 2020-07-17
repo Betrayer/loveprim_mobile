@@ -12,6 +12,8 @@
     "@react-native-community/async-storage": "^1.11.0",
     "@react-native-community/masked-view": "^0.1.6",
     "@react-native-community/toolbar-android": "0.1.0-rc.2",
+    "@react-native-firebase/app": "^8.2.0",
+    "@react-native-firebase/messaging": "^7.4.2",
     "@react-navigation/bottom-tabs": "^5.6.0",
     "@react-navigation/drawer": "^5.8.4",
     "@react-navigation/material-bottom-tabs": "^5.2.12",
@@ -52,7 +54,8 @@
     "react-redux": "^7.2.0",
     "react-router-dom": "^5.2.0",
     "redux-persist": "^6.0.0",
-    "redux-thunk": "^2.3.0"
+    "redux-thunk": "^2.3.0",
+    "expo-notifications": "~0.1.1"
   },
   "devDependencies": {
     "@babel/core": "^7.8.6",

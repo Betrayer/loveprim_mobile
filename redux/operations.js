@@ -1,10 +1,13 @@
 import types from "./types";
 import { auth, firestore } from "../firebase/config";
 
-export const registerUser = (param, setError, setErrorId, toMain) => async (
-  dispatch
-) => {
-  // console.log("param", param);
+export const registerUser = (
+  param,
+  setError,
+  setErrorId,
+  toMain,
+  token
+) => async (dispatch) => {
   try {
     const user = await auth.createUserWithEmailAndPassword(
       param.email,
@@ -24,6 +27,7 @@ export const registerUser = (param, setError, setErrorId, toMain) => async (
       userPhone: param.userPhone,
       userAdress: "",
       userBonus: 0,
+      userToken: token,
     });
     await dispatch({
       type: types.REGISTR_USER,
@@ -35,6 +39,7 @@ export const registerUser = (param, setError, setErrorId, toMain) => async (
         userPhone: param.userPhone,
         userAdress: "",
         userBonus: 0,
+        userToken: token,
       },
     }).then(toMain());
   } catch (error) {
@@ -73,6 +78,7 @@ export const loginUser = (param, setError, setErrorId, toMain) => async (
         userPhone: dataData.userPhone,
         userAdress: dataData.userAdress,
         buyer: dataData.buyer,
+        userToken: dataData.userToken,
       },
     }).then(toMain());
   } catch (error) {

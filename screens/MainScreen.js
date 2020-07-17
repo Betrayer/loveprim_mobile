@@ -26,22 +26,19 @@ import { AuthScreen } from "./AuthScreen";
 import { NotificationScreen } from "./additionalScreens/NotificationScreen";
 import { CatalogScreen } from "./additionalScreens/CatalogScreen";
 import { HomeScreen } from "./additionalScreens/HomeScreen";
-import { Ionicons } from '@expo/vector-icons';
+import { Ionicons } from "@expo/vector-icons";
 
 const Tab = createBottomTabNavigator();
 
 export const MainScreen = ({ navigation, route }) => {
+  const [userToken, setUserToken] = useState("");
   const { userId, admin, userName } = useSelector((state) => state.user);
-  const [allProducts, setAllProducts] = useState([]);
-  const [user, setUser] = useState({});
   const [drawer, setDrawer] = useState(false);
 
   useEffect(() => {
     setDrawer(false);
     getUser();
   }, []);
-
-
 
   const getUser = async () => {
     await firebase
@@ -58,56 +55,28 @@ export const MainScreen = ({ navigation, route }) => {
       });
   };
 
+ 
+ 
 
-  const registerForPushNotificationsAsync = async () => {
-    if (Constants.isDevice) {
-      const { status: existingStatus } = await Permissions.getAsync(
-        Permissions.NOTIFICATIONS
-      );
-      let finalStatus = existingStatus;
-      if (existingStatus !== "granted") {
-        const { status } = await Permissions.askAsync(
-          Permissions.NOTIFICATIONS
-        );
-        finalStatus = status;
-      }
-      if (finalStatus !== "granted") {
-        alert("Failed to get push token for push notification!");
-        return;
-      }
-      console.log("userId", userId);
-      try {
-        let token = await Notifications.getExpoPushTokenAsync();
-        console.log("token", token);
-        firebase
-        .database()
-        .ref("users/" + userId + "/push_token")
-        .set(token);
-      } catch (error) {
-        console.log("error", error);
-      }
-      // console.log(token);
-      // this.setState({ expoPushToken: token });
-    } else {
-      alert("Must use physical device for Push Notifications");
-    }
+  async function sendPushNotification(expoPushToken) {
+    const message = {
+      to: expoPushToken,
+      sound: "default",
+      title: "Original Title",
+      body: "And here is the body!",
+      data: { data: "goes here" },
+    };
 
-
-    
-  };
-  // =-=-=-=--=-=-=-=-=
-  useEffect(() => {
-    if (user) {
-      async function pushNotify() {
-        try {
-          await registerForPushNotificationsAsync();
-        } catch (error) {
-          console.log("PushEror", error);
-        }
-      }
-      pushNotify();
-    }
-  }, [user]);
+    await fetch("https://exp.host/--/api/v2/push/send", {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Accept-encoding": "gzip, deflate",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(message),
+    });
+  }
 
   return (
     <>
@@ -198,7 +167,6 @@ export const MainScreen = ({ navigation, route }) => {
           />
         )}
       </Tab.Navigator>
-      
     </>
   );
 };

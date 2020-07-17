@@ -18,7 +18,9 @@ import { auth, storage } from "../firebase/config";
 // import * as ImagePicker from "expo-image-picker";
 import { useDispatch } from "react-redux";
 import { registerUser } from "../redux/operations";
-
+import Constants from "expo-constants";
+import * as Permissions from "expo-permissions";
+import { Notifications } from "expo"; // Богдан тест
 
 const initialState = {
   email: "",
@@ -37,6 +39,28 @@ export const RegistrScreen = ({ navigation, route }) => {
   const [passInp, setPassInp] = useState(true);
   const [error, setError] = useState(false);
   const [errorId, setErrorId] = useState();
+  const [token, setToken] = useState("");
+  const [user, setUser] = useState({});
+  const [userToken, setUserToken] = useState("");
+
+
+  // useEffect(() => {
+  //   registerForPushNotificationsAsync();
+  // }, []);
+
+  
+  useEffect(() => {
+    if (user) {
+      async function pushNotify() {
+        try {
+          await registerForPushNotificationsAsync();
+        } catch (error) {
+          console.log("PushEror", error);
+        }
+      }
+      pushNotify();
+    }
+  }, [user]);
 
   useEffect(() => {
     if (textValue.userPhone.length < 10 && textValue.userPhone !== "") {
@@ -73,6 +97,41 @@ export const RegistrScreen = ({ navigation, route }) => {
       handleOnChange(email);
     }
   }, [textValue.email]);
+
+  const registerForPushNotificationsAsync = async () => {
+    if (Constants.isDevice) {
+      const { status: existingStatus } = await Permissions.getAsync(
+        Permissions.NOTIFICATIONS
+      );
+      let finalStatus = existingStatus;
+      if (existingStatus !== "granted") {
+        const { status } = await Permissions.askAsync(
+          Permissions.NOTIFICATIONS
+        );
+        finalStatus = status;
+      }
+      if (finalStatus !== "granted") {
+        alert("Failed to get push token for push notification!");
+        return;
+      }
+      // console.log("userId", userId);
+      try {
+        let token = await Notifications.getExpoPushTokenAsync();
+        console.log("token", token);
+        // firebase
+        //   .database()
+        //   .ref("users/" + userId + "/push_token")
+        //   .set(token);
+        setUserToken(token);
+      } catch (error) {
+        console.log("error", error);
+      }
+      // console.log(token);
+      // this.setState({ expoPushToken: token });
+    } else {
+      alert("Must use physical device for Push Notifications");
+    }
+  };
 
   const phoneTranslate = async (phone) => {
     let phone_is_valid = false;
@@ -128,7 +187,9 @@ export const RegistrScreen = ({ navigation, route }) => {
     //   console.log(error);
     //   Alert.alert(error);
     // }
-    await dispatch(registerUser(textValue, setError, setErrorId, toMain));
+    await dispatch(
+      registerUser(textValue, setError, setErrorId, toMain, userToken)
+    );
   };
 
   return (
