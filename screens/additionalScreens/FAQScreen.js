@@ -1,7 +1,6 @@
 import React from "react";
 import { StyleSheet, Text, ScrollView, View } from "react-native";
-import { Accordion } from "native-base";
-
+import { Accordion, Container, Icon } from "native-base";
 
 export const FAQScreen = () => {
   const dataArray = [
@@ -31,27 +30,49 @@ export const FAQScreen = () => {
         "Если Вам не подошел размер-мы всегда поможем Вам продать этот товар. К сожалению, возврата в магазины Испании нет. Но, к счастью «Пролётов» с размерами мало, так как мы стараемся всегда максимально точно помочь подобрать Вам нужный размер =) В случае обнаружения каких-либо дефектов на товаре-просьба спокойно все описать +прикрепить фото и мы решим Ваш вопрос. Связаться с консультантом",
     },
   ];
+  const renderHeader=(item, expanded) =>{
+    return (
+      <View style={{
+        flexDirection: "row",
+        padding: 10,
+        justifyContent: "space-between",
+        alignItems: "center" ,
+        
+        backgroundColor: "#fff", }}>
+      <Text style={{ fontSize: 20,
+        fontFamily: "Roboto-Condensed-Regular", }}>
+          {" "}{item.title}
+        </Text>
+        {expanded
+          ? <Icon style={{ fontSize: 18, color: "tomato" }} name="remove" />
+          : <Icon style={{ fontSize: 18, color: "#2f8f85" }} name="add" />}
+      </View>
+    );
+  }
   return (
-    <ScrollView>
-      <Text style={styles.faqHeader}>Часто задаваемые вопросы</Text>
-      <Accordion dataArray={dataArray} expanded={0} icon="add"
-            expandedIcon="remove"
-            iconStyle={{ color: "green" }}
-            expandedIconStyle={{ color: "red" }}/>
-    </ScrollView>
+    <Container style={styles.container}>
+      {/* <Text style={styles.faqHeader}>Часто задаваемые вопросы</Text> */}
+      <Accordion
+        dataArray={dataArray}
+        expanded={0}
+        icon="add"
+        expandedIcon="remove"
+        contentStyle={{
+          fontFamily: "Roboto-Condensed-Regular",
+          backgroundColor: "#f7fafa",
+        }}
+        iconStyle={{ color: "green" }}
+        expandedIconStyle={{ color: "red" }}
+        renderHeader={renderHeader}
+      />
+    </Container>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    fontFamily: "ubuntu-regular",
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  faqHeader: {
-    fontSize: 20,
-    textAlign: "center",
+    fontFamily: "Roboto-Condensed-Regular",
+    backgroundColor: "#f1f4f4",
   },
 });
