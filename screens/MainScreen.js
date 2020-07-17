@@ -33,8 +33,6 @@ const Tab = createBottomTabNavigator();
 export const MainScreen = ({ navigation, route }) => {
   const [userToken, setUserToken] = useState("");
   const { userId, admin, userName } = useSelector((state) => state.user);
-  const [allProducts, setAllProducts] = useState([]);
-  const [user, setUser] = useState({});
   const [drawer, setDrawer] = useState(false);
 
   useEffect(() => {
@@ -57,54 +55,8 @@ export const MainScreen = ({ navigation, route }) => {
       });
   };
 
-  const registerForPushNotificationsAsync = async () => {
-    if (Constants.isDevice) {
-      const { status: existingStatus } = await Permissions.getAsync(
-        Permissions.NOTIFICATIONS
-      );
-      let finalStatus = existingStatus;
-      if (existingStatus !== "granted") {
-        const { status } = await Permissions.askAsync(
-          Permissions.NOTIFICATIONS
-        );
-        finalStatus = status;
-      }
-      if (finalStatus !== "granted") {
-        alert("Failed to get push token for push notification!");
-        return;
-      }
-      console.log("userId", userId);
-      try {
-        let token = await Notifications.getExpoPushTokenAsync();
-        console.log("token", token);
-        firebase
-          .database()
-          .ref("users/" + userId + "/push_token")
-          .set(token);
-        setUserToken(token);
-      } catch (error) {
-        console.log("error", error);
-      }
-      // console.log(token);
-      // this.setState({ expoPushToken: token });
-    } else {
-      alert("Must use physical device for Push Notifications");
-    }
-  };
-  // =-=-=-=--=-=-=-=-=
-
-  useEffect(() => {
-    if (user) {
-      async function pushNotify() {
-        try {
-          await registerForPushNotificationsAsync();
-        } catch (error) {
-          console.log("PushEror", error);
-        }
-      }
-      pushNotify();
-    }
-  }, [user]);
+ 
+ 
 
   async function sendPushNotification(expoPushToken) {
     const message = {
@@ -128,12 +80,6 @@ export const MainScreen = ({ navigation, route }) => {
 
   return (
     <>
-      <Button
-        title="Press to Send Notification"
-        onPress={async () => {
-          await sendPushNotification(userToken);
-        }}
-      />
       <Tab.Navigator
         tabBarOptions={{
           showLabel: true,
