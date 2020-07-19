@@ -37,7 +37,7 @@ export const MainScreen = ({ navigation, route }) => {
 
   useEffect(() => {
     setDrawer(false);
-    getUser();
+    // getUser();
   }, []);
 
   const getUser = async () => {
@@ -89,12 +89,13 @@ export const MainScreen = ({ navigation, route }) => {
           options={{
             tabBarIcon: ({ focused, size, color }) => (
               <Ionicons
-                name="md-laptop"
+                name="md-home"
                 size={focused ? 40 : 30}
-                color={!focused ? "#aaa" : "tomato"}
+                color={!focused ? "#aaa" : "#5bb3b6"}
               />
             ),
           }}
+          labelStyle={{color: '#5bb3b6'}}
           name="Home"
           component={HomeScreen}
         />
@@ -104,7 +105,7 @@ export const MainScreen = ({ navigation, route }) => {
               <Ionicons
                 name="ios-albums"
                 size={focused ? 40 : 30}
-                color={!focused ? "#aaa" : "tomato"}
+                color={!focused ? "#aaa" : "#5bb3b6"}
               />
             ),
           }}
@@ -117,7 +118,7 @@ export const MainScreen = ({ navigation, route }) => {
               <Ionicons
                 name="ios-basket"
                 size={focused ? 40 : 30}
-                color={!focused ? "#aaa" : "tomato"}
+                color={!focused ? "#aaa" : "#5bb3b6"}
               />
             ),
           }}
@@ -130,7 +131,7 @@ export const MainScreen = ({ navigation, route }) => {
               <Ionicons
                 name="ios-notifications"
                 size={focused ? 40 : 30}
-                color={!focused ? "#aaa" : "tomato"}
+                color={!focused ? "#aaa" : "#5bb3b6"}
               />
             ),
           }}
@@ -144,11 +145,16 @@ export const MainScreen = ({ navigation, route }) => {
                 <Ionicons
                   name="ios-contact"
                   size={focused ? 40 : 30}
-                  color={!focused ? "#aaa" : "tomato"}
+                  color={!focused ? "#aaa" : "#5bb3b6"}
                 />
               ),
             }}
+            // tabBarOptions={{
+            //   activeTintColor: 'tomato',
+            //   inactiveTintColor: 'gray',
+            // }}
             name="Profile"
+
             component={MainProfileScreen}
           />
         ) : (
@@ -158,7 +164,7 @@ export const MainScreen = ({ navigation, route }) => {
                 <Ionicons
                   name="ios-log-in"
                   size={focused ? 40 : 30}
-                  color={!focused ? "#aaa" : "tomato"}
+                  color={!focused ? "#aaa" : "#5bb3b6"}
                 />
               ),
             }}

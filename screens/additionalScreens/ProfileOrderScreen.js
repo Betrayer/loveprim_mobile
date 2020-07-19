@@ -4,13 +4,26 @@ import { useSelector } from "react-redux";
 import { firestore } from "../../firebase/config";
 import moment from "moment";
 
-export const ProfileOrderScreen = ({ order }) => {
+export const ProfileOrderScreen = ({ item }) => {
     const { admin, userId, buyer } = useSelector((state) => state.user);
   const day = moment(order.numberOfOrder).format("D/M/YYYY, HH:mm");
+  const [order, setOrder] = useState(item);
   const [status, setStatus] = useState("Обработка");
   useEffect(() => {
     translateStatus();
     remindToPay(order.numberOfOrder);
+    const getOrder = async () => {
+      await firestore
+        .collection("orders")
+        .where("numberOfOrder", "==", item.numberOfOrder)
+        .get()
+        .then(function (querySnapshot) {
+          querySnapshot.forEach(function (doc) {
+            setOrder(doc.data());
+          });
+        });
+    };
+    getOrder()
   }, []);
   const translateStatus = () => {
     if (order.status === "processing") {
