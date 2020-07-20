@@ -42,6 +42,7 @@ export const MainScreen = ({ navigation, route }) => {
   useEffect(() => {
     setDrawer(false);
     getUser();
+    // console.log(userToken)
   }, []);
 
   const getUser = async () => {
