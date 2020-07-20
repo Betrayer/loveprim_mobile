@@ -6,8 +6,8 @@ import moment from "moment";
 
 export const ProfileOrderScreen = ({ item }) => {
     const { admin, userId, buyer } = useSelector((state) => state.user);
-  const day = moment(order.numberOfOrder).format("D/M/YYYY, HH:mm");
   const [order, setOrder] = useState(item);
+  const day = moment(order.numberOfOrder).format("D/M/YYYY, HH:mm");
   const [status, setStatus] = useState("Обработка");
   useEffect(() => {
     translateStatus();

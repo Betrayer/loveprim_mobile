@@ -25,6 +25,7 @@ export const AdminPageScreen = ({ navigation }) => {
 
 
 
+
   useEffect(() => {
     getOrders();
     getKurs();
@@ -92,6 +93,25 @@ export const AdminPageScreen = ({ navigation }) => {
         setExchange(username.kurs);
       });
   };
+  const translateStatus = (selectedValue) => {
+    if (selectedValue === "processing") {
+      return"Обработка";
+    } else if (selectedValue === "bought") {
+      return "Куплено";
+    } else if (selectedValue === "checkedAndWeighted") {
+      return"Проверено и взвешено";
+    } else if (selectedValue === "approved") {
+      return "Одобрено Администратором";
+    } else if (selectedValue === "payed") {
+      return "Оплачено";
+    } else if (selectedValue === "sendToUkr") {
+      return "Едет в Украину";
+    } else if (selectedValue === "inUkr") {
+      return "Прибыло в Украину";
+    } else if (selectedValue === "received") {
+      return "Получено";
+    }
+  };
 
   const filterOrders = (itemValue) => {
     setSelectedValue(itemValue);
@@ -108,7 +128,7 @@ export const AdminPageScreen = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <Text>{exchange}</Text>
+      <Text style={styles.exchange}>1&#8364; = {exchange}</Text>
       <View>
         {/* <View style={{ ...StyleSheet.absoluteFill }}></View> */}
         <TextInput
@@ -138,12 +158,13 @@ export const AdminPageScreen = ({ navigation }) => {
       </Picker>
       <FlatList
         // data={filteredOrders}
+        contentContainerStyle={{ paddingBottom: 20}}
         style={{width:'100%', paddingHorizontal:40}}
         data={filteredItems}
         keyExtractor={(item, indx) => indx.toString()}
         renderItem={({ item }) => {
           return (
-            <View style={styles.comment}>
+            <View style={styles.comment} >
               <TouchableOpacity
                 onPress={() =>
                   navigation.navigate("OrderScreen", { info: item })
@@ -151,8 +172,8 @@ export const AdminPageScreen = ({ navigation }) => {
               >
                 <View style={styles.order}>
                   <View style={styles.orderTextWrapper}>
-                  <Text style={styles.orderText}>{item.numberOfOrder}</Text>
-                  <Text style={styles.orderText}>{item.status}</Text></View>
+                  <Text style={styles.orderText}>&#8470;{item.numberOfOrder}</Text>
+                  <Text style={styles.orderText}>{translateStatus(item.status)}</Text></View>
                   <Text style={styles.orderText}>{item.userName}</Text>
                 </View>
               </TouchableOpacity>
@@ -160,6 +181,7 @@ export const AdminPageScreen = ({ navigation }) => {
           );
         }}
       />
+      
     </View>
   );
 };
@@ -170,14 +192,28 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     // paddingHorizontal:30
+    paddingTop:10
+  },
+  exchange:{
+    fontFamily: "Roboto-Condensed-Bold",
+    fontSize: 20,
   },
   order: {
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 2,
+      height: 3,
+    },
+    shadowOpacity: 0.17,
+    shadowRadius: 4.65,
+    backgroundColor:'#fff',
+    elevation: 6,
     // width: 330,
     alignSelf: 'stretch',
     marginTop: 20,
-    borderColor: "#6CC4C7",
-    borderWidth: 2,
-    borderRadius: 10,
+    // borderColor: "#6CC4C7",
+    // borderWidth: 2,
+    borderRadius: 2,
     // width: "92%",
     // justifyContent: "space-between",
     alignItems: "center",
