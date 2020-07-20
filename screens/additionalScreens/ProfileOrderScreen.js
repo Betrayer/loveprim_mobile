@@ -5,8 +5,8 @@ import { firestore } from "../../firebase/config";
 import moment from "moment";
 
 export const ProfileOrderScreen = ({ item }) => {
-    const { admin, userId, buyer } = useSelector((state) => state.user);
-  const day = moment(order.numberOfOrder).format("D/M/YYYY, HH:mm");
+  const { admin, userId, buyer } = useSelector((state) => state.user);
+  const day = moment(item.numberOfOrder).format("D/M/YYYY, HH:mm");
   const [order, setOrder] = useState(item);
   const [status, setStatus] = useState("Обработка");
   useEffect(() => {
@@ -23,7 +23,7 @@ export const ProfileOrderScreen = ({ item }) => {
           });
         });
     };
-    getOrder()
+    getOrder();
   }, []);
   const translateStatus = () => {
     if (order.status === "processing") {
