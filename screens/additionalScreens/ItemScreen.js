@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, Component } from "react";
 import { Container, Header, Fab, Icon } from "native-base";
-import { Dimensions } from "react-native";
+import { Dimensions, ScrollView } from "react-native";
 import { useSelector } from "react-redux";
 import Modal from "react-native-modal";
 import { firestore } from "../../firebase/config";
@@ -308,7 +308,7 @@ export const ItemScreen = ({ route, navigation }) => {
 
   return (
     <>
-      <View style={styles.container}>
+      <ScrollView style={styles.container}>
         <Modal
           style={{ justifyContent: "flex-end" }}
           isVisible={isModalVisible}
@@ -339,6 +339,7 @@ export const ItemScreen = ({ route, navigation }) => {
                 ) : (
                   <></>
                 )}
+                {good.sizes.some((r) => sizes.indexOf(r) >= 0) ? <Text style={styles.sizesText}>Выберите размер</Text> : <></>}
               </View>
             ) : (
               <></>
@@ -354,13 +355,12 @@ export const ItemScreen = ({ route, navigation }) => {
               renderItem={({ item }) => {
                 return (
                   <>
-                    {/* {console.log("emptySize", emptySize)} */}
-                    {/* {chekedSizes(item)} */}
+                  {item ?
                     <TouchableOpacity
                       style={
                         chosenSizes === item ? styles.activeSizes : styles.sizes
                       }
-                      onPress={() => setSizes(item)}
+                      onPress={() => {setSizes(item), setModalVisible(false)}}
                     >
                       <Text
                         style={
@@ -371,7 +371,7 @@ export const ItemScreen = ({ route, navigation }) => {
                       >
                         {item}
                       </Text>
-                    </TouchableOpacity>
+                    </TouchableOpacity> :<></>}
                   </>
                 );
               }}
@@ -419,9 +419,9 @@ export const ItemScreen = ({ route, navigation }) => {
           </Fab>
         </View>
         <TouchableOpacity
-          disabled={good.sizes[0] && !chosenSizes}
+          disabled={!userId || (good.sizes[0] && !chosenSizes) }
           style={
-            good.sizes[0] && !chosenSizes
+            !userId || (good.sizes[0] && !chosenSizes)
               ? styles.cartButtonDisabled
               : styles.cartButton
           }
@@ -429,7 +429,7 @@ export const ItemScreen = ({ route, navigation }) => {
         >
           <Text style={styles.cartButtonText}>В корзину</Text>
         </TouchableOpacity>
-      </View>
+      </ScrollView>
     </>
   );
 };
@@ -438,7 +438,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 2,
     backgroundColor: "#fff",
-    alignItems: "center",
+    // alignItems: "center",
     // justifyContent: "center",
     // paddingTop: 300,
     paddingHorizontal: 30,
@@ -574,9 +574,11 @@ const styles = StyleSheet.create({
     fontFamily: "Roboto-Condensed-Regular",
   },
   sizesModalWrapper: {
-    flex: 0.7,
+    // flex: 0.7,
     backgroundColor: "#fff",
     borderRadius: 10,
+    paddingTop: 20,
+    paddingBottom:60,
   },
   sizesBtn: {
     marginTop: 16,
@@ -592,5 +594,6 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontFamily: "Roboto-Condensed-Regular",
     textAlign: "center",
+    color: '#555',
   },
 });

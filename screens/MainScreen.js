@@ -37,7 +37,7 @@ export const MainScreen = ({ navigation, route }) => {
 const [user, setUser] = useState('');
   useEffect(() => {
     setDrawer(false);
-    getUser();
+    // getUser();
   }, []);
 
   const getUser = async () => {
@@ -83,16 +83,18 @@ const [user, setUser] = useState('');
       <Tab.Navigator
         tabBarOptions={{
           showLabel: true,
-          keyboardHidesTabBar: true
+          keyboardHidesTabBar: true,
+          labelStyle: { fontSize: 12, fontFamily: "Roboto-Condensed-Regular"},
+          activeTintColor : '#5bb3b6'
         }}
       >
         <Tab.Screen
           options={{
             tabBarIcon: ({ focused, size, color }) => (
               <Ionicons
-                name="md-laptop"
-                size={focused ? 40 : 30}
-                color={!focused ? "#aaa" : "tomato"}
+                name="md-home"
+                size={focused ? 38 : 30}
+                color={!focused ? "#aaa" : "#5bb3b6"}
               />
             ),
           }}
@@ -104,8 +106,8 @@ const [user, setUser] = useState('');
             tabBarIcon: ({ focused, size, color }) => (
               <Ionicons
                 name="ios-albums"
-                size={focused ? 40 : 30}
-                color={!focused ? "#aaa" : "tomato"}
+                size={focused ? 38 : 30}
+                color={!focused ? "#aaa" : "#5bb3b6"}
               />
             ),
           }}
@@ -117,8 +119,8 @@ const [user, setUser] = useState('');
             tabBarIcon: ({ focused, size, color }) => (
               <Ionicons
                 name="ios-basket"
-                size={focused ? 40 : 30}
-                color={!focused ? "#aaa" : "tomato"}
+                size={focused ? 38 : 30}
+                color={!focused ? "#aaa" : "#5bb3b6"}
               />
             ),
           }}
@@ -130,8 +132,8 @@ const [user, setUser] = useState('');
             tabBarIcon: ({ focused, size, color }) => (
               <Ionicons
                 name="ios-notifications"
-                size={focused ? 40 : 30}
-                color={!focused ? "#aaa" : "tomato"}
+                size={focused ? 38 : 30}
+                color={!focused ? "#aaa" : "#5bb3b6"}
               />
             ),
           }}
@@ -144,8 +146,8 @@ const [user, setUser] = useState('');
               tabBarIcon: ({ focused, size, color }) => (
                 <Ionicons
                   name="ios-contact"
-                  size={focused ? 40 : 30}
-                  color={!focused ? "#aaa" : "tomato"}
+                  size={focused ? 38 : 30}
+                  color={!focused ? "#aaa" : "#5bb3b6"}
                 />
               ),
             }}
@@ -158,8 +160,8 @@ const [user, setUser] = useState('');
               tabBarIcon: ({ focused, size, color }) => (
                 <Ionicons
                   name="ios-log-in"
-                  size={focused ? 40 : 30}
-                  color={!focused ? "#aaa" : "tomato"}
+                  size={focused ? 38 : 30}
+                  color={!focused ? "#aaa" : "#5bb3b6"}
                 />
               ),
             }}
