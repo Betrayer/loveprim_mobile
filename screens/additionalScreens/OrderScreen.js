@@ -1,5 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { StyleSheet, Text, View, Picker, TextInput, TouchableOpacity } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  Picker,
+  TextInput,
+  TouchableOpacity,
+} from "react-native";
 import { firestore } from "../../firebase/config";
 import moment from "moment";
 
@@ -18,17 +25,18 @@ export const OrderScreen = ({ route }) => {
   );
   const [color, setColor] = useState("#8360c3");
   const [status, setStatus] = useState("Обработка");
-  const [deliveryNo, setDeliveryNo] = useState(route.params.info.deliveryNo ? route.params.info.deliveryNo : "");
-
+  const [deliveryNo, setDeliveryNo] = useState(
+    route.params.info.deliveryNo ? route.params.info.deliveryNo : ""
+  );
 
   useEffect(() => {
-    translateStatus()
+    translateStatus();
     getUser(route.params.info.userId);
     calculatePrice();
   }, []);
   useEffect(() => {
     setStatusFirebase();
-    translateStatus()
+    translateStatus();
   }, [selectedValue]);
 
   const translateStatus = () => {
@@ -57,7 +65,7 @@ export const OrderScreen = ({ route }) => {
       setStatus("Получено");
       setColor("#2ebf91");
     }
-    getOrder()
+    getOrder();
   };
   const getUser = async (userId) => {
     await firestore
@@ -69,20 +77,20 @@ export const OrderScreen = ({ route }) => {
           setUser(doc.data());
         });
       });
-      const translateDelivery = () => {
-        if (user.delivery === "ukrPoshta") {
-          setUkrDelivery("Укрпошта");
-        } else if (user.delivery === "novaPoshta") {
-          setUkrDelivery("Нова пошта");
-        } else if (
-          user.delivery === "" ||
-          user.delivery === undefined ||
-          user.delivery === null
-        ) {
-          setUkrDelivery("Не выбрана");
-        }
-      };
-      translateDelivery();
+    const translateDelivery = () => {
+      if (user.delivery === "ukrPoshta") {
+        setUkrDelivery("Укрпошта");
+      } else if (user.delivery === "novaPoshta") {
+        setUkrDelivery("Нова пошта");
+      } else if (
+        user.delivery === "" ||
+        user.delivery === undefined ||
+        user.delivery === null
+      ) {
+        setUkrDelivery("Не выбрана");
+      }
+    };
+    translateDelivery();
   };
   const getOrder = async () => {
     await firestore
@@ -116,7 +124,9 @@ export const OrderScreen = ({ route }) => {
           .map((item) => Number(item.charge) + 2)
           .reduce((accumulator, currentValue) => accumulator + currentValue, 0)
       );
-    let newPrice = Math.ceil((newPriceHrn + weightPrice) / Number(route.params.info.kurs));
+    let newPrice = Math.ceil(
+      (newPriceHrn + weightPrice) / Number(route.params.info.kurs)
+    );
     setHrnPrice(Math.ceil(newPriceHrn + weightPrice));
     setPriceWOutWeight(Math.ceil(newPriceHrn / Number(route.params.info.kurs)));
     setCalcPrice(newPrice);
@@ -125,7 +135,7 @@ export const OrderScreen = ({ route }) => {
     });
   };
   const setStatusFirebase = async () => {
-    console.log('selectedValue', selectedValue)
+    console.log("selectedValue", selectedValue);
     await firestore.collection("orders").doc(route.params.info.id).update({
       status: selectedValue,
     });
@@ -158,7 +168,7 @@ export const OrderScreen = ({ route }) => {
         notification: "Пожалуйста, оплатите заказ ",
         orderNo: route.params.info.numberOfOrder,
         date: Date.now(),
-        userToken: user.userToken
+        userToken: user.userToken,
       });
     }
     if (id === "payed") {
@@ -167,70 +177,141 @@ export const OrderScreen = ({ route }) => {
         notification: "Была принята оплата за заказ ",
         orderNo: route.params.info.numberOfOrder,
         date: Date.now(),
-        userToken: user.userToken
+        userToken: user.userToken,
       });
     }
   };
 
   return (
     <View style={styles.container}>
-      <Text>{route.params.info.numberOfOrder}</Text>
-      <Text>{route.params.info.userName}</Text>
-      <Text>{route.params.info.userPhone}</Text>
-      <Text>Дата заказа {day}</Text>
-      <Text>Цена без веса: {priceWOutWeight}&euro;</Text>
-      <Text>
-        Цена: {calcPrice}&euro; / {hrnPrice}грн
-      </Text>
-      <Text>Доставка: {user.delivery ? ukrDelivery : "Не выбрана"}</Text>
-      <Text>Адрес: {user.userAdress ? user.userAdress : "Не указан"}</Text>
-      {order.status === "inUkr" ? <><Text>Номер накладной:{order.deliveryNo}</Text>
-      <TextInput
-      style={{ height: 40, borderColor: 'gray', borderWidth: 1, paddingHorizontal: 10, width: 160 }}
-      onChangeText={text => setDeliveryNo(text)}
-      placeholder="Номер накладной"
-      value={deliveryNo}
-    />
-    <TouchableOpacity style={styles.btn} onPress={setOrderDeliveryNo}>
-          <Text style={styles.btn}>Внести изменения</Text>
-        </TouchableOpacity>
-      </> : <Text>Не введено</Text>}
-      <Text>УПАКОВКА</Text>
-      <Text>Цена: {route.params.info.packaging}</Text>
-      <Text>СТАТУС</Text>
-      <Text style={{color: color}}>{status}</Text>
-      <Picker
-        selectedValue={selectedValue}
-        style={{ width: 200, height: 44, backgroundColor: "#fff" }}
+      <View style={styles.textWrapper}>
+        <Text style={styles.orderText}>
+          &#8470;{route.params.info.numberOfOrder}
+        </Text>
+        <Text style={styles.orderText}>{route.params.info.userName}</Text>
+        <Text style={styles.orderText}>{route.params.info.userPhone}</Text>
+        <Text style={styles.orderText}>Дата заказа {day}</Text>
+      </View>
+      <View style={styles.textWrapper}>
+        <Text style={styles.orderText}>
+          Цена без веса: {priceWOutWeight}&euro;
+        </Text>
+        <Text style={styles.orderText}>
+          Цена:
+          <Text style={styles.orderTextTitle}>
+            {" "}
+            {calcPrice}&euro; / {hrnPrice}грн
+          </Text>
+        </Text>
+      </View>
+      <View style={styles.textWrapper}>
+        <Text style={styles.orderText}>
+          Доставка: {user.delivery ? ukrDelivery : "Не выбрана"}
+        </Text>
+        <Text style={styles.orderText}>
+          Адрес: {user.userAdress ? user.userAdress : "Не указан"}
+        </Text>
+        {order.status === "inUkr" ? (
+          <>
+            <Text style={styles.orderText}>
+              Номер накладной:{order.deliveryNo}
+            </Text>
+            <View style={{ flexDirection: "row" }}>
+              <TextInput
+                style={{
+                  // height: 40,
+                  borderColor: "#ddd",
+                  borderWidth: 1,
+                  paddingHorizontal: 6,
+                  paddingVertical:8,
+                  width: 160,
+                  fontFamily: "Roboto-Condensed-Regular",
+                }}
+                onChangeText={(text) => setDeliveryNo(text)}
+                placeholder="Номер накладной"
+                value={deliveryNo}
+              />
+            
+            <TouchableOpacity style={styles.btn} onPress={setOrderDeliveryNo}>
+              <Text style={styles.btnText}>Внести</Text>
+            </TouchableOpacity></View>
+          </>
+        ) : (
+          <Text style={styles.orderText}>Номер накладной: не введен</Text>
+        )}
+      </View>
+      <View style={styles.textWrapper}>
+        <Text style={styles.orderTextTitle}>УПАКОВКА</Text>
+        <Text style={styles.orderText}>
+          Цена: {route.params.info.packaging}
+        </Text>
+      </View>
+      <View style={styles.textWrapper}>
+        <Text style={styles.orderTextTitle}>СТАТУС</Text>
+        <Text
+          style={{
+            color: color,
+            fontFamily: "Roboto-Condensed-Bold",
+            fontSize: 18,
+          }}
+        >
+          {status}
+        </Text>
+        <Picker
+          selectedValue={selectedValue}
+          style={{ width: 200, height: 44, backgroundColor: "#fff", fontFamily: "Roboto-Condensed-Regular"}}
           itemStyle={{ height: 44 }}
-        onValueChange={(itemValue) => checkOnlyOne(itemValue)}
-      >
-        <Picker.Item label="Все" value="all" />
-        <Picker.Item label="Подождуны" value="wait" />
-        <Picker.Item label="Обработка" value="processing" />
-        <Picker.Item label="Куплено" value="bought" />
-        <Picker.Item label="Проверено и взвешено" value="checkedAndWeighted" />
-        <Picker.Item label="Одобрено Администратором" value="approved" />
-        <Picker.Item label="Оплачено" value="payed" />
-        <Picker.Item label="Едет в Украину" value="sendToUkr" />
-        <Picker.Item label="Прибыло в Украину" value="inUkr" />
-        <Picker.Item label="Получено" value="received" />
-      </Picker>
+          onValueChange={(itemValue) => checkOnlyOne(itemValue)}
+        >
+          <Picker.Item label="Все" value="all" />
+          <Picker.Item label="Подождуны" value="wait" />
+          <Picker.Item label="Обработка" value="processing" />
+          <Picker.Item label="Куплено" value="bought" />
+          <Picker.Item
+            label="Проверено и взвешено"
+            value="checkedAndWeighted"
+          />
+          <Picker.Item label="Одобрено Администратором" value="approved" />
+          <Picker.Item label="Оплачено" value="payed" />
+          <Picker.Item label="Едет в Украину" value="sendToUkr" />
+          <Picker.Item label="Прибыло в Украину" value="inUkr" />
+          <Picker.Item label="Получено" value="received" />
+        </Picker>
+      </View>
     </View>
   );
 };
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    fontFamily: "ubuntu-regular",
     backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "center",
   },
   btn: {
-    textAlign: "center",
     alignItems: "center",
-    backgroundColor: "#DDDDDD",
-    padding: 4,
+    backgroundColor: "#5bb3b6",
+  },
+  btnText: {
+    textAlign: "center",
+    color:'#fff',
+    padding: 6,
+    paddingVertical: 8,
+    fontFamily: "Roboto-Condensed-Regular",
+    textTransform: 'uppercase'
+  },
+  textWrapper: {
+    alignItems: "center",
+    marginVertical: 6,
+  },
+  orderText: {
+    fontFamily: "Roboto-Condensed-Regular",
+    fontSize: 18,
+    marginBottom: 2,
+  },
+  orderTextTitle: {
+    fontFamily: "Roboto-Condensed-Bold",
+    fontSize: 16,
+    marginBottom: 2,
   },
 });

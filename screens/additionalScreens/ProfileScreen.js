@@ -173,17 +173,18 @@ export const ProfileScreen = ({ navigation, route }) => {
   };
 
   return (
-    <ScrollView>
-      <View style={styles.container}>
+    <View style={{flex:1, backgroundColor:"#fff"}}>
+    <ScrollView contentContainerStyle={styles.container}>
+      
         <View style={styles.inputWrapper}>
-          <Text>Имя</Text>
+          <Text style={styles.inputTitle}>ФИО</Text>
           <TextInput
             style={styles.input}
             textContentType="username"
             onChangeText={(text) => setUsername(text)}
             value={username}
           />
-          <Text>Телефон</Text>
+          <Text style={styles.inputTitle}>Телефон</Text>
           <TextInput
             keyboardType="phone-pad"
             style={styles.input}
@@ -192,7 +193,7 @@ export const ProfileScreen = ({ navigation, route }) => {
             onChangeText={(number) => onChangeTel(number)}
             value={userTel}
           />
-          <Text>Email</Text>
+          <Text style={styles.inputTitle}>Email</Text>
           <TextInput
             keyboardType="email-address"
             style={styles.input}
@@ -201,7 +202,7 @@ export const ProfileScreen = ({ navigation, route }) => {
             placeholder="Введите еmail"
             value={newEmail}
           />
-          <Text>Адрес</Text>
+          <Text style={styles.inputTitle}>Адрес</Text>
           <TextInput
             placeholder="Введите адрес"
             style={styles.input}
@@ -209,10 +210,10 @@ export const ProfileScreen = ({ navigation, route }) => {
             onChangeText={(text) => setAddress(text)}
             value={address}
           />
-          <Text>Доставка</Text>
+          <Text style={styles.inputTitle}>Доставка</Text>
           <Picker
             selectedValue={delivery}
-            style={{ width: 200, height: 44, backgroundColor: "#fff" }}
+            style={{ width: 200, height: 44, backgroundColor: "#fff",fontFamily: "Roboto-Condensed-Regular", }}
             itemStyle={{ height: 44 }}
             onValueChange={(itemValue) => {
               setDelivery(itemValue);
@@ -223,7 +224,7 @@ export const ProfileScreen = ({ navigation, route }) => {
             <Picker.Item label="Укр пошта" value="ukrPoshta" />
             <Picker.Item label="Не отправлять" value="wait" />
           </Picker>
-          <Text>Новый пароль</Text>
+          <Text style={styles.inputTitle}>Новый пароль</Text>
           <TextInput
             style={styles.input}
             secureTextEntry={true}
@@ -232,8 +233,8 @@ export const ProfileScreen = ({ navigation, route }) => {
             onChangeText={(text) => setNewPassword(text)}
             value={newPassword}
           />
-          <TouchableOpacity onPress={updateEverything}>
-            <Text style={styles.btn}>Внести изменения</Text>
+          <TouchableOpacity style={styles.btn} onPress={updateEverything}>
+            <Text style={styles.btnText}>Внести изменения</Text>
           </TouchableOpacity>
         </View>
         <TouchableOpacity
@@ -247,33 +248,28 @@ export const ProfileScreen = ({ navigation, route }) => {
         title=""
         // onPress={() => navigation.navigate("LoginScreen")}
       /> */}
-      </View>
     </ScrollView>
+      </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "center",
+  },
+  inputTitle:{
+    fontFamily: "Roboto-Condensed-Regular",
+    fontSize: 18,
+    marginVertical: 2,
+    color: '#111'
   },
   buttonStl: {
     width: "80%",
     height: 30,
     borderRadius: 10,
     backgroundColor: "#6CC4C7",
-    justifyContent: "center",
-    alignItems: "center",
-    // marginBottom: -40,
-    marginTop: 20,
-  },
-  buttonLog: {
-    width: "80%",
-    height: 30,
-    borderRadius: 10,
-    backgroundColor: "red",
     justifyContent: "center",
     alignItems: "center",
     // marginBottom: -40,
@@ -286,22 +282,46 @@ const styles = StyleSheet.create({
   },
   input: {
     height: 40,
-    borderColor: "gray",
+    borderColor: "#ddd",
     borderWidth: 1,
+    borderRadius:2,
     paddingHorizontal: 6,
     marginVertical: 6,
     backgroundColor: "#fff",
+    color: "#333",
+    fontFamily: "Roboto-Condensed-Regular",
+    fontSize:16
   },
   btn: {
-    textAlign: "center",
     alignItems: "center",
-    backgroundColor: "#DDDDDD",
-    padding: 10,
+    backgroundColor: "#5bb3b6",
+    marginTop:16,
+    borderRadius:4
+  },
+  btnText: {
+    textAlign: "center",
+    color:'#fff',
+    padding: 8,
+    paddingVertical: 9,
+    fontFamily: "Roboto-Condensed-Bold",
+    textTransform: 'uppercase',
+    fontSize: 18,
   },
   btnLog: {
     textAlign: "center",
     alignItems: "center",
-    // backgroundColor: "#DDDDDD",
+    color:'#fff',
+    fontFamily: "Roboto-Condensed-Bold",
+    fontSize:16,
     padding: 10,
+  },
+  buttonLog: {
+    width: "80%",
+    borderRadius: 4,
+    backgroundColor: "tomato",
+    justifyContent: "center",
+    alignItems: "center",
+    // marginBottom: -40,
+    marginTop: 20,
   },
 });
