@@ -158,6 +158,7 @@ export const OrderScreen = ({ route }) => {
         notification: "Пожалуйста, оплатите заказ ",
         orderNo: route.params.info.numberOfOrder,
         date: Date.now(),
+        userToken: user.userToken
       });
     }
     if (id === "payed") {
@@ -166,6 +167,7 @@ export const OrderScreen = ({ route }) => {
         notification: "Была принята оплата за заказ ",
         orderNo: route.params.info.numberOfOrder,
         date: Date.now(),
+        userToken: user.userToken
       });
     }
   };

@@ -92,16 +92,18 @@ export const MainScreen = ({ navigation, route }) => {
       <Tab.Navigator
         tabBarOptions={{
           showLabel: true,
-          keyboardHidesTabBar: true
+          keyboardHidesTabBar: true,
+          labelStyle: { fontSize: 12, fontFamily: "Roboto-Condensed-Regular"},
+          activeTintColor : '#5bb3b6'
         }}
       >
         <Tab.Screen
           options={{
             tabBarIcon: ({ focused, size, color }) => (
               <Ionicons
-                name="md-laptop"
-                size={focused ? 40 : 30}
-                color={!focused ? "#aaa" : "tomato"}
+                name="md-home"
+                size={focused ? 38 : 30}
+                color={!focused ? "#aaa" : "#5bb3b6"}
               />
             ),
           }}
@@ -113,8 +115,8 @@ export const MainScreen = ({ navigation, route }) => {
             tabBarIcon: ({ focused, size, color }) => (
               <Ionicons
                 name="ios-albums"
-                size={focused ? 40 : 30}
-                color={!focused ? "#aaa" : "tomato"}
+                size={focused ? 38 : 30}
+                color={!focused ? "#aaa" : "#5bb3b6"}
               />
             ),
           }}
@@ -126,8 +128,8 @@ export const MainScreen = ({ navigation, route }) => {
             tabBarIcon: ({ focused, size, color }) => (
               <Ionicons
                 name="ios-basket"
-                size={focused ? 40 : 30}
-                color={!focused ? "#aaa" : "tomato"}
+                size={focused ? 38 : 30}
+                color={!focused ? "#aaa" : "#5bb3b6"}
               />
             ),
           }}
@@ -141,7 +143,7 @@ export const MainScreen = ({ navigation, route }) => {
                 <Ionicons
                   name="ios-notifications"
                   size={focused ? 40 : 30}
-                  color={!focused ? "#aaa" : "tomato"}
+                  color={!focused ? "#aaa" : "#5bb3b6"}
                 />
                 {notificationList.length > 0 && (
                   <View
@@ -180,8 +182,8 @@ export const MainScreen = ({ navigation, route }) => {
               tabBarIcon: ({ focused, size, color }) => (
                 <Ionicons
                   name="ios-contact"
-                  size={focused ? 40 : 30}
-                  color={!focused ? "#aaa" : "tomato"}
+                  size={focused ? 38 : 30}
+                  color={!focused ? "#aaa" : "#5bb3b6"}
                 />
               ),
             }}
@@ -194,8 +196,8 @@ export const MainScreen = ({ navigation, route }) => {
               tabBarIcon: ({ focused, size, color }) => (
                 <Ionicons
                   name="ios-log-in"
-                  size={focused ? 40 : 30}
-                  color={!focused ? "#aaa" : "tomato"}
+                  size={focused ? 38 : 30}
+                  color={!focused ? "#aaa" : "#5bb3b6"}
                 />
               ),
             }}

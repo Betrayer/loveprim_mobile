@@ -28,6 +28,7 @@
     "expo-font": "~8.1.0",
     "expo-image-picker": "~8.1.0",
     "expo-location": "~8.1.0",
+    "expo-notifications": "~0.1.1",
     "expo-permissions": "~8.1.0",
     "expo-status-bar": "^1.0.2",
     "firebase": "7.9.0",
@@ -54,8 +55,7 @@
     "react-redux": "^7.2.0",
     "react-router-dom": "^5.2.0",
     "redux-persist": "^6.0.0",
-    "redux-thunk": "^2.3.0",
-    "expo-notifications": "~0.1.1"
+    "redux-thunk": "^2.3.0"
   },
   "devDependencies": {
     "@babel/core": "^7.8.6",

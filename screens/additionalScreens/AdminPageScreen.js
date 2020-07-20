@@ -11,7 +11,6 @@ import React, { useState, useEffect, useRef } from "react";
 import { firestore } from "../../firebase/config";
 import { Container, Header, Item, Input, Icon } from "native-base";
 
-
 export const AdminPageScreen = ({ navigation }) => {
   const [orderList, setOrderList] = useState([]);
   const [opened, setOpened] = useState("");
@@ -25,8 +24,6 @@ export const AdminPageScreen = ({ navigation }) => {
   const [searchValue, setSearchValue] = useState("");
   const [filteredItems, setFilteredItems] = useState([]);
 
-
-
   useEffect(() => {
     getOrders();
     getKurs();
@@ -36,11 +33,9 @@ export const AdminPageScreen = ({ navigation }) => {
     setExchange(rate);
   }, []);
 
-
   useEffect(() => {
     setFilteredOrders(orderList);
   }, [orderList]);
-
 
   useEffect(() => {
     if (orderList) {
@@ -111,8 +106,6 @@ export const AdminPageScreen = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <Text>Курс на сегодня {exchange}</Text>
-      {/* <View> */}
-
       <View
         style={{
           alignItems: "center",
@@ -135,7 +128,7 @@ export const AdminPageScreen = ({ navigation }) => {
           </Item>
         </Container>
       </View>
-        {/* <View style={{ ...StyleSheet.absoluteFill }}></View>
+      {/* <View style={{ ...StyleSheet.absoluteFill }}></View>
         <TextInput
           style={styles.txtInput}
           placeholder="Искать по телефону"
@@ -146,7 +139,7 @@ export const AdminPageScreen = ({ navigation }) => {
       <Picker
         selectedValue={selectedValue}
         style={{ width: 200, height: 44, backgroundColor: "#fff" }}
-          itemStyle={{ height: 44 }}
+        itemStyle={{ height: 44 }}
         onValueChange={(itemValue) => filterOrders(itemValue)}
       >
         <Picker.Item label="Все" value="all" />
@@ -161,7 +154,7 @@ export const AdminPageScreen = ({ navigation }) => {
         <Picker.Item label="Получено" value="received" />
       </Picker>
       <FlatList
-        // data={filteredOrders}
+        style={{ width: "100%", paddingHorizontal: 40 }}
         data={filteredItems}
         keyExtractor={(item, indx) => indx.toString()}
         renderItem={({ item }) => {
@@ -173,9 +166,11 @@ export const AdminPageScreen = ({ navigation }) => {
                 }
               >
                 <View style={styles.order}>
-                  <Text>{item.numberOfOrder}</Text>
-                  <Text>{item.userName}</Text>
-                  <Text>{item.status}</Text>
+                  <View style={styles.orderTextWrapper}>
+                    <Text style={styles.orderText}>{item.numberOfOrder}</Text>
+                    <Text style={styles.orderText}>{item.status}</Text>
+                  </View>
+                  <Text style={styles.orderText}>{item.userName}</Text>
                 </View>
               </TouchableOpacity>
             </View>
@@ -191,16 +186,30 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "center",
+    // paddingHorizontal:30
   },
   order: {
-    width: 330,
+    // width: 330,
+    alignSelf: "stretch",
     marginTop: 20,
     borderColor: "#6CC4C7",
     borderWidth: 2,
     borderRadius: 10,
     // width: "92%",
     // justifyContent: "space-between",
-    // alignItems: "center",
+    alignItems: "center",
+    paddingHorizontal: 14,
+    paddingBottom: 4,
     // flexDirection: "row",
+  },
+  orderTextWrapper: {
+    flexDirection: "row",
+    alignSelf: "stretch",
+    justifyContent: "space-between",
+    paddingVertical: 4,
+  },
+  orderText: {
+    fontFamily: "Roboto-Condensed-Regular",
+    fontSize: 16,
   },
 });

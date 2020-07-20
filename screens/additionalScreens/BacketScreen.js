@@ -36,7 +36,7 @@ export const BacketScreen = ({ navigation }) => {
   const [discount, setDiscount] = useState(0);
 
   useEffect(() => {
-    if (myUser !== undefined && myUser !== "") {
+    if (userId && myUser !== undefined && myUser !== "") {
       if (
         myUser.userBonus !== undefined &&
         myUser.userBonus !== "" &&
@@ -252,17 +252,20 @@ export const BacketScreen = ({ navigation }) => {
   };
 
   return (
-    <ScrollView>
+    <ScrollView contentContainerStyle={styles.container}>
+      {userId ? 
+      <>
       {backet.length === 0 ? (
         <View style={styles.container}>
           <Text
-            style={{
-              alignItems: "center",
-              justifyContent: "center",
-              padding: 10,
-            }}
+            // style={{
+            //   alignItems: "center",
+            //   justifyContent: "center",
+            //   padding: 10,
+            // }}
+            style={styles.register}
           >
-            Ваша корзина пуста
+            Ваша корзина пуста :&#40;
           </Text>
         </View>
       ) : (
@@ -326,7 +329,7 @@ export const BacketScreen = ({ navigation }) => {
             <Text style={styles.checkoutText}>
             Скидка:{" "}
             </Text>
-            {myUser.userBonus ? <Picker
+            {myUser && myUser.userBonus ? <Picker
               mode="dropdown"
               iosHeader="Скидка"
               placeholder="Виберите скидку"
@@ -365,6 +368,7 @@ export const BacketScreen = ({ navigation }) => {
           </View>
         </View>
       )}
+      </> : <View style={styles.container}><Text style={styles.register}>Вы должны зарегистрироваться чтобы просмотреть корзину</Text></View>}
     </ScrollView>
   );
 };
@@ -416,6 +420,14 @@ const styles = StyleSheet.create({
     fontSize: 20,
     paddingHorizontal: 20,
     marginTop: 16,
+  },
+  register:{
+    fontFamily: "Roboto-Condensed-Light",
+    fontSize: 22,
+    color: "#666",
+    paddingHorizontal: 20,
+    marginTop: 22,
+    textAlign: "center"
   },
   additional:{
     color: "#777",
