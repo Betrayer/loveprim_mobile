@@ -339,7 +339,11 @@ export const ItemScreen = ({ route, navigation }) => {
                 ) : (
                   <></>
                 )}
-                {good.sizes.some((r) => sizes.indexOf(r) >= 0) ? <Text style={styles.sizesText}>Выберите размер</Text> : <></>}
+                {good.sizes.some((r) => sizes.indexOf(r) >= 0) ? (
+                  <Text style={styles.sizesText}>Выберите размер</Text>
+                ) : (
+                  <></>
+                )}
               </View>
             ) : (
               <></>
@@ -355,23 +359,30 @@ export const ItemScreen = ({ route, navigation }) => {
               renderItem={({ item }) => {
                 return (
                   <>
-                  {item ?
-                    <TouchableOpacity
-                      style={
-                        chosenSizes === item ? styles.activeSizes : styles.sizes
-                      }
-                      onPress={() => {setSizes(item), setModalVisible(false)}}
-                    >
-                      <Text
+                    {item ? (
+                      <TouchableOpacity
                         style={
                           chosenSizes === item
-                            ? styles.chosenSizes
-                            : styles.size
+                            ? styles.activeSizes
+                            : styles.sizes
                         }
+                        onPress={() => {
+                          setSizes(item), setModalVisible(false);
+                        }}
                       >
-                        {item}
-                      </Text>
-                    </TouchableOpacity> :<></>}
+                        <Text
+                          style={
+                            chosenSizes === item
+                              ? styles.chosenSizes
+                              : styles.size
+                          }
+                        >
+                          {item}
+                        </Text>
+                      </TouchableOpacity>
+                    ) : (
+                      <></>
+                    )}
                   </>
                 );
               }}
@@ -388,15 +399,18 @@ export const ItemScreen = ({ route, navigation }) => {
             <Text style={styles.text}>грн</Text>
           </Text>
           <Text style={styles.text}>{good.text}</Text>
-          {good.sizes[0] ? 
-          <TouchableOpacity
-            style={styles.sizesBtn}
-            onPress={() => toggleModal()}
-          >
-            <Text style={styles.sizesTxt}>
-              {chosenSizes ? chosenSizes : "Выберите размер"}
-            </Text>
-          </TouchableOpacity> : <></>}
+          {good.sizes[0] ? (
+            <TouchableOpacity
+              style={styles.sizesBtn}
+              onPress={() => toggleModal()}
+            >
+              <Text style={styles.sizesTxt}>
+                {chosenSizes ? chosenSizes : "Выберите размер"}
+              </Text>
+            </TouchableOpacity>
+          ) : (
+            <></>
+          )}
           {/* <Text style={styles.text}>{translatedCatagory}</Text> */}
         </View>
         {/* <TouchableOpacity
@@ -411,7 +425,11 @@ export const ItemScreen = ({ route, navigation }) => {
             active={!active}
             direction="up"
             containerStyle={{}}
-            style={{ backgroundColor: "#2f8f85", top: - win.height / 4 + 20, left: win.width / 2}}
+            style={{
+              backgroundColor: "#2f8f85",
+              top: -win.height / 4 + 20,
+              left: win.width / 2,
+            }}
             position="topRight"
             onPress={onShare}
           >
@@ -419,7 +437,7 @@ export const ItemScreen = ({ route, navigation }) => {
           </Fab>
         </View>
         <TouchableOpacity
-          disabled={!userId || (good.sizes[0] && !chosenSizes) }
+          disabled={!userId || (good.sizes[0] && !chosenSizes)}
           style={
             !userId || (good.sizes[0] && !chosenSizes)
               ? styles.cartButtonDisabled
@@ -578,7 +596,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     borderRadius: 10,
     paddingTop: 20,
-    paddingBottom:60,
+    paddingBottom: 60,
   },
   sizesBtn: {
     marginTop: 16,
@@ -594,6 +612,6 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontFamily: "Roboto-Condensed-Regular",
     textAlign: "center",
-    color: '#555',
+    color: "#555",
   },
 });
