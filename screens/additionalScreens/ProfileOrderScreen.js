@@ -76,7 +76,7 @@ export const ProfileOrderScreen = ({ item }) => {
   let newPrice = Math.ceil(newPriceHrn + weightPrice);
   return (
     <View style={styles.container}>
-      <Text>Заказ No {order.numberOfOrder}</Text>
+      <Text>&#8470;{order.numberOfOrder}</Text>
       <Text>{newPrice} грн</Text>
       <Text>Статус: {status}</Text>
       <Text>Дата заказа {day}</Text>
@@ -101,7 +101,9 @@ export const ProfileOrderScreen = ({ item }) => {
           </Text>
           <Text>
             Доплатить:{" "}
-            {Math.ceil((newPrice - order.alreadyPayed) * Number(order.kurs))}
+            {console.log('newPrice', newPrice)}
+            {console.log('order.alreadyPayed', order.alreadyPayed)}
+            {Math.ceil((newPrice - (order.alreadyPayed* Number(order.kurs))))}
             грн
           </Text>
         </>
@@ -114,7 +116,6 @@ export const ProfileOrderScreen = ({ item }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    fontFamily: "ubuntu-regular",
     backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "center",
