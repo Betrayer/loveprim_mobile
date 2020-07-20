@@ -34,7 +34,7 @@ export const MainScreen = ({ navigation, route }) => {
   const [userToken, setUserToken] = useState("");
   const { userId, admin, userName } = useSelector((state) => state.user);
   const [drawer, setDrawer] = useState(false);
-
+const [user, setUser] = useState('');
   useEffect(() => {
     setDrawer(false);
     // getUser();
@@ -83,6 +83,9 @@ export const MainScreen = ({ navigation, route }) => {
       <Tab.Navigator
         tabBarOptions={{
           showLabel: true,
+          keyboardHidesTabBar: true,
+          labelStyle: { fontSize: 12, fontFamily: "Roboto-Condensed-Regular"},
+          activeTintColor : '#5bb3b6'
         }}
       >
         <Tab.Screen
@@ -90,13 +93,12 @@ export const MainScreen = ({ navigation, route }) => {
             tabBarIcon: ({ focused, size, color }) => (
               <Ionicons
                 name="md-home"
-                size={focused ? 40 : 30}
+                size={focused ? 38 : 30}
                 color={!focused ? "#aaa" : "#5bb3b6"}
               />
             ),
           }}
-          labelStyle={{color: '#5bb3b6'}}
-          name="Home"
+          name="Главная"
           component={HomeScreen}
         />
         <Tab.Screen
@@ -104,12 +106,12 @@ export const MainScreen = ({ navigation, route }) => {
             tabBarIcon: ({ focused, size, color }) => (
               <Ionicons
                 name="ios-albums"
-                size={focused ? 40 : 30}
+                size={focused ? 38 : 30}
                 color={!focused ? "#aaa" : "#5bb3b6"}
               />
             ),
           }}
-          name="Catalog"
+          name="Каталог"
           component={CatalogScreen}
         />
         <Tab.Screen
@@ -117,12 +119,12 @@ export const MainScreen = ({ navigation, route }) => {
             tabBarIcon: ({ focused, size, color }) => (
               <Ionicons
                 name="ios-basket"
-                size={focused ? 40 : 30}
+                size={focused ? 38 : 30}
                 color={!focused ? "#aaa" : "#5bb3b6"}
               />
             ),
           }}
-          name="Backet"
+          name="Корзина"
           component={BacketScreen}
         />
         <Tab.Screen
@@ -130,12 +132,12 @@ export const MainScreen = ({ navigation, route }) => {
             tabBarIcon: ({ focused, size, color }) => (
               <Ionicons
                 name="ios-notifications"
-                size={focused ? 40 : 30}
+                size={focused ? 38 : 30}
                 color={!focused ? "#aaa" : "#5bb3b6"}
               />
             ),
           }}
-          name="Notification"
+          name="Уведомления"
           component={NotificationScreen}
         />
         {userId ? (
@@ -144,17 +146,12 @@ export const MainScreen = ({ navigation, route }) => {
               tabBarIcon: ({ focused, size, color }) => (
                 <Ionicons
                   name="ios-contact"
-                  size={focused ? 40 : 30}
+                  size={focused ? 38 : 30}
                   color={!focused ? "#aaa" : "#5bb3b6"}
                 />
               ),
             }}
-            // tabBarOptions={{
-            //   activeTintColor: 'tomato',
-            //   inactiveTintColor: 'gray',
-            // }}
-            name="Profile"
-
+            name="Профиль"
             component={MainProfileScreen}
           />
         ) : (
@@ -163,12 +160,12 @@ export const MainScreen = ({ navigation, route }) => {
               tabBarIcon: ({ focused, size, color }) => (
                 <Ionicons
                   name="ios-log-in"
-                  size={focused ? 40 : 30}
+                  size={focused ? 38 : 30}
                   color={!focused ? "#aaa" : "#5bb3b6"}
                 />
               ),
             }}
-            name="AuthScreen"
+            name="Вход"
             component={AuthScreen}
           />
         )}

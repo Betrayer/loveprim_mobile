@@ -110,7 +110,7 @@ export const AdminPageScreen = ({ navigation }) => {
     <View style={styles.container}>
       <Text>{exchange}</Text>
       <View>
-        <View style={{ ...StyleSheet.absoluteFill }}></View>
+        {/* <View style={{ ...StyleSheet.absoluteFill }}></View> */}
         <TextInput
           style={styles.txtInput}
           placeholder="Искать по телефону"
@@ -138,6 +138,7 @@ export const AdminPageScreen = ({ navigation }) => {
       </Picker>
       <FlatList
         // data={filteredOrders}
+        style={{width:'100%', paddingHorizontal:40}}
         data={filteredItems}
         keyExtractor={(item, indx) => indx.toString()}
         renderItem={({ item }) => {
@@ -149,9 +150,10 @@ export const AdminPageScreen = ({ navigation }) => {
                 }
               >
                 <View style={styles.order}>
-                  <Text>{item.numberOfOrder}</Text>
-                  <Text>{item.userName}</Text>
-                  <Text>{item.status}</Text>
+                  <View style={styles.orderTextWrapper}>
+                  <Text style={styles.orderText}>{item.numberOfOrder}</Text>
+                  <Text style={styles.orderText}>{item.status}</Text></View>
+                  <Text style={styles.orderText}>{item.userName}</Text>
                 </View>
               </TouchableOpacity>
             </View>
@@ -167,16 +169,30 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "center",
+    // paddingHorizontal:30
   },
   order: {
-    width: 330,
+    // width: 330,
+    alignSelf: 'stretch',
     marginTop: 20,
     borderColor: "#6CC4C7",
     borderWidth: 2,
     borderRadius: 10,
     // width: "92%",
     // justifyContent: "space-between",
-    // alignItems: "center",
+    alignItems: "center",
+    paddingHorizontal: 14,
+    paddingBottom: 4,
     // flexDirection: "row",
+  },
+  orderTextWrapper:{
+    flexDirection: 'row',
+    alignSelf: 'stretch',
+    justifyContent: 'space-between',
+    paddingVertical:4,
+  },
+  orderText:{
+    fontFamily: "Roboto-Condensed-Regular",
+    fontSize: 16
   },
 });

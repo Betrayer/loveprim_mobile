@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 
-import { StyleSheet, Text, View, TouchableOpacity, Image } from "react-native";
+import { StyleSheet, Text, View, TouchableOpacity, Image, ScrollView } from "react-native";
 
 export const CatalogScreen = ({ navigation }) => {
   const toReviews = () => {
@@ -53,6 +53,7 @@ export const CatalogScreen = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
+    <ScrollView contentContainerStyle={styles.container}>
       <View style={styles.menu}>
         <TouchableOpacity onPress={() => toReviews()} style={styles.menuItem}>
           <Image
@@ -63,7 +64,7 @@ export const CatalogScreen = ({ navigation }) => {
         </TouchableOpacity>
         <TouchableOpacity onPress={() => toFAQ()} style={styles.menuItem}>
           <Image style={styles.pic} source={require("../../image/faq.png")} />
-          <Text style={{ fontFamily: "Roboto-Condensed-Regular", fontSize: 16}}>FAQ</Text>
+          <Text style={{ fontFamily: "Roboto-Condensed-Regular", fontSize: 16}}>Вопро&Ответ</Text>
         </TouchableOpacity>
         <TouchableOpacity onPress={() => toSizeChart()} style={styles.menuItem}>
           <Image style={styles.pic} source={require("../../image/sizes.png")} />
@@ -109,6 +110,7 @@ export const CatalogScreen = ({ navigation }) => {
           <Text style={{ fontFamily: "Roboto-Condensed-Regular", fontSize: 16}}>Скидки</Text>
         </TouchableOpacity>
       </View>
+    </ScrollView>
     </View>
   );
 };

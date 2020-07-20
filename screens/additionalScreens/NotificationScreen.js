@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import {
   StyleSheet,
   View,
-  FlatList,
+  ScrollView,
   Text,
   TouchableOpacity,
 } from "react-native";
@@ -82,9 +82,9 @@ export const NotificationScreen = ({ navigation }) => {
     console.log("This row opened", rowKey);
   };
   return (
-    <View style={styles.container}>
+    <ScrollView contentContainerStyle={styles.container}>
 
-      <SwipeListView
+      {notificationList[0] ? <SwipeListView
         data={notificationList}
         style={{ marginTop: 20 }}
         renderItem={renderItem}
@@ -94,8 +94,8 @@ export const NotificationScreen = ({ navigation }) => {
         previewRowKey={"0"}
         previewOpenValue={-40}
         previewOpenDelay={3000}
-      />
-    </View>
+      /> : <Text style={styles.noNotif}>Новых уведомлений нету</Text>}
+    </ScrollView>
   );
 };
 
@@ -103,12 +103,12 @@ const styles = StyleSheet.create({
   container: {
     // flex: 1,
     // backgroundColor: "#F5F8F8",
-    // alignItems: "center",
-    // justifyContent: "center",
+    alignItems: "center",
+    justifyContent: "center",
     // width: "100%",
     backgroundColor: "#f7f9f9",
     flex: 1,
-    paddingVertical: 10,
+    // paddingVertical: 10,
   },
   //   notifWrapper: {
   //     alignSelf: "stretch",
@@ -120,6 +120,14 @@ const styles = StyleSheet.create({
 
   //     // borderRadius:5,
   //   },
+  noNotif: {
+    fontFamily: "Roboto-Condensed-Light",
+    fontSize: 22,
+    color: "#666",
+    paddingHorizontal: 20,
+    marginTop: 16,
+    textAlign: "center"
+  },
   notif: {
     textAlign: "center",
     fontFamily: "Roboto-Condensed-Regular",

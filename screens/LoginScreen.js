@@ -5,14 +5,14 @@ import {
   View,
   TextInput,
   Button,
-  Alert,
+  ScrollView,
   Image,
   KeyboardAvoidingView,
   Keyboard,
   TouchableWithoutFeedback,
   Platform,
+  TouchableOpacity,
 } from "react-native";
-
 import { auth } from "../firebase/config";
 import { useDispatch, useSelector } from "react-redux";
 import { loginUser } from "../redux/operations";
@@ -32,10 +32,9 @@ export const LoginScreen = ({ navigation, route }) => {
   // useEffect(() => {
   // }, [error, errorId]);
 
-const toMain = () => {
-  navigation.navigate("MainScreen")
-}
-
+  const toMain = () => {
+    navigation.navigate("MainScreen");
+  };
 
   const loginUserAdd = async () => {
     const { email, password } = textValue;
@@ -81,32 +80,40 @@ const toMain = () => {
         behavior={Platform.Os == "ios" ? "padding" : "height"}
         style={styles.container}
       >
-        <View style={styles.container}>
-          <View style={{ ...StyleSheet.absoluteFill }}>
-            {/* <Image
+        {/* <View style={styles.container}> */}
+        <ScrollView width="100%" contentContainerStyle={styles.container}>
+          {/* <View style={{ ...StyleSheet.absoluteFill }}> */}
+          {/* <Image
               source={require("../image/instagram_gradient.png")}
               style={{ flex: 1, width: null, height: null }}
             /> */}
+          {/* </View> */}
+          {/* <Text>Email</Text> */}
+          <View style={styles.inputWrapper}>
+            <TextInput
+            autoCapitalize='none'
+              style={styles.txtInput}
+              placeholder="Почта"
+              onChangeText={(value) =>
+                setTextValue({ ...textValue, email: value })
+              }
+            />
+            {/* <Text>Пароль</Text> */}
+            <TextInput
+            autoCapitalize='none'
+              style={styles.txtInput}
+              secureTextEntry={true}
+              placeholder="Пароль"
+              onChangeText={(value) =>
+                setTextValue({ ...textValue, password: value })
+              }
+            />
+            <TouchableOpacity style={styles.btn} title="Вход" onPress={loginUserAdd} >
+              <Text style={styles.btnText}>Вход</Text></TouchableOpacity>
+            {errorId ? <Text>{errorId}</Text> : <></>}
           </View>
-          <Text>Email</Text>
-          <TextInput
-            style={styles.txtInput}
-            placeholder="Email"
-            onChangeText={(value) =>
-              setTextValue({ ...textValue, email: value })
-            }
-          />
-          <Text>Password</Text>
-          <TextInput
-            style={styles.txtInput}
-            placeholder="Password"
-            onChangeText={(value) =>
-              setTextValue({ ...textValue, password: value })
-            }
-          />
-          <Button title="Log In" onPress={loginUserAdd} />
-          {errorId ? <Text>{errorId}</Text> : <></>}
-        </View>
+        </ScrollView>
+        {/* </View> */}
       </KeyboardAvoidingView>
     </TouchableWithoutFeedback>
   );
@@ -116,25 +123,43 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     width: "100%",
-    fontFamily: "ubuntu-regular",
-
     backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "center",
+    alignSelf: "stretch",
+  },
+  inputWrapper: {
+    width: "80%",
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "rgba(0,0,10,0.1)",
+    paddingVertical: 30,
+    borderTopColor: "#ade9ed",
+    borderTopWidth: 3,
+   marginVertical:100,
   },
   txtInput: {
     width: "70%",
     height: 40,
-    borderColor: "black",
-    borderWidth: 1,
     padding: 10,
-    margin: 5,
-    backgroundColor: "white",
-    borderRadius: 20,
+    backgroundColor: "rgba(255,255,255,1)",
+    borderRadius: 2,
+    fontFamily: "Roboto-Condensed-Regular",
+    marginVertical:10,
+    color: '#777'
   },
-  register: {
-    color: "red",
+  btn: {
+    width:'70%',
+    backgroundColor: '#5bb3b6',
+    marginTop:10,
+    marginBottom:20
+  },
+  btnText: {
+    fontFamily: "Roboto-Condensed-Bold",
     fontSize: 16,
-    paddingRight: 30,
+    paddingVertical:12,
+    textAlign:'center',
+    color: '#fff',
+    textTransform: 'uppercase'
   },
 });
