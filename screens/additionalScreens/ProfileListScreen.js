@@ -87,7 +87,6 @@ export const ProfileListScreen = ({ navigation, route }) => {
 
   return (
     <View>
-  
       <FlatList
         data={orderList}
         keyExtractor={(item, indx) => indx.toString()}

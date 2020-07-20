@@ -7,6 +7,7 @@ import {
   TextInput,
   Picker,
   TouchableOpacity,
+  ScrollView,
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { logoutUser } from "../../redux/operations";
@@ -172,101 +173,103 @@ export const ProfileScreen = ({ navigation, route }) => {
   };
 
   return (
-    <View style={styles.container}>
-      <View style={styles.inputWrapper}>
-        <Text>Имя</Text>
-        <TextInput
-          style={styles.input}
-          textContentType="username"
-          onChangeText={(text) => setUsername(text)}
-          value={username}
-        />
-        <Text>Телефон</Text>
-        <TextInput
-          keyboardType="phone-pad"
-          style={styles.input}
-          textContentType="telephoneNumber"
-          placeholder="Введите телефон"
-          onChangeText={(number) => onChangeTel(number)}
-          value={userTel}
-        />
-        <Text>Email</Text>
-        <TextInput
-          keyboardType="email-address"
-          style={styles.input}
-          textContentType="emailAddress"
-          onChangeText={(text) => setUserEmail(text)}
-          placeholder="Введите еmail"
-          value={newEmail}
-        />
-        <Text>Адрес</Text>
-        <TextInput
-          placeholder="Введите адрес"
-          style={styles.input}
-          textContentType="fullStreetAddress"
-          onChangeText={(text) => setAddress(text)}
-          value={address}
-        />
-        <Text>Доставка</Text>
-        <Picker
-          selectedValue={delivery}
-          style={{ width: 200, height: 44, backgroundColor: "#fff" }}
-          itemStyle={{ height: 44 }}
-          onValueChange={(itemValue) => {
-            setDelivery(itemValue);
-            console.log("itemValue", itemValue);
-          }}
+    <View style={{flex:1, backgroundColor:"#fff"}}>
+    <ScrollView contentContainerStyle={styles.container}>
+      
+        <View style={styles.inputWrapper}>
+          <Text style={styles.inputTitle}>ФИО</Text>
+          <TextInput
+            style={styles.input}
+            textContentType="username"
+            onChangeText={(text) => setUsername(text)}
+            value={username}
+          />
+          <Text style={styles.inputTitle}>Телефон</Text>
+          <TextInput
+            keyboardType="phone-pad"
+            style={styles.input}
+            textContentType="telephoneNumber"
+            placeholder="Введите телефон"
+            onChangeText={(number) => onChangeTel(number)}
+            value={userTel}
+          />
+          <Text style={styles.inputTitle}>Email</Text>
+          <TextInput
+            keyboardType="email-address"
+            style={styles.input}
+            textContentType="emailAddress"
+            onChangeText={(text) => setUserEmail(text)}
+            placeholder="Введите еmail"
+            value={newEmail}
+          />
+          <Text style={styles.inputTitle}>Адрес</Text>
+          <TextInput
+            placeholder="Введите адрес"
+            style={styles.input}
+            textContentType="fullStreetAddress"
+            onChangeText={(text) => setAddress(text)}
+            value={address}
+          />
+          <Text style={styles.inputTitle}>Доставка</Text>
+          <Picker
+            selectedValue={delivery}
+            style={{ width: 200, height: 44, backgroundColor: "#fff",fontFamily: "Roboto-Condensed-Regular", }}
+            itemStyle={{ height: 44 }}
+            onValueChange={(itemValue) => {
+              setDelivery(itemValue);
+              console.log("itemValue", itemValue);
+            }}
+          >
+            <Picker.Item label="Нова пошта" value="novaPoshta" />
+            <Picker.Item label="Укр пошта" value="ukrPoshta" />
+            <Picker.Item label="Не отправлять" value="wait" />
+          </Picker>
+          <Text style={styles.inputTitle}>Новый пароль</Text>
+          <TextInput
+            style={styles.input}
+            secureTextEntry={true}
+            textContentType="newPassword"
+            placeholder="Введите пароль"
+            onChangeText={(text) => setNewPassword(text)}
+            value={newPassword}
+          />
+          <TouchableOpacity style={styles.btn} onPress={updateEverything}>
+            <Text style={styles.btnText}>Внести изменения</Text>
+          </TouchableOpacity>
+        </View>
+        <TouchableOpacity
+          style={styles.buttonLog}
+          title="ВЫЙТИ"
+          onPress={logout}
         >
-          <Picker.Item label="Нова пошта" value="novaPoshta" />
-          <Picker.Item label="Укр пошта" value="ukrPoshta" />
-          <Picker.Item label="Не отправлять" value="wait" />
-        </Picker>
-        <Text>Новый пароль</Text>
-        <TextInput
-          style={styles.input}
-          secureTextEntry={true}
-          textContentType="newPassword"
-          placeholder="Введите пароль"
-          onChangeText={(text) => setNewPassword(text)}
-          value={newPassword}
-        />
-        <TouchableOpacity onPress={updateEverything}>
-          <Text style={styles.btn}>Внести изменения</Text>
+          <Text style={styles.btnLog}>Выйти</Text>
         </TouchableOpacity>
-      </View>
-      <TouchableOpacity style={styles.buttonLog} title="ВЫЙТИ" onPress={logout}>
-        <Text style={styles.btnLog}>Выйти</Text>
-      </TouchableOpacity>
-      {/* <Button
+        {/* <Button
         title=""
         // onPress={() => navigation.navigate("LoginScreen")}
       /> */}
-    </View>
+    </ScrollView>
+      </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "center",
+  },
+  inputTitle:{
+    fontFamily: "Roboto-Condensed-Regular",
+    fontSize: 18,
+    marginVertical: 2,
+    color: '#111'
   },
   buttonStl: {
     width: "80%",
     height: 30,
     borderRadius: 10,
     backgroundColor: "#6CC4C7",
-    justifyContent: "center",
-    alignItems: "center",
-    // marginBottom: -40,
-    marginTop: 20,
-  },
-  buttonLog: {
-    width: "80%",
-    height: 30,
-    borderRadius: 10,
-    backgroundColor: "red",
     justifyContent: "center",
     alignItems: "center",
     // marginBottom: -40,
@@ -279,22 +282,46 @@ const styles = StyleSheet.create({
   },
   input: {
     height: 40,
-    borderColor: "gray",
+    borderColor: "#ddd",
     borderWidth: 1,
+    borderRadius:2,
     paddingHorizontal: 6,
     marginVertical: 6,
     backgroundColor: "#fff",
+    color: "#333",
+    fontFamily: "Roboto-Condensed-Regular",
+    fontSize:16
   },
   btn: {
-    textAlign: "center",
     alignItems: "center",
-    backgroundColor: "#DDDDDD",
-    padding: 10,
+    backgroundColor: "#5bb3b6",
+    marginTop:16,
+    borderRadius:4
+  },
+  btnText: {
+    textAlign: "center",
+    color:'#fff',
+    padding: 8,
+    paddingVertical: 9,
+    fontFamily: "Roboto-Condensed-Bold",
+    textTransform: 'uppercase',
+    fontSize: 18,
   },
   btnLog: {
     textAlign: "center",
     alignItems: "center",
-    // backgroundColor: "#DDDDDD",
+    color:'#fff',
+    fontFamily: "Roboto-Condensed-Bold",
+    fontSize:16,
     padding: 10,
+  },
+  buttonLog: {
+    width: "80%",
+    borderRadius: 4,
+    backgroundColor: "tomato",
+    justifyContent: "center",
+    alignItems: "center",
+    // marginBottom: -40,
+    marginTop: 20,
   },
 });

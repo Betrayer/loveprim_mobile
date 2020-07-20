@@ -185,53 +185,81 @@ export const OrderScreen = ({ route }) => {
   return (
     <View style={styles.container}>
       <View style={styles.textWrapper}>
-        <Text>{route.params.info.numberOfOrder}</Text>
-        <Text>{route.params.info.userName}</Text>
-        <Text>{route.params.info.userPhone}</Text>
-        <Text>Дата заказа {day}</Text>
+        <Text style={styles.orderText}>
+          &#8470;{route.params.info.numberOfOrder}
+        </Text>
+        <Text style={styles.orderText}>{route.params.info.userName}</Text>
+        <Text style={styles.orderText}>{route.params.info.userPhone}</Text>
+        <Text style={styles.orderText}>Дата заказа {day}</Text>
       </View>
       <View style={styles.textWrapper}>
-        <Text>Цена без веса: {priceWOutWeight}&euro;</Text>
-        <Text>
-          Цена: {calcPrice}&euro; / {hrnPrice}грн
+        <Text style={styles.orderText}>
+          Цена без веса: {priceWOutWeight}&euro;
+        </Text>
+        <Text style={styles.orderText}>
+          Цена:
+          <Text style={styles.orderTextTitle}>
+            {" "}
+            {calcPrice}&euro; / {hrnPrice}грн
+          </Text>
         </Text>
       </View>
       <View style={styles.textWrapper}>
-        <Text>Доставка: {user.delivery ? ukrDelivery : "Не выбрана"}</Text>
-        <Text>Адрес: {user.userAdress ? user.userAdress : "Не указан"}</Text>
+        <Text style={styles.orderText}>
+          Доставка: {user.delivery ? ukrDelivery : "Не выбрана"}
+        </Text>
+        <Text style={styles.orderText}>
+          Адрес: {user.userAdress ? user.userAdress : "Не указан"}
+        </Text>
         {order.status === "inUkr" ? (
           <>
-            <Text>Номер накладной:{order.deliveryNo}</Text>
-            <TextInput
-              style={{
-                height: 40,
-                borderColor: "gray",
-                borderWidth: 1,
-                paddingHorizontal: 10,
-                width: 160,
-              }}
-              onChangeText={(text) => setDeliveryNo(text)}
-              placeholder="Номер накладной"
-              value={deliveryNo}
-            />
+            <Text style={styles.orderText}>
+              Номер накладной:{order.deliveryNo}
+            </Text>
+            <View style={{ flexDirection: "row" }}>
+              <TextInput
+                style={{
+                  // height: 40,
+                  borderColor: "#ddd",
+                  borderWidth: 1,
+                  paddingHorizontal: 6,
+                  paddingVertical:8,
+                  width: 160,
+                  fontFamily: "Roboto-Condensed-Regular",
+                }}
+                onChangeText={(text) => setDeliveryNo(text)}
+                placeholder="Номер накладной"
+                value={deliveryNo}
+              />
+            
             <TouchableOpacity style={styles.btn} onPress={setOrderDeliveryNo}>
-              <Text style={styles.btn}>Внести изменения</Text>
-            </TouchableOpacity>
+              <Text style={styles.btnText}>Внести</Text>
+            </TouchableOpacity></View>
           </>
         ) : (
-          <Text>Номер накладной: не введен</Text>
+          <Text style={styles.orderText}>Номер накладной: не введен</Text>
         )}
       </View>
       <View style={styles.textWrapper}>
-        <Text>УПАКОВКА</Text>
-        <Text>Цена: {route.params.info.packaging}</Text>
+        <Text style={styles.orderTextTitle}>УПАКОВКА</Text>
+        <Text style={styles.orderText}>
+          Цена: {route.params.info.packaging}
+        </Text>
       </View>
       <View style={styles.textWrapper}>
-        <Text>СТАТУС</Text>
-        <Text style={{ color: color }}>{status}</Text>
+        <Text style={styles.orderTextTitle}>СТАТУС</Text>
+        <Text
+          style={{
+            color: color,
+            fontFamily: "Roboto-Condensed-Bold",
+            fontSize: 18,
+          }}
+        >
+          {status}
+        </Text>
         <Picker
           selectedValue={selectedValue}
-          style={{ width: 200, height: 44, backgroundColor: "#fff" }}
+          style={{ width: 200, height: 44, backgroundColor: "#fff", fontFamily: "Roboto-Condensed-Regular"}}
           itemStyle={{ height: 44 }}
           onValueChange={(itemValue) => checkOnlyOne(itemValue)}
         >
@@ -256,19 +284,34 @@ export const OrderScreen = ({ route }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    fontFamily: "ubuntu-regular",
     backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "center",
   },
   btn: {
-    textAlign: "center",
     alignItems: "center",
-    backgroundColor: "#DDDDDD",
-    padding: 4,
+    backgroundColor: "#5bb3b6",
   },
-  textWrapper:{
-    justifyContent: 'center',
-    marginVertical:5
+  btnText: {
+    textAlign: "center",
+    color:'#fff',
+    padding: 6,
+    paddingVertical: 8,
+    fontFamily: "Roboto-Condensed-Regular",
+    textTransform: 'uppercase'
+  },
+  textWrapper: {
+    alignItems: "center",
+    marginVertical: 6,
+  },
+  orderText: {
+    fontFamily: "Roboto-Condensed-Regular",
+    fontSize: 18,
+    marginBottom: 2,
+  },
+  orderTextTitle: {
+    fontFamily: "Roboto-Condensed-Bold",
+    fontSize: 16,
+    marginBottom: 2,
   },
 });
