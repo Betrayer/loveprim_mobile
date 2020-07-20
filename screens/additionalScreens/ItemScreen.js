@@ -447,6 +447,12 @@ export const ItemScreen = ({ route, navigation }) => {
         >
           <Text style={styles.cartButtonText}>В корзину</Text>
         </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.sizeChartButton}
+          onPress={() => navigation.navigate("SizeChartScreen")}
+        >
+          <Text style={styles.sizeChartText}>Размерная сетка</Text>
+        </TouchableOpacity>
       </ScrollView>
     </>
   );
@@ -563,12 +569,6 @@ const styles = StyleSheet.create({
     marginTop: 20,
     marginHorizontal: 10,
   },
-  cartButtonText: {
-    color: "#fff",
-    textAlign: "center",
-    fontSize: 20,
-    fontFamily: "Roboto-Condensed-Regular",
-  },
   cartButton: {
     backgroundColor: "#6cc4c7",
     alignSelf: "stretch",
@@ -613,5 +613,16 @@ const styles = StyleSheet.create({
     fontFamily: "Roboto-Condensed-Regular",
     textAlign: "center",
     color: "#555",
+  },
+  sizeChartButton: {
+    alignSelf: "stretch",
+    paddingVertical: 10,
+    marginVertical: 10,
+  },
+  sizeChartText: {
+    textAlign: "center",
+    color: "#6cc4c7",
+    fontSize: 20,
+    fontFamily: "Roboto-Condensed-Regular",
   },
 });

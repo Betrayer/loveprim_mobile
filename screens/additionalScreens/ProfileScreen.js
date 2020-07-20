@@ -7,6 +7,7 @@ import {
   TextInput,
   Picker,
   TouchableOpacity,
+  ScrollView,
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { logoutUser } from "../../redux/operations";
@@ -172,76 +173,82 @@ export const ProfileScreen = ({ navigation, route }) => {
   };
 
   return (
-    <View style={styles.container}>
-      <View style={styles.inputWrapper}>
-        <Text>Имя</Text>
-        <TextInput
-          style={styles.input}
-          textContentType="username"
-          onChangeText={(text) => setUsername(text)}
-          value={username}
-        />
-        <Text>Телефон</Text>
-        <TextInput
-          keyboardType="phone-pad"
-          style={styles.input}
-          textContentType="telephoneNumber"
-          placeholder="Введите телефон"
-          onChangeText={(number) => onChangeTel(number)}
-          value={userTel}
-        />
-        <Text>Email</Text>
-        <TextInput
-          keyboardType="email-address"
-          style={styles.input}
-          textContentType="emailAddress"
-          onChangeText={(text) => setUserEmail(text)}
-          placeholder="Введите еmail"
-          value={newEmail}
-        />
-        <Text>Адрес</Text>
-        <TextInput
-          placeholder="Введите адрес"
-          style={styles.input}
-          textContentType="fullStreetAddress"
-          onChangeText={(text) => setAddress(text)}
-          value={address}
-        />
-        <Text>Доставка</Text>
-        <Picker
-          selectedValue={delivery}
-          style={{ width: 200, height: 44, backgroundColor: "#fff" }}
-          itemStyle={{ height: 44 }}
-          onValueChange={(itemValue) => {
-            setDelivery(itemValue);
-            console.log("itemValue", itemValue);
-          }}
+    <ScrollView>
+      <View style={styles.container}>
+        <View style={styles.inputWrapper}>
+          <Text>Имя</Text>
+          <TextInput
+            style={styles.input}
+            textContentType="username"
+            onChangeText={(text) => setUsername(text)}
+            value={username}
+          />
+          <Text>Телефон</Text>
+          <TextInput
+            keyboardType="phone-pad"
+            style={styles.input}
+            textContentType="telephoneNumber"
+            placeholder="Введите телефон"
+            onChangeText={(number) => onChangeTel(number)}
+            value={userTel}
+          />
+          <Text>Email</Text>
+          <TextInput
+            keyboardType="email-address"
+            style={styles.input}
+            textContentType="emailAddress"
+            onChangeText={(text) => setUserEmail(text)}
+            placeholder="Введите еmail"
+            value={newEmail}
+          />
+          <Text>Адрес</Text>
+          <TextInput
+            placeholder="Введите адрес"
+            style={styles.input}
+            textContentType="fullStreetAddress"
+            onChangeText={(text) => setAddress(text)}
+            value={address}
+          />
+          <Text>Доставка</Text>
+          <Picker
+            selectedValue={delivery}
+            style={{ width: 200, height: 44, backgroundColor: "#fff" }}
+            itemStyle={{ height: 44 }}
+            onValueChange={(itemValue) => {
+              setDelivery(itemValue);
+              console.log("itemValue", itemValue);
+            }}
+          >
+            <Picker.Item label="Нова пошта" value="novaPoshta" />
+            <Picker.Item label="Укр пошта" value="ukrPoshta" />
+            <Picker.Item label="Не отправлять" value="wait" />
+          </Picker>
+          <Text>Новый пароль</Text>
+          <TextInput
+            style={styles.input}
+            secureTextEntry={true}
+            textContentType="newPassword"
+            placeholder="Введите пароль"
+            onChangeText={(text) => setNewPassword(text)}
+            value={newPassword}
+          />
+          <TouchableOpacity onPress={updateEverything}>
+            <Text style={styles.btn}>Внести изменения</Text>
+          </TouchableOpacity>
+        </View>
+        <TouchableOpacity
+          style={styles.buttonLog}
+          title="ВЫЙТИ"
+          onPress={logout}
         >
-          <Picker.Item label="Нова пошта" value="novaPoshta" />
-          <Picker.Item label="Укр пошта" value="ukrPoshta" />
-          <Picker.Item label="Не отправлять" value="wait" />
-        </Picker>
-        <Text>Новый пароль</Text>
-        <TextInput
-          style={styles.input}
-          secureTextEntry={true}
-          textContentType="newPassword"
-          placeholder="Введите пароль"
-          onChangeText={(text) => setNewPassword(text)}
-          value={newPassword}
-        />
-        <TouchableOpacity onPress={updateEverything}>
-          <Text style={styles.btn}>Внести изменения</Text>
+          <Text style={styles.btnLog}>Выйти</Text>
         </TouchableOpacity>
-      </View>
-      <TouchableOpacity style={styles.buttonLog} title="ВЫЙТИ" onPress={logout}>
-        <Text style={styles.btnLog}>Выйти</Text>
-      </TouchableOpacity>
-      {/* <Button
+        {/* <Button
         title=""
         // onPress={() => navigation.navigate("LoginScreen")}
       /> */}
-    </View>
+      </View>
+    </ScrollView>
   );
 };
 
