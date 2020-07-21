@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, Component } from "react";
-import { Container, Header, Fab, Icon } from "native-base";
+import { Fab, Icon, Toast } from "native-base";
 import { Dimensions, ScrollView } from "react-native";
 import { useSelector } from "react-redux";
 import Modal from "react-native-modal";
@@ -9,8 +9,8 @@ import {
   Text,
   View,
   Image,
-  Button,
   TouchableOpacity,
+  Button,
   FlatList,
   Alert,
   Share,
@@ -89,6 +89,7 @@ export const ItemScreen = ({ route, navigation }) => {
   const [exchange, setExchange] = useState(27);
   const [active, setActive] = useState(false);
   const [isModalVisible, setModalVisible] = useState(false);
+  const [isModalVisibleBacket, setModalVisibleBacket] = useState(false);
   const [price, setPrice] = useState(
     Math.ceil(good.price * 1.15 * Number(exchange) + Number(good.charge) + 2)
   );
@@ -132,14 +133,6 @@ export const ItemScreen = ({ route, navigation }) => {
     let mounted = true;
     if (mounted) {
       getKurs();
-      return () => (mounted = false);
-    }
-  }, [exchange]);
-
-  useEffect(() => {
-    let mounted = true;
-    if (mounted) {
-      getPrice();
       return () => (mounted = false);
     }
   }, [exchange]);
@@ -285,30 +278,67 @@ export const ItemScreen = ({ route, navigation }) => {
   };
 
   const ddd = async () => {
-    await firestore
-      .collection("backet")
-      .add({
-        userId: userId,
-        name: good.name,
-        text: good.text,
-        image: good.image,
-        price: good.price,
-        priceWeight: good.priceWeight,
-        weight: 0,
-        size: chosenSizes,
-        charge: good.charge ? good.charge : 0,
-        inStock: good.inStock,
-      })
-      .then(alert("Товар добавлен в корзину"));
+    toggleModalBacket();
+    //   await firestore
+    //     .collection("backet")
+    //     .add({
+    //       userId: userId,
+    //       name: good.name,
+    //       text: good.text,
+    //       image: good.image,
+    //       price: good.price,
+    //       priceWeight: good.priceWeight,
+    //       weight: 0,
+    //       size: chosenSizes,
+    //       charge: good.charge ? good.charge : 0,
+    //       inStock: good.inStock,
+    //     })
+    //     .then(alert("Товар добавлен в корзину"));
   };
+
+  const navigationBacket = () => {
+    navigation.navigate("BacketScreen")
+  }
 
   const toggleModal = () => {
     setModalVisible(!isModalVisible);
   };
 
+  const toggleModalBacket = () => {
+    setModalVisibleBacket(!isModalVisibleBacket);
+  };
+
   return (
     <>
       <ScrollView style={styles.container}>
+        <Modal
+          style={{ justifyContent: "flex-end" }}
+          isVisible={isModalVisibleBacket}
+          animationIn="slideInUp"
+          animationInTiming={500}
+          hasBackdrop={true}
+          backdropOpacity={0.7}
+          backdropTransitionOutTiming={10}
+          onBackdropPress={() => toggleModalBacket()}
+          swipeDirection="down"
+        >
+          <View style={styles.sizesModalBacket}>
+            <TouchableOpacity
+              style={styles.activeSizes}
+              onPress={() => {
+                toggleModalBacket();
+              }}
+            >
+              <Text style={styles.chosenSizes}>Продолжить</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.sizes}
+              onPress={() => navigation.navigate("MainScreen", { info: "backet" })}
+            >
+              <Text style={styles.size}>В корзину</Text>
+            </TouchableOpacity>
+          </View>
+        </Modal>
         <Modal
           style={{ justifyContent: "flex-end" }}
           isVisible={isModalVisible}
@@ -339,7 +369,11 @@ export const ItemScreen = ({ route, navigation }) => {
                 ) : (
                   <></>
                 )}
-                {good.sizes.some((r) => sizes.indexOf(r) >= 0) ? <Text style={styles.sizesText}>Выберите размер</Text> : <></>}
+                {good.sizes.some((r) => sizes.indexOf(r) >= 0) ? (
+                  <Text style={styles.sizesText}>Выберите размер</Text>
+                ) : (
+                  <></>
+                )}
               </View>
             ) : (
               <></>
@@ -355,30 +389,36 @@ export const ItemScreen = ({ route, navigation }) => {
               renderItem={({ item }) => {
                 return (
                   <>
-                  {item ?
-                    <TouchableOpacity
-                      style={
-                        chosenSizes === item ? styles.activeSizes : styles.sizes
-                      }
-                      onPress={() => {setSizes(item), setModalVisible(false)}}
-                    >
-                      <Text
+                    {item ? (
+                      <TouchableOpacity
                         style={
                           chosenSizes === item
-                            ? styles.chosenSizes
-                            : styles.size
+                            ? styles.activeSizes
+                            : styles.sizes
                         }
+                        onPress={() => {
+                          setSizes(item), setModalVisible(false);
+                        }}
                       >
-                        {item}
-                      </Text>
-                    </TouchableOpacity> :<></>}
+                        <Text
+                          style={
+                            chosenSizes === item
+                              ? styles.chosenSizes
+                              : styles.size
+                          }
+                        >
+                          {item}
+                        </Text>
+                      </TouchableOpacity>
+                    ) : (
+                      <></>
+                    )}
                   </>
                 );
               }}
             />
           </View>
         </Modal>
-        {/* {console.log("chosenSizes", chosenSizes)} */}
         <Image style={styles.itemImage} source={{ uri: good.image }} />
         <View style={styles.textWrapper}>
           {good.sale ? <Text style={styles.goodSale}>Скидка%</Text> : <></>}
@@ -388,30 +428,30 @@ export const ItemScreen = ({ route, navigation }) => {
             <Text style={styles.text}>грн</Text>
           </Text>
           <Text style={styles.text}>{good.text}</Text>
-          {good.sizes[0] ? 
-          <TouchableOpacity
-            style={styles.sizesBtn}
-            onPress={() => toggleModal()}
-          >
-            <Text style={styles.sizesTxt}>
-              {chosenSizes ? chosenSizes : "Выберите размер"}
-            </Text>
-          </TouchableOpacity> : <></>}
+          {good.sizes[0] ? (
+            <TouchableOpacity
+              style={styles.sizesBtn}
+              onPress={() => toggleModal()}
+            >
+              <Text style={styles.sizesTxt}>
+                {chosenSizes ? chosenSizes : "Выберите размер"}
+              </Text>
+            </TouchableOpacity>
+          ) : (
+            <></>
+          )}
           {/* <Text style={styles.text}>{translatedCatagory}</Text> */}
         </View>
-        {/* <TouchableOpacity
-          style={styles.container}
-          onPress={() => navigation.navigate("ItemScreen", { info: item })}
-        >
-          <Text>{item}</Text>
-        </TouchableOpacity> */}
-
         <View>
           <Fab
             active={!active}
             direction="up"
             containerStyle={{}}
-            style={{ backgroundColor: "#2f8f85", top: - win.height / 4 + 20, left: win.width / 2}}
+            style={{
+              backgroundColor: "#2f8f85",
+              top: -win.height / 4 + 20,
+              left: win.width / 2,
+            }}
             position="topRight"
             onPress={onShare}
           >
@@ -419,7 +459,7 @@ export const ItemScreen = ({ route, navigation }) => {
           </Fab>
         </View>
         <TouchableOpacity
-          disabled={!userId || (good.sizes[0] && !chosenSizes) }
+          disabled={!userId || (good.sizes[0] && !chosenSizes)}
           style={
             !userId || (good.sizes[0] && !chosenSizes)
               ? styles.cartButtonDisabled
@@ -428,6 +468,12 @@ export const ItemScreen = ({ route, navigation }) => {
           onPress={() => ddd()}
         >
           <Text style={styles.cartButtonText}>В корзину</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.sizeChartButton}
+          onPress={() => navigation.navigate("SizeChartScreen")}
+        >
+          <Text style={styles.sizeChartText}>Размерная сетка</Text>
         </TouchableOpacity>
       </ScrollView>
     </>
@@ -490,10 +536,6 @@ const styles = StyleSheet.create({
   },
   sizes: {
     flexDirection: "column",
-    //   height: 30,
-    // //   width: 30,
-    // fontSize: 18,
-    // backgroundColor: "#6CC4C7",
     borderColor: "#6CC4C7",
     marginBottom: 6,
     borderRadius: 5,
@@ -545,12 +587,6 @@ const styles = StyleSheet.create({
     marginTop: 20,
     marginHorizontal: 10,
   },
-  cartButtonText: {
-    color: "#fff",
-    textAlign: "center",
-    fontSize: 20,
-    fontFamily: "Roboto-Condensed-Regular",
-  },
   cartButton: {
     backgroundColor: "#6cc4c7",
     alignSelf: "stretch",
@@ -578,7 +614,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     borderRadius: 10,
     paddingTop: 20,
-    paddingBottom:60,
+    paddingBottom: 60,
   },
   sizesBtn: {
     marginTop: 16,
@@ -594,6 +630,17 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontFamily: "Roboto-Condensed-Regular",
     textAlign: "center",
-    color: '#555',
+    color: "#555",
+  },
+  sizeChartButton: {
+    alignSelf: "stretch",
+    paddingVertical: 10,
+    marginVertical: 10,
+  },
+  sizeChartText: {
+    textAlign: "center",
+    color: "#6cc4c7",
+    fontSize: 20,
+    fontFamily: "Roboto-Condensed-Regular",
   },
 });

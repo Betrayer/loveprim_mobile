@@ -20,6 +20,7 @@ const reducer = {
       isAuth: true,
       userAdress: payload.userAdress,
       buyer: payload.buyer,
+      userToken: payload.userToken
     };
   },
   [types.REGISTR_USER]: (state, { payload }) => {
@@ -31,6 +32,7 @@ const reducer = {
       userName: payload.userName,
       isAuth: true,
       userAdress: payload.userAdress,
+      userToken: payload.userToken
     };
   },
   [types.USER_SIGNOUT]: () => initialState,
