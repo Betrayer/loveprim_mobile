@@ -38,10 +38,6 @@ export const AdminPageScreen = ({ navigation }) => {
   }, [orderList]);
 
   useEffect(() => {
-    filterOrders(selectedValue);
-  }, [selectedValue]);
-
-  useEffect(() => {
     if (orderList) {
       headerFilter(searchValue);
     }
@@ -93,6 +89,25 @@ export const AdminPageScreen = ({ navigation }) => {
         setExchange(username.kurs);
       });
   };
+  const translateStatus = (selectedValue) => {
+    if (selectedValue === "processing") {
+      return "Обработка";
+    } else if (selectedValue === "bought") {
+      return "Куплено";
+    } else if (selectedValue === "checkedAndWeighted") {
+      return "Проверено и взвешено";
+    } else if (selectedValue === "approved") {
+      return "Одобрено Администратором";
+    } else if (selectedValue === "payed") {
+      return "Оплачено";
+    } else if (selectedValue === "sendToUkr") {
+      return "Едет в Украину";
+    } else if (selectedValue === "inUkr") {
+      return "Прибыло в Украину";
+    } else if (selectedValue === "received") {
+      return "Получено";
+    }
+  };
 
   const filterOrders = (itemValue) => {
     setSelectedValue(itemValue);
@@ -110,30 +125,46 @@ export const AdminPageScreen = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <Text>Курс на сегодня {exchange}</Text>
-      <View
-        style={{
-          alignItems: "center",
-          flexDirection: "row",
-        }}
-      >
-        <Container style={{ height: 50, backgroundColor: "#fff" }}>
-          <Item
-            searchBar
+      <Text style={styles.exchange}>1&#8364; = {exchange}</Text>
+      {/* <View> */}
+      <View style={styles.topWrapper}>
+        <View
+          style={{
+            alignItems: "center",
+            flexDirection: "row",
+          }}
+        >
+          <Container
             style={{
+              height: 50,
               backgroundColor: "#fff",
+              alignItems: "center",
             }}
           >
-            <Icon name="ios-search" />
-            <Input
-              placeholder="Искать..."
-              value={searchValue}
-              onChangeText={(value) => setSearchValue(value)}
-            />
-          </Item>
-        </Container>
+            <Item
+              searchBar
+              style={{
+                backgroundColor: "#fff",
+              }}
+            >
+              <Icon name="ios-search" />
+              <Input
+                placeholder="Искать..."
+                value={searchValue}
+                onChangeText={(value) => setSearchValue(value)}
+              />
+            </Item>
+          </Container>
+        </View>
       </View>
-
+      {/* <View style={{ ...StyleSheet.absoluteFill }}></View>
+        <TextInput
+          style={styles.txtInput}
+          placeholder="Искать по телефону"
+          value={searchValue}
+          onChangeText={(value) => setSearchValue(value)}
+        />
+      </View> */}
       <Picker
         selectedValue={selectedValue}
         style={{ width: 200, height: 44, backgroundColor: "#fff" }}
@@ -151,34 +182,37 @@ export const AdminPageScreen = ({ navigation }) => {
         <Picker.Item label="Прибыло в Украину" value="inUkr" />
         <Picker.Item label="Получено" value="received" />
       </Picker>
-      {!filteredItems[0] ? (
-        <Text>Заказы не найдены</Text>
-      ) : (
-        <FlatList
-          style={{ width: "100%", paddingHorizontal: 40 }}
-          data={filteredItems}
-          keyExtractor={(item, indx) => indx.toString()}
-          renderItem={({ item }) => {
-            return (
-              <View style={styles.comment}>
-                <TouchableOpacity
-                  onPress={() =>
-                    navigation.navigate("OrderScreen", { info: item })
-                  }
-                >
-                  <View style={styles.order}>
-                    <View style={styles.orderTextWrapper}>
-                      <Text style={styles.orderText}>{item.numberOfOrder}</Text>
-                      <Text style={styles.orderText}>{item.status}</Text>
-                    </View>
-                    <Text style={styles.orderText}>{item.userName}</Text>
+      <FlatList
+        // data={filteredOrders}
+        contentContainerStyle={{ paddingBottom: 20 }}
+        style={{ width: "100%", paddingHorizontal: 40 }}
+        data={filteredItems}
+        keyExtractor={(item, indx) => indx.toString()}
+        renderItem={({ item }) => {
+          return (
+            <View style={styles.comment}>
+              <TouchableOpacity
+                onPress={() =>
+                  navigation.navigate("OrderScreen", { info: item })
+                }
+              >
+                <View style={styles.order}>
+                  <View style={styles.orderTextWrapper}>
+                    <Text style={styles.orderText}>
+                      &#8470;{item.numberOfOrder}
+                    </Text>
+                    <Text style={styles.orderText}>
+                      {translateStatus(item.status)}
+                    </Text>
                   </View>
-                </TouchableOpacity>
-              </View>
-            );
-          }}
-        />
-      )}
+                  <Text style={styles.orderText}>{item.userName}</Text>
+                </View>
+              </TouchableOpacity>
+            </View>
+          );
+        }}
+      />
+      {/* </View> */}
     </View>
   );
 };
@@ -187,16 +221,34 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#fff",
     alignItems: "center",
-    justifyContent: "flex-start",
-    // paddingHorizontal:30
+    justifyContent: "center",
+    // paddingHorizontal:30,
+    paddingTop: 20,
+  },
+  topWrapper:{
+    alignSelf: 'stretch',
+    paddingHorizontal:30
+  },
+  exchange: {
+    fontFamily: "Roboto-Condensed-Bold",
+    fontSize: 20,
   },
   order: {
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 2,
+      height: 3,
+    },
+    shadowOpacity: 0.17,
+    shadowRadius: 4.65,
+    backgroundColor: "#fff",
+    elevation: 6,
     // width: 330,
     alignSelf: "stretch",
     marginTop: 20,
-    borderColor: "#6CC4C7",
-    borderWidth: 2,
-    borderRadius: 10,
+    // borderColor: "#6CC4C7",
+    // borderWidth: 2,
+    borderRadius: 2,
     // width: "92%",
     // justifyContent: "space-between",
     alignItems: "center",

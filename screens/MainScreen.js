@@ -160,12 +160,12 @@ export const MainScreen = ({ navigation, route }) => {
                   <View
                     style={{
                       position: "absolute",
-                      right: -6,
+                      left: 7,
                       top: -3,
                       backgroundColor: "red",
                       borderRadius: 6,
-                      width: 16,
-                      height: 16,
+                      padding:2,
+                      paddingHorizontal:4,
                       justifyContent: "center",
                       alignItems: "center",
                     }}
