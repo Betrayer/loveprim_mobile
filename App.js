@@ -5,7 +5,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 import { NavigationContainer } from "@react-navigation/native";
 import { Provider } from "react-redux";
 import * as Font from "expo-font";
-import firebase from "firebase"; // Богдан тест
+// import firebase from "firebase"; // Богдан тест
 import { firestore, storage, auth, firebaseConfig } from "./firebase/config";
 import { store } from "./redux/store";
 import { MainScreen } from "./screens/MainScreen";
@@ -29,7 +29,7 @@ import { AdminPageScreen } from "./screens/additionalScreens/AdminPageScreen";
 import { OrderScreen } from "./screens/additionalScreens/OrderScreen";
 import { BoysScreen } from "./screens/additionalScreens/BoysScreen/BoysScreen";
 import { AuthScreen } from "./screens/AuthScreen";
-import { BacketScreen } from "./screens/additionalScreens/BacketScreen";
+// import { BacketScreen } from "./screens/additionalScreens/BacketScreen";
 
 
 export default function App() {
@@ -105,7 +105,7 @@ export default function App() {
               name="LoginScreen"
               component={LoginScreen}
             /> */}
-            <Stack.Screen
+            {/* <Stack.Screen
               options={{
                 headerTitleAlign: "center",
                 headerTitle: "Корзина",
@@ -116,7 +116,7 @@ export default function App() {
               }}
               name="BacketScreen"
               component={BacketScreen}
-            />
+            /> */}
             <Stack.Screen
               options={{
                 headerTitleAlign: "center",

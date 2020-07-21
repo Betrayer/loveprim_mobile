@@ -33,7 +33,7 @@ const Tab = createBottomTabNavigator();
 
 export const MainScreen = ({ navigation, route }) => {
   // const [userToken, setUserToken] = useState("");
-  const { userId, admin, userName, userToken } = useSelector((state) => state.user);
+  const { userId, admin, userName } = useSelector((state) => state.user);
   const [drawer, setDrawer] = useState(false);
   const [user, setUser] = useState("");
 
