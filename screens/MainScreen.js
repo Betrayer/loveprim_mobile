@@ -159,7 +159,7 @@ export const MainScreen = ({ navigation, route }) => {
 
   return (
     <>
-      <Button title="SLAP ME, DADDY" onPress={() => sendPushNotification()} />
+    <Button title="S" onPress={() => sendPushNotification()} />
       <Tab.Navigator
         tabBarOptions={{
           showLabel: true,
