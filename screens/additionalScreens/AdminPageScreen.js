@@ -97,7 +97,7 @@ export const AdminPageScreen = ({ navigation }) => {
     } else if (selectedValue === "checkedAndWeighted") {
       return "Проверено и взвешено";
     } else if (selectedValue === "approved") {
-      return "Одобрено Администратором";
+      return "Одобрено Админом";
     } else if (selectedValue === "payed") {
       return "Оплачено";
     } else if (selectedValue === "sendToUkr") {

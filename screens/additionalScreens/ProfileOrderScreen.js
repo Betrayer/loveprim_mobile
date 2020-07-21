@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
+
 import { StyleSheet, Text, View, Picker, TextInput } from "react-native";
 import { useSelector } from "react-redux";
 import { firestore } from "../../firebase/config";
 import moment from "moment";
 
-export const ProfileOrderScreen = ({ item }) => {
+export const ProfileOrderScreen = ( {item} ) => {
   const { admin, userId, buyer } = useSelector((state) => state.user);
   const day = moment(item.numberOfOrder).format("D/M/YYYY, HH:mm");
   const [order, setOrder] = useState(item);

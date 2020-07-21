@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { Container, Accordion, Icon, Content } from "native-base";
 import {
   StyleSheet,
   Text,
@@ -9,56 +10,122 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
-
+import moment from "moment";
 import { firestore } from "../../firebase/config";
-import { ProfileOrderScreen } from "./ProfileOrderScreen";
 
 export const ProfileListScreen = ({ navigation, route }) => {
   const [user, setUser] = useState("");
-  const { userId, admin, userName, userEmail } = useSelector((state) => state.user);
+  const { userId, admin, userName, userEmail } = useSelector(
+    (state) => state.user
+  );
   const dispatch = useDispatch();
   const [orderList, setOrderList] = useState([]);
-  const [username, setUsername] = useState("user");
-  const [userTel, setUserTel] = useState("");
-  const [newEmail, setUserEmail] = useState("");
-  const [address, setAddress] = useState("");
-  const [delivery, setDelivery] = useState("");
-  const [newPassword, setNewPassword] = useState("");
-
 
   useEffect(() => {
-    getUser();
     getOrders();
   }, []);
-  useEffect(() => {
-    getUserData();
-  }, [user]);
 
-  
-
-  const getUserData = () => {
-    setUsername(user.userName);
-    setUserTel(user.userPhone);
-    setUserEmail(userEmail);
-    setAddress(user.userAdress);
-    if (user.delivery) {
-      setDelivery(user.delivery);
-    }else{
-      setDelivery("novaPoshta");
+  const translateStatus = (item) => {
+    if (item.status === "processing") {
+      return "Обработка";
+    } else if (item.status === "bought") {
+      return "Куплено";
+    } else if (item.status === "checkedAndWeighted") {
+      return "Проверено и взвешено";
+    } else if (item.status === "approved") {
+      return "Одобрено Администратором";
+    } else if (item.status === "payed") {
+      return "Оплачено";
+    } else if (item.status === "sendToUkr") {
+      return "Едет в Украину";
+    } else if (item.status === "inUkr") {
+      return "Прибыло в Украину";
+    } else if (item.status === "received") {
+      return "Получено";
     }
   };
+  const ProfileOrderScreen = (item) => {
+    const weightPrice = Number(item.weight) * 0.006 * Number(item.kurs);
 
-  const getUser = async () => {
-    await firestore
-      .collection("users")
-      .where("userId", "==", userId)
-      .get()
-      .then(function (querySnapshot) {
-        querySnapshot.forEach(function (doc) {
-          setUser({ ...doc.data(), id: doc.id });
-        });
-      });
+    const newPriceHrn =
+      Number(
+        item.backet
+          .map((order) => Number(order.price))
+          .reduce((accumulator, currentValue) => accumulator + currentValue, 0)
+      ) *
+        1.15 *
+        Number(item.kurs) -
+      Number(item.userBonus) +
+      Number(item.packaging) +
+      Number(
+        item.backet
+          .map((order) => Number(order.charge) + 2)
+          .reduce((accumulator, currentValue) => accumulator + currentValue, 0)
+      );
+
+    let newPrice = Math.ceil(newPriceHrn + weightPrice);
+    return (
+      <View>
+        <Text>&#8470;{item.numberOfOrder}</Text>
+        <Text>{newPrice} грн</Text>
+        <Text>Статус: {translateStatus(item)}</Text>
+        <Text>
+          Дата заказа {moment(item.numberOfOrder).format("D/M/YYYY, HH:mm")}
+        </Text>
+        {item.deliveryNo ? (
+          <Text>Номер накладной: {item.deliveryNo}</Text>
+        ) : (
+          <></>
+        )}
+        {item.payTime !== "" &&
+        item.payTime !== null &&
+        item.payTime !== undefined ? (
+          <Text>Оплачено {item.payTime}</Text>
+        ) : (
+          <></>
+        )}
+        <Text>Скидка: {item.userBonus}</Text>
+        {item.alreadyPayed ? (
+          <>
+            <Text>
+              Оплачено: {Math.round(item.alreadyPayed * Number(item.kurs))}
+              грн
+            </Text>
+            <Text>
+              Доплатить:
+              {Math.ceil(newPrice - item.alreadyPayed * Number(item.kurs))}
+              грн
+            </Text>
+          </>
+        ) : (
+          <></>
+        )}
+      </View>
+    );
   };
+  const renderHeader = (item, expanded) => {
+    return (
+      <View
+        style={{
+          flexDirection: "row",
+          padding: 10,
+          justifyContent: "space-between",
+          alignItems: "center",
+          backgroundColor: "#A9DAD6",
+        }}
+      >
+        <Text style={{ fontFamily: "Roboto-Condensed-Regular", fontSize: 18 }}>
+          &#8470;{item.numberOfOrder}
+        </Text>
+        {expanded ? (
+          <Icon style={{ fontSize: 15 }} name="ios-arrow-up" />
+        ) : (
+          <Icon style={{ fontSize: 15 }} name="ios-arrow-down" />
+        )}
+      </View>
+    );
+  };
+
   const getOrders = async () => {
     await firestore
       .collection("orders")
@@ -81,20 +148,19 @@ export const ProfileListScreen = ({ navigation, route }) => {
         );
       });
   };
-  
-  
-  
 
   return (
-    <View>
-      <FlatList
+    <Container>
+      <Content padder style={{ backgroundColor: "white" }}>
+      {/* <FlatList
         data={orderList}
         keyExtractor={(item, indx) => indx.toString()}
         renderItem={({ item }) => {
           return <ProfileOrderScreen item={item} />;
         }}
-      />
-    </View>
+      /> */}
+      <Accordion animation={true} dataArray={orderList} renderHeader={renderHeader} renderContent={ProfileOrderScreen} />
+      </Content></Container>
   );
 };
 
