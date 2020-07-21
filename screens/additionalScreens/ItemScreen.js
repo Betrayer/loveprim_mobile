@@ -449,8 +449,10 @@ export const ItemScreen = ({ route, navigation }) => {
             containerStyle={{}}
             style={{
               backgroundColor: "#2f8f85",
-              top: -win.height / 4 + 20,
-              left: win.width / 2,
+              top: -230,
+              left: 19
+              // top: -win.height / 4 - 300,
+              // left: win.width / 2,
             }}
             position="topRight"
             onPress={onShare}
