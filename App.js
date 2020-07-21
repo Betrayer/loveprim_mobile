@@ -29,6 +29,8 @@ import { AdminPageScreen } from "./screens/additionalScreens/AdminPageScreen";
 import { OrderScreen } from "./screens/additionalScreens/OrderScreen";
 import { BoysScreen } from "./screens/additionalScreens/BoysScreen/BoysScreen";
 import { AuthScreen } from "./screens/AuthScreen";
+import { BacketScreen } from "./screens/additionalScreens/BacketScreen";
+
 
 export default function App() {
   const Stack = createStackNavigator();
@@ -102,19 +104,19 @@ export default function App() {
               }}
               name="LoginScreen"
               component={LoginScreen}
-            />
+            /> */}
             <Stack.Screen
               options={{
                 headerTitleAlign: "center",
-                headerTitle: "Registration",
+                headerTitle: "Корзина",
                 headerStyle: {
                   backgroundColor: "#6CC4C7",
                 },
                 headerTintColor: "white",
               }}
-              name="RegistrScreen"
-              component={RegistrScreen}
-            /> */}
+              name="BacketScreen"
+              component={BacketScreen}
+            />
             <Stack.Screen
               options={{
                 headerTitleAlign: "center",

@@ -32,8 +32,8 @@ import { Ionicons } from "@expo/vector-icons";
 const Tab = createBottomTabNavigator();
 
 export const MainScreen = ({ navigation, route }) => {
-  const [userToken, setUserToken] = useState("");
-  const { userId, admin, userName } = useSelector((state) => state.user);
+  // const [userToken, setUserToken] = useState("");
+  const { userId, admin, userName, userToken } = useSelector((state) => state.user);
   const [drawer, setDrawer] = useState(false);
   const [user, setUser] = useState("");
 
@@ -42,8 +42,19 @@ export const MainScreen = ({ navigation, route }) => {
   useEffect(() => {
     setDrawer(false);
     getUser();
-    // console.log(userToken)
   }, []);
+
+  // useEffect(() => {
+  //   const ch = route
+  //   console.log(ch)
+  //   if (ch.param.info) {
+  //     navigationBacket();
+  //   }
+  // }, []);
+
+  const navigationBacket = () => {
+    navigation.navigate("BacketScreen");
+  };
 
   const getUser = async () => {
     await firebase
@@ -93,8 +104,8 @@ export const MainScreen = ({ navigation, route }) => {
         tabBarOptions={{
           showLabel: true,
           keyboardHidesTabBar: true,
-          labelStyle: { fontSize: 12, fontFamily: "Roboto-Condensed-Regular"},
-          activeTintColor : '#5bb3b6'
+          labelStyle: { fontSize: 12, fontFamily: "Roboto-Condensed-Regular" },
+          activeTintColor: "#5bb3b6",
         }}
       >
         <Tab.Screen

@@ -19,6 +19,8 @@ export const HomeScreen = () => {
   const [filteredItems, setFilteredItems] = useState([]);
   const [exchange, setExchange] = useState(27);
   const [rate, setRate] = useState(27);
+  const { userId, admin, userName, userToken } = useSelector((state) => state.user);
+
 
   useEffect(() => {
     getCollection();
@@ -115,6 +117,7 @@ export const HomeScreen = () => {
   };
 
   return (
+    
     <View
       style={{
         paddingHorizontal: 10,

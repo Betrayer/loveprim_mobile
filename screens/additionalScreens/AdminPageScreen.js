@@ -38,6 +38,10 @@ export const AdminPageScreen = ({ navigation }) => {
   }, [orderList]);
 
   useEffect(() => {
+    filterOrders(selectedValue);
+  }, [selectedValue]);
+
+  useEffect(() => {
     if (orderList) {
       headerFilter(searchValue);
     }
@@ -71,7 +75,7 @@ export const AdminPageScreen = ({ navigation }) => {
       if (settingUpFilter[0]) {
         setFilteredItems(settingUpFilter);
       } else {
-        setFilteredItems([1]);
+        setFilteredItems([]);
       }
     } else {
       setFilteredItems(orderList);
@@ -101,6 +105,7 @@ export const AdminPageScreen = ({ navigation }) => {
       setFilteredOrders(orderList.filter((item) => item.status === status));
     }
     openSelectUser(false);
+    setFilteredItems(filteredOrders);
   };
 
   return (
@@ -128,14 +133,7 @@ export const AdminPageScreen = ({ navigation }) => {
           </Item>
         </Container>
       </View>
-      {/* <View style={{ ...StyleSheet.absoluteFill }}></View>
-        <TextInput
-          style={styles.txtInput}
-          placeholder="Искать по телефону"
-          value={searchValue}
-          onChangeText={(value) => setSearchValue(value)}
-        />
-      </View> */}
+
       <Picker
         selectedValue={selectedValue}
         style={{ width: 200, height: 44, backgroundColor: "#fff" }}
@@ -153,30 +151,34 @@ export const AdminPageScreen = ({ navigation }) => {
         <Picker.Item label="Прибыло в Украину" value="inUkr" />
         <Picker.Item label="Получено" value="received" />
       </Picker>
-      <FlatList
-        style={{ width: "100%", paddingHorizontal: 40 }}
-        data={filteredItems}
-        keyExtractor={(item, indx) => indx.toString()}
-        renderItem={({ item }) => {
-          return (
-            <View style={styles.comment}>
-              <TouchableOpacity
-                onPress={() =>
-                  navigation.navigate("OrderScreen", { info: item })
-                }
-              >
-                <View style={styles.order}>
-                  <View style={styles.orderTextWrapper}>
-                    <Text style={styles.orderText}>{item.numberOfOrder}</Text>
-                    <Text style={styles.orderText}>{item.status}</Text>
+      {!filteredItems[0] ? (
+        <Text>Заказы не найдены</Text>
+      ) : (
+        <FlatList
+          style={{ width: "100%", paddingHorizontal: 40 }}
+          data={filteredItems}
+          keyExtractor={(item, indx) => indx.toString()}
+          renderItem={({ item }) => {
+            return (
+              <View style={styles.comment}>
+                <TouchableOpacity
+                  onPress={() =>
+                    navigation.navigate("OrderScreen", { info: item })
+                  }
+                >
+                  <View style={styles.order}>
+                    <View style={styles.orderTextWrapper}>
+                      <Text style={styles.orderText}>{item.numberOfOrder}</Text>
+                      <Text style={styles.orderText}>{item.status}</Text>
+                    </View>
+                    <Text style={styles.orderText}>{item.userName}</Text>
                   </View>
-                  <Text style={styles.orderText}>{item.userName}</Text>
-                </View>
-              </TouchableOpacity>
-            </View>
-          );
-        }}
-      />
+                </TouchableOpacity>
+              </View>
+            );
+          }}
+        />
+      )}
     </View>
   );
 };
@@ -185,7 +187,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#fff",
     alignItems: "center",
-    justifyContent: "center",
+    justifyContent: "flex-start",
     // paddingHorizontal:30
   },
   order: {
