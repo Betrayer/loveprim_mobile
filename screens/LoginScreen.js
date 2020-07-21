@@ -16,6 +16,11 @@ import {
 import { auth } from "../firebase/config";
 import { useDispatch, useSelector } from "react-redux";
 import { loginUser } from "../redux/operations";
+import Constants from "expo-constants";
+import * as Permissions from "expo-permissions";
+import { Notifications } from "expo"; // Богдан тест
+
+
 
 const initialState = {
   email: "",
@@ -28,12 +33,63 @@ export const LoginScreen = ({ navigation, route }) => {
   const [textValue, setTextValue] = useState(initialState);
   const dispatch = useDispatch();
   const { userId, admin } = useSelector((state) => state.user);
+  const [user, setUser] = useState({});
+  const [userToken, setUserToken] = useState("");
+
 
   // useEffect(() => {
   // }, [error, errorId]);
 
+  useEffect(() => {
+    if (user) {
+      async function pushNotify() {
+        try {
+          await registerForPushNotificationsAsync();
+        } catch (error) {
+          console.log("PushEror", error);
+        }
+      }
+      pushNotify();
+    }
+  }, [user]);
+
   const toMain = () => {
     navigation.navigate("MainScreen");
+  };
+
+  const registerForPushNotificationsAsync = async () => {
+    if (Constants.isDevice) {
+      const { status: existingStatus } = await Permissions.getAsync(
+        Permissions.NOTIFICATIONS
+      );
+      let finalStatus = existingStatus;
+      if (existingStatus !== "granted") {
+        const { status } = await Permissions.askAsync(
+          Permissions.NOTIFICATIONS
+        );
+        finalStatus = status;
+      }
+      if (finalStatus !== "granted") {
+        alert("Failed to get push token for push notification!");
+        return;
+      }
+      // console.log("userId", userId);
+      try {
+        let token = await Notifications.getExpoPushTokenAsync();
+        // console.log("tokenLOGIN", token);
+        // firebase
+        //   .database()
+        //   .ref("users/" + userId + "/push_token")
+        //   .set(token);
+        setUserToken(token);
+      } catch (error) {
+        console.log("error", error);
+      }
+      // console.log(token);
+      // this.setState({ expoPushToken: token });
+    } else {
+      alert("Must use physical device for Push Notifications");
+    }
   };
 
   const loginUserAdd = async () => {
@@ -41,7 +97,7 @@ export const LoginScreen = ({ navigation, route }) => {
     // console.log("email", email);
     // console.log("password", password);
     // console.log("textValue", textValue);
-    await dispatch(loginUser(textValue, setError, setErrorId, toMain));
+    await dispatch(loginUser(textValue, setError, setErrorId, toMain, userToken));
     // await setEmail("");
     // await setPassword("");
 
