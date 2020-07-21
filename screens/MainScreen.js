@@ -10,7 +10,7 @@ import {
   Keyboard,
   Platform,
   TextInput,
-  Button
+  Button,
 } from "react-native";
 // import { Container, Header, Content, Footer, FooterTab, Button, Icon, Text, Badge } from 'native-base';
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
@@ -34,16 +34,20 @@ const Tab = createBottomTabNavigator();
 
 export const MainScreen = ({ navigation, route }) => {
   // const [userToken, setUserToken] = useState("");
-  const { userId, admin, userName, userToken } = useSelector((state) => state.user);
+  const { userId, admin, userToken } = useSelector((state) => state.user);
   const [drawer, setDrawer] = useState(false);
   const [user, setUser] = useState("");
-
   const [notificationList, setNotificationList] = useState([]);
+  const [allNotifications, setAllNotifications] = useState([]);
 
   useEffect(() => {
     setDrawer(false);
     getUser();
   }, []);
+
+  useEffect(() => {
+    getNotifications();
+  }, [userId]);
 
   // useEffect(() => {
   //   const ch = route
@@ -65,7 +69,7 @@ export const MainScreen = ({ navigation, route }) => {
       .onSnapshot((data) => {
         setUser(
           ...data.docs.map((doc) => {
-            console.log("doc.id", doc.id);
+            // console.log("doc.id", doc.id);
             return { id: doc.id };
           })
         );
@@ -73,8 +77,39 @@ export const MainScreen = ({ navigation, route }) => {
   };
 
   useEffect(() => {
-    getNotifications();
+    if (userId) {
+      getNotifications();
+    }
   }, []);
+
+  useEffect(() => {
+    if (allNotifications[0]) {
+      allNotifications.map((notif) => {
+        sendPushNotification(notif);
+      });
+    }
+  }, [allNotifications]);
+
+  const getAllNotifications = async () => {
+    await firestore.collection("notifications").onSnapshot((data) => {
+      setAllNotifications(
+        data.docs
+          .map((doc, ind) => {
+            return { ...doc.data(), id: doc.id, key: { ind } };
+          })
+          .filter((item) => !item.alreadySent)
+          .sort(function (a, b) {
+            if (a.date > b.date) {
+              return -1;
+            }
+            if (a.date < b.date) {
+              return 1;
+            }
+            return 0;
+          })
+      );
+    });
+  };
 
   const getNotifications = async () => {
     await firestore
@@ -98,13 +133,13 @@ export const MainScreen = ({ navigation, route }) => {
         );
       });
   };
-  const sendPushNotification = async() => {
-    const message = {
 
-   to: userToken,
+  const sendPushNotification = async (notif) => {
+    const message = {
+      to: notif.userToken,
       sound: "default",
-      title: "Original Title",
-      body: "And here is the body!",
+      title: "Hello there",
+      body: notif.notification,
       data: { data: "goes here" },
     };
 
@@ -117,8 +152,11 @@ export const MainScreen = ({ navigation, route }) => {
       },
       body: JSON.stringify(message),
     });
-  }
-
+    await firestore.collection("notifications").doc(notif.id).update({
+      alreadySent: true,
+    });
+    // console.log("notificationList", notificationList);
+  };
 
   return (
     <>
@@ -131,6 +169,7 @@ export const MainScreen = ({ navigation, route }) => {
           activeTintColor: "#5bb3b6",
         }}
       >
+        {/* {console.log("route", route)} */}
         <Tab.Screen
           options={{
             tabBarIcon: ({ focused, size, color }) => (
@@ -187,8 +226,8 @@ export const MainScreen = ({ navigation, route }) => {
                       top: -3,
                       backgroundColor: "red",
                       borderRadius: 6,
-                      padding:2,
-                      paddingHorizontal:4,
+                      padding: 2,
+                      paddingHorizontal: 4,
                       justifyContent: "center",
                       alignItems: "center",
                     }}

@@ -31,6 +31,7 @@ export const ProfileScreen = ({ navigation, route }) => {
   const logout = () => {
     console.log("LOGOUT");
     dispatch(logoutUser());
+    navigation.navigate("MainScreen");
   };
 
   useEffect(() => {
@@ -240,7 +241,7 @@ export const ProfileScreen = ({ navigation, route }) => {
         <TouchableOpacity
           style={styles.buttonLog}
           title="ВЫЙТИ"
-          onPress={logout}
+          onPress={() => logout()}
         >
           <Text style={styles.btnLog}>Выйти</Text>
         </TouchableOpacity>

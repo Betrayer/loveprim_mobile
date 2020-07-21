@@ -139,7 +139,7 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
-
+marginHorizontal:20,
     elevation: 5,
   },
   head: {
