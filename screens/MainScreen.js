@@ -44,6 +44,10 @@ export const MainScreen = ({ navigation, route }) => {
     getUser();
   }, []);
 
+  useEffect(() => {
+    getNotifications();
+  }, [userId]);
+
   // useEffect(() => {
   //   const ch = route
   //   console.log(ch)
@@ -64,7 +68,7 @@ export const MainScreen = ({ navigation, route }) => {
       .onSnapshot((data) => {
         setUser(
           ...data.docs.map((doc) => {
-            console.log("doc.id", doc.id);
+            // console.log("doc.id", doc.id);
             return { id: doc.id };
           })
         );
@@ -72,7 +76,9 @@ export const MainScreen = ({ navigation, route }) => {
   };
 
   useEffect(() => {
-    getNotifications();
+    if (userId) {
+      getNotifications();
+    }
   }, []);
 
   const getNotifications = async () => {
@@ -108,6 +114,7 @@ export const MainScreen = ({ navigation, route }) => {
           activeTintColor: "#5bb3b6",
         }}
       >
+        {/* {console.log("route", route)} */}
         <Tab.Screen
           options={{
             tabBarIcon: ({ focused, size, color }) => (
@@ -164,8 +171,8 @@ export const MainScreen = ({ navigation, route }) => {
                       top: -3,
                       backgroundColor: "red",
                       borderRadius: 6,
-                      padding:2,
-                      paddingHorizontal:4,
+                      padding: 2,
+                      paddingHorizontal: 4,
                       justifyContent: "center",
                       alignItems: "center",
                     }}

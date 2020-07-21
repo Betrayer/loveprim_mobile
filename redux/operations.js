@@ -48,9 +48,14 @@ export const registerUser = (
   }
 };
 
-export const loginUser = (param, setError, setErrorId, toMain) => async (
-  dispatch
-) => {
+export const loginUser = (
+  param,
+  setError,
+  setErrorId,
+  toMain,
+  userToken
+) => async (dispatch) => {
+  console.log("userTokenDISPA", userToken);
   try {
     await auth.signInWithEmailAndPassword(param.email, param.password);
     const currentUser = await auth.currentUser;
@@ -61,12 +66,23 @@ export const loginUser = (param, setError, setErrorId, toMain) => async (
       .get()
       .then(function (querySnapshot) {
         querySnapshot.forEach(function (doc) {
-          dataData = doc.data();
+          dataData = { ...doc.data(), id: doc.id }
         });
+        
       })
       .then(setError(true))
       .catch(function (error) {
         console.log("Error getting document:", error);
+      });
+    await firestore
+      .collection("users")
+      .doc(dataData.id)
+      .update({
+        userToken: userToken,
+      })
+      .then(setError(true))
+      .catch(function (error) {
+        console.log("Error UPDATE", error);
       });
     await dispatch({
       type: types.LOGIN_USER,
@@ -78,7 +94,7 @@ export const loginUser = (param, setError, setErrorId, toMain) => async (
         userPhone: dataData.userPhone,
         userAdress: dataData.userAdress,
         buyer: dataData.buyer,
-        userToken: dataData.userToken,
+        userToken: userToken,
       },
     }).then(toMain());
   } catch (error) {

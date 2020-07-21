@@ -616,6 +616,13 @@ const styles = StyleSheet.create({
     paddingTop: 20,
     paddingBottom: 60,
   },
+  sizesModalBacket: {
+    // flex: 0.7,
+    backgroundColor: "#fff",
+    borderRadius: 10,
+    paddingTop: 20,
+    paddingBottom: 20,
+  },
   sizesBtn: {
     marginTop: 16,
     paddingVertical: 10,
