@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Container, Accordion, Icon, Content } from "native-base";
+import { Container, Accordion, Icon, Content, Separator } from "native-base";
 import {
   StyleSheet,
   Text,
@@ -8,6 +8,7 @@ import {
   TextInput,
   Picker,
   TouchableOpacity,
+  Image,
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import moment from "moment";
@@ -65,38 +66,105 @@ export const ProfileListScreen = ({ navigation, route }) => {
 
     let newPrice = Math.ceil(newPriceHrn + weightPrice);
     return (
-      <View>
-        <Text>&#8470;{item.numberOfOrder}</Text>
-        <Text>{newPrice} грн</Text>
-        <Text>Статус: {translateStatus(item)}</Text>
-        <Text>
-          Дата заказа {moment(item.numberOfOrder).format("D/M/YYYY, HH:mm")}
+      <View style={{ paddingHorizontal: 20, paddingVertical: 10 }}>
+        <Text style={styles.orderText}>&#8470;{item.numberOfOrder}</Text>
+        <Text style={styles.orderText}>
+          Цена: <Text style={styles.mainText}>{newPrice}грн</Text>
         </Text>
+        <Text style={styles.orderText}>
+          Статус: <Text style={styles.mainText}>{translateStatus(item)}</Text>
+        </Text>
+        <Text style={styles.orderText}>
+          Дата заказа:{" "}
+          <Text style={styles.mainText}>
+            {moment(item.numberOfOrder).format("D/M/YYYY, HH:mm")}
+          </Text>
+        </Text>
+        {console.log("item", item)}
         {item.deliveryNo ? (
-          <Text>Номер накладной: {item.deliveryNo}</Text>
+          <Text style={styles.orderText}>
+            Номер накладной:{" "}
+            <Text style={styles.mainText}>{item.deliveryNo}</Text>
+          </Text>
         ) : (
           <></>
         )}
         {item.payTime !== "" &&
         item.payTime !== null &&
         item.payTime !== undefined ? (
-          <Text>Оплачено {item.payTime}</Text>
+          <Text style={styles.orderText}>
+            Оплачено: <Text style={styles.mainText}>{item.payTime}</Text>
+          </Text>
         ) : (
           <></>
         )}
-        <Text>Скидка: {item.userBonus}</Text>
+        <Text style={styles.orderText}>
+          Скидка: <Text style={styles.mainText}>{item.userBonus}грн</Text>
+        </Text>
         {item.alreadyPayed ? (
           <>
-            <Text>
-              Оплачено: {Math.round(item.alreadyPayed * Number(item.kurs))}
-              грн
+            <Text style={styles.orderText}>
+              Оплачено:{" "}
+              <Text style={styles.mainText}>
+                {Math.round(item.alreadyPayed * Number(item.kurs))}
+                грн
+              </Text>
             </Text>
-            <Text>
-              Доплатить:
-              {Math.ceil(newPrice - item.alreadyPayed * Number(item.kurs))}
-              грн
+            <Text style={styles.orderText}>
+              Доплатить:{" "}
+              <Text style={styles.mainText}>
+                {Math.ceil(newPrice - item.alreadyPayed * Number(item.kurs))}
+                грн
+              </Text>
             </Text>
           </>
+        ) : (
+          <></>
+        )}
+        {item.comment ? (
+          <>
+            <Text style={styles.orderText}>
+              Комментарий к заказу:{" "}
+              <Text style={styles.mainText}>{item.comment}</Text>
+            </Text>
+          </>
+        ) : (
+          <></>
+        )}
+        <FlatList
+          numColumns={3}
+          style={{ marginTop: 8, alignSelf: "center" }}
+          horizontal={false}
+          data={item.backet}
+          keyExtractor={(item, ind) => ind}
+          renderItem={({ item }) => {
+            return (
+              <TouchableOpacity
+                onPress={() =>
+                  navigation.navigate("CommentImg", { info: item })
+                }
+              >
+                <Image
+                  style={{
+                    width: 110,
+                    height: 130,
+                    marginBottom: 10,
+                    marginHorizontal: 5,
+                    borderRadius: 10,
+                  }}
+                  source={{ uri: item.image }}
+                />
+              </TouchableOpacity>
+            );
+          }}
+        />
+        {item.status === "approved" ? (
+          <TouchableOpacity
+            style={styles.payBtn}
+            onClick={() => console.log("payBtn")}
+          >
+            <Text style={styles.payBtnText}>Оплатить</Text>
+          </TouchableOpacity>
         ) : (
           <></>
         )}
@@ -105,24 +173,35 @@ export const ProfileListScreen = ({ navigation, route }) => {
   };
   const renderHeader = (item, expanded) => {
     return (
-      <View
-        style={{
-          flexDirection: "row",
-          padding: 10,
-          justifyContent: "space-between",
-          alignItems: "center",
-          backgroundColor: "#A9DAD6",
-        }}
-      >
-        <Text style={{ fontFamily: "Roboto-Condensed-Regular", fontSize: 18 }}>
-          &#8470;{item.numberOfOrder}
-        </Text>
-        {expanded ? (
-          <Icon style={{ fontSize: 15 }} name="ios-arrow-up" />
-        ) : (
-          <Icon style={{ fontSize: 15 }} name="ios-arrow-down" />
-        )}
-      </View>
+      <>
+        <View
+          style={{
+            flexDirection: "row",
+            padding: 10,
+            justifyContent: "space-between",
+            alignItems: "center",
+            backgroundColor: "#5bb3b6",
+          }}
+        >
+          <Text
+            style={{
+              fontFamily: "Roboto-Condensed-Regular",
+              fontSize: 18,
+              color: "#fff",
+            }}
+          >
+            &#8470;{item.numberOfOrder}
+          </Text>
+          {expanded ? (
+            <Icon style={{ fontSize: 15, color: "#fff" }} name="ios-arrow-up" />
+          ) : (
+            <Icon
+              style={{ fontSize: 15, color: "#fff" }}
+              name="ios-arrow-down"
+            />
+          )}
+        </View>
+      </>
     );
   };
 
@@ -152,15 +231,21 @@ export const ProfileListScreen = ({ navigation, route }) => {
   return (
     <Container>
       <Content padder style={{ backgroundColor: "white" }}>
-      {/* <FlatList
+        {/* <FlatList
         data={orderList}
         keyExtractor={(item, indx) => indx.toString()}
         renderItem={({ item }) => {
           return <ProfileOrderScreen item={item} />;
         }}
       /> */}
-      <Accordion animation={true} dataArray={orderList} renderHeader={renderHeader} renderContent={ProfileOrderScreen} />
-      </Content></Container>
+        <Accordion
+          animation={true}
+          dataArray={orderList}
+          renderHeader={renderHeader}
+          renderContent={ProfileOrderScreen}
+        />
+      </Content>
+    </Container>
   );
 };
 
@@ -199,5 +284,28 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: "#DDDDDD",
     padding: 10,
+  },
+  orderText: {
+    fontFamily: "Roboto-Condensed-Regular",
+    fontSize: 17,
+    paddingVertical: 2,
+    color: "#444",
+  },
+  mainText: {
+    fontFamily: "Roboto-Condensed-Bold",
+    fontSize: 16,
+  },
+  payBtn: {
+    alignSelf: "center",
+    marginVertical: 10,
+    backgroundColor: "tomato",
+    borderRadius: 6
+  },
+  payBtnText: {
+    fontFamily: "Roboto-Condensed-Bold",
+    fontSize: 16,
+    color:'#fff',
+    paddingHorizontal:20,
+    paddingVertical:10,
   },
 });
