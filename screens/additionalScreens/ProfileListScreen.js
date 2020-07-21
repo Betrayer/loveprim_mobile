@@ -80,7 +80,6 @@ export const ProfileListScreen = ({ navigation, route }) => {
             {moment(item.numberOfOrder).format("D/M/YYYY, HH:mm")}
           </Text>
         </Text>
-        {console.log("item", item)}
         {item.deliveryNo ? (
           <Text style={styles.orderText}>
             Номер накладной:{" "}
