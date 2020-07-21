@@ -10,6 +10,7 @@ import {
   Keyboard,
   Platform,
   TextInput,
+  Button
 } from "react-native";
 // import { Container, Header, Content, Footer, FooterTab, Button, Icon, Text, Badge } from 'native-base';
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
@@ -33,7 +34,7 @@ const Tab = createBottomTabNavigator();
 
 export const MainScreen = ({ navigation, route }) => {
   // const [userToken, setUserToken] = useState("");
-  const { userId, admin, userName } = useSelector((state) => state.user);
+  const { userId, admin, userName, userToken } = useSelector((state) => state.user);
   const [drawer, setDrawer] = useState(false);
   const [user, setUser] = useState("");
 
@@ -97,9 +98,31 @@ export const MainScreen = ({ navigation, route }) => {
         );
       });
   };
+  const sendPushNotification = async() => {
+    const message = {
+
+   to: userToken,
+      sound: "default",
+      title: "Original Title",
+      body: "And here is the body!",
+      data: { data: "goes here" },
+    };
+
+    await fetch("https://exp.host/--/api/v2/push/send", {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Accept-encoding": "gzip, deflate",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(message),
+    });
+  }
+
 
   return (
     <>
+    <Button title="S" onPress={() => sendPushNotification()} />
       <Tab.Navigator
         tabBarOptions={{
           showLabel: true,
