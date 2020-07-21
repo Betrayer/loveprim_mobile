@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useRef } from "react";
-
 import {
   StyleSheet,
   Text,
@@ -7,10 +6,11 @@ import {
   TouchableOpacity,
   Image,
   ScrollView,
-  Dimensions
+  Dimensions,
 } from "react-native";
 const win = Dimensions.get("window");
 export const CatalogScreen = ({ navigation }) => {
+
   const toReviews = () => {
     navigation.navigate("ReviewsScreen");
   };
@@ -224,10 +224,18 @@ const styles = StyleSheet.create({
     margin: 10,
     alignItems: "center",
     justifyContent: "space-between",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 4,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
   },
   pic: {
-    width: win.width/3-50,
-    height: win.width/3-50,
+    width: win.width / 3 - 50,
+    height: win.width / 3 - 50,
     marginBottom: 6,
   },
 });

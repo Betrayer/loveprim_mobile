@@ -10,6 +10,7 @@ import {
   Keyboard,
   Platform,
   TextInput,
+  Button,
 } from "react-native";
 // import { Container, Header, Content, Footer, FooterTab, Button, Icon, Text, Badge } from 'native-base';
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
@@ -33,11 +34,11 @@ const Tab = createBottomTabNavigator();
 
 export const MainScreen = ({ navigation, route }) => {
   // const [userToken, setUserToken] = useState("");
-  const { userId, admin, userName } = useSelector((state) => state.user);
+  const { userId, admin, userToken } = useSelector((state) => state.user);
   const [drawer, setDrawer] = useState(false);
   const [user, setUser] = useState("");
-
   const [notificationList, setNotificationList] = useState([]);
+  const [allNotifications, setAllNotifications] = useState([]);
 
   useEffect(() => {
     setDrawer(false);
@@ -81,6 +82,35 @@ export const MainScreen = ({ navigation, route }) => {
     }
   }, []);
 
+  useEffect(() => {
+    if (allNotifications[0]) {
+      allNotifications.map((notif) => {
+        sendPushNotification(notif);
+      });
+    }
+  }, [allNotifications]);
+
+  const getAllNotifications = async () => {
+    await firestore.collection("notifications").onSnapshot((data) => {
+      setAllNotifications(
+        data.docs
+          .map((doc, ind) => {
+            return { ...doc.data(), id: doc.id, key: { ind } };
+          })
+          .filter((item) => !item.alreadySent)
+          .sort(function (a, b) {
+            if (a.date > b.date) {
+              return -1;
+            }
+            if (a.date < b.date) {
+              return 1;
+            }
+            return 0;
+          })
+      );
+    });
+  };
+
   const getNotifications = async () => {
     await firestore
       .collection("notifications")
@@ -104,8 +134,33 @@ export const MainScreen = ({ navigation, route }) => {
       });
   };
 
+  const sendPushNotification = async (notif) => {
+    const message = {
+      to: notif.userToken,
+      sound: "default",
+      title: "Hello there",
+      body: notif.notification,
+      data: { data: "goes here" },
+    };
+
+    await fetch("https://exp.host/--/api/v2/push/send", {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Accept-encoding": "gzip, deflate",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(message),
+    });
+    await firestore.collection("notifications").doc(notif.id).update({
+      alreadySent: true,
+    });
+    // console.log("notificationList", notificationList);
+  };
+
   return (
     <>
+      <Button title="SLAP ME, DADDY" onPress={() => sendPushNotification()} />
       <Tab.Navigator
         tabBarOptions={{
           showLabel: true,

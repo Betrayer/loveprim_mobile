@@ -223,7 +223,7 @@ export const OrderScreen = ({ route }) => {
                   borderColor: "#ddd",
                   borderWidth: 1,
                   paddingHorizontal: 6,
-                  paddingVertical:8,
+                  paddingVertical: 8,
                   width: 160,
                   fontFamily: "Roboto-Condensed-Regular",
                 }}
@@ -231,10 +231,11 @@ export const OrderScreen = ({ route }) => {
                 placeholder="Номер накладной"
                 value={deliveryNo}
               />
-            
-            <TouchableOpacity style={styles.btn} onPress={setOrderDeliveryNo}>
-              <Text style={styles.btnText}>Внести</Text>
-            </TouchableOpacity></View>
+
+              <TouchableOpacity style={styles.btn} onPress={setOrderDeliveryNo}>
+                <Text style={styles.btnText}>Внести</Text>
+              </TouchableOpacity>
+            </View>
           </>
         ) : (
           <Text style={styles.orderText}>Номер накладной: не введен</Text>
@@ -259,7 +260,12 @@ export const OrderScreen = ({ route }) => {
         </Text>
         <Picker
           selectedValue={selectedValue}
-          style={{ width: 200, height: 44, backgroundColor: "#fff", fontFamily: "Roboto-Condensed-Regular"}}
+          style={{
+            width: 200,
+            height: 44,
+            backgroundColor: "#fff",
+            fontFamily: "Roboto-Condensed-Regular",
+          }}
           itemStyle={{ height: 44 }}
           onValueChange={(itemValue) => checkOnlyOne(itemValue)}
         >
@@ -294,11 +300,11 @@ const styles = StyleSheet.create({
   },
   btnText: {
     textAlign: "center",
-    color:'#fff',
+    color: "#fff",
     padding: 6,
     paddingVertical: 8,
     fontFamily: "Roboto-Condensed-Regular",
-    textTransform: 'uppercase'
+    textTransform: "uppercase",
   },
   textWrapper: {
     alignItems: "center",

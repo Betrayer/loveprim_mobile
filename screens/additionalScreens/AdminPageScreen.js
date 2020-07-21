@@ -23,7 +23,7 @@ export const AdminPageScreen = ({ navigation }) => {
   const [selectedValue, setSelectedValue] = useState("all");
   const [searchValue, setSearchValue] = useState("");
   const [filteredItems, setFilteredItems] = useState([]);
-
+  
   useEffect(() => {
     getOrders();
     getKurs();
@@ -97,7 +97,7 @@ export const AdminPageScreen = ({ navigation }) => {
     } else if (selectedValue === "checkedAndWeighted") {
       return "Проверено и взвешено";
     } else if (selectedValue === "approved") {
-      return "Одобрено Администратором";
+      return "Одобрено Админом";
     } else if (selectedValue === "payed") {
       return "Оплачено";
     } else if (selectedValue === "sendToUkr") {
@@ -225,9 +225,9 @@ const styles = StyleSheet.create({
     // paddingHorizontal:30,
     paddingTop: 20,
   },
-  topWrapper:{
-    alignSelf: 'stretch',
-    paddingHorizontal:30
+  topWrapper: {
+    alignSelf: "stretch",
+    paddingHorizontal: 30,
   },
   exchange: {
     fontFamily: "Roboto-Condensed-Bold",
