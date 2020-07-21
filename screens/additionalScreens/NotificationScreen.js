@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import {
   StyleSheet,
   View,
-  FlatList,
+  ScrollView,
   Text,
   TouchableOpacity,
 } from "react-native";
@@ -16,8 +16,15 @@ export const NotificationScreen = ({ navigation }) => {
   const { admin, userId } = useSelector((state) => state.user);
 
   useEffect(() => {
-    getNotifications();
+    if (userId) {
+      getNotifications();
+    }
   }, []);
+  useEffect(() => {
+    if (userId) {
+      getNotifications();
+    }
+  }, [userId]);
 
   const getNotifications = async () => {
     await firestore
@@ -56,7 +63,7 @@ export const NotificationScreen = ({ navigation }) => {
     const prevIndex = notificationList.findIndex((item) => item.key === rowKey);
     newData.splice(prevIndex, 1);
     setNotificationList(newData);
-    deleteNotification(id)
+    deleteNotification(id);
   };
   const renderHiddenItem = (data, rowMap) => (
     <View style={styles.rowBack}>
@@ -71,7 +78,7 @@ export const NotificationScreen = ({ navigation }) => {
   );
   const renderItem = (item) => (
     <View style={styles.rowFront} underlayColor={"#AAA"}>
-      {console.log("item", item)}
+      {/* {console.log("item", item)} */}
       <Text style={styles.notif}>
         {item.item.notification}
         <Text styles={styles.notifTextNo}>No{item.item.orderNo}</Text>
@@ -82,20 +89,23 @@ export const NotificationScreen = ({ navigation }) => {
     console.log("This row opened", rowKey);
   };
   return (
-    <View style={styles.container}>
-
-      <SwipeListView
-        data={notificationList}
-        style={{ marginTop: 20 }}
-        renderItem={renderItem}
-        renderHiddenItem={renderHiddenItem}
-        leftOpenValue={0}
-        rightOpenValue={-50}
-        previewRowKey={"0"}
-        previewOpenValue={-40}
-        previewOpenDelay={3000}
-      />
-    </View>
+    <ScrollView contentContainerStyle={styles.container}>
+      {notificationList[0] ? (
+        <SwipeListView
+          data={notificationList}
+          style={{ marginTop: 20 }}
+          renderItem={renderItem}
+          renderHiddenItem={renderHiddenItem}
+          leftOpenValue={0}
+          rightOpenValue={-50}
+          previewRowKey={"0"}
+          previewOpenValue={-40}
+          previewOpenDelay={3000}
+        />
+      ) : (
+        <Text style={styles.noNotif}>Новых уведомлений нету</Text>
+      )}
+    </ScrollView>
   );
 };
 
@@ -103,12 +113,12 @@ const styles = StyleSheet.create({
   container: {
     // flex: 1,
     // backgroundColor: "#F5F8F8",
-    // alignItems: "center",
-    // justifyContent: "center",
+    alignItems: "center",
+    justifyContent: "center",
     // width: "100%",
     backgroundColor: "#f7f9f9",
     flex: 1,
-    paddingVertical: 10,
+    // paddingVertical: 10,
   },
   //   notifWrapper: {
   //     alignSelf: "stretch",
@@ -120,13 +130,21 @@ const styles = StyleSheet.create({
 
   //     // borderRadius:5,
   //   },
+  noNotif: {
+    fontFamily: "Roboto-Condensed-Light",
+    fontSize: 22,
+    color: "#666",
+    paddingHorizontal: 20,
+    marginTop: 16,
+    textAlign: "center",
+  },
   notif: {
     textAlign: "center",
     fontFamily: "Roboto-Condensed-Regular",
     fontSize: 18,
     lineHeight: 25,
     color: "#444",
-    backgroundColor:'#fff',
+    backgroundColor: "#fff",
   },
   notifTextNo: {
     color: "#2f8f85",

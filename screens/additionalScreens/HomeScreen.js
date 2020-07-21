@@ -11,6 +11,8 @@ import {
   TextInput,
 } from "react-native";
 import { firestore } from "../../firebase/config";
+import { useDispatch, useSelector } from "react-redux";
+
 
 export const HomeScreen = () => {
   const navigation = useNavigation();
@@ -19,6 +21,9 @@ export const HomeScreen = () => {
   const [filteredItems, setFilteredItems] = useState([]);
   const [exchange, setExchange] = useState(27);
   const [rate, setRate] = useState(27);
+  const { userId, admin, userName, userToken } = useSelector(
+    (state) => state.user
+  );
 
   useEffect(() => {
     getCollection();
@@ -115,102 +120,108 @@ export const HomeScreen = () => {
   };
 
   return (
-    <View
-      style={{
-        paddingHorizontal: 10,
-        alignSelf: "stretch",
-        backgroundColor: "#fff",
-      }}
-    >
+    <>
       <View
         style={{
-          alignItems: "center",
-          flexDirection: "row",
+          paddingHorizontal: 10,
+          alignSelf: "stretch",
+          backgroundColor: "#fff",
         }}
       >
-        <Container style={{ height: 50, backgroundColor: "#fff" }}>
-          <Item
-            searchBar
-            style={{
-              backgroundColor: "#fff",
-            }}
-          >
-            <Icon name="ios-search" />
-            <Input
-              placeholder="Искать..."
-              value={searchValue}
-              onChangeText={(value) => setSearchValue(value)}
-            />
-          </Item>
-        </Container>
-      </View>
-
-      <View style={{ height: 1, width: "100%", backgroundColor: "#EEE" }} />
-      <View style={{ marginBottom: 100 }}>
-        <FlatList
-          showsVerticalScrollIndicator={false}
-          activeOpacity={0.7}
-          data={filteredItems}
-          numColumns={2}
-          horizontal={false}
-          keyExtractor={(item, index) => index.toString()}
-          ItemSeparatorComponent={renderedSeparator}
-          style={{ paddingBottom: 30 }}
-          renderItem={({ item }) => {
-            return (
-              <TouchableOpacity
-                style={styles.container}
-                onPress={() =>
-                  navigation.navigate("ItemScreen", { info: item })
-                }
-              >
-                {item.sale ? (
-                  <View style={styles.sale}>
-                    <Text style={styles.salesText}>%Скидка</Text>
-                  </View>
-                ) : (
-                  <></>
-                )}
-                {item.inStock ? (
-                  <View
-                    style={{
-                      position: "absolute",
-                      backgroundColor: "#5cbcbf",
-                      top: item.sale ? 54 : 24,
-                      left: 6,
-                      zIndex: 3,
-                    }}
-                  >
-                    <Text style={styles.salesText}>В наличии</Text>
-                  </View>
-                ) : (
-                  <></>
-                )}
-                <Image
-                  style={styles.pic}
-                  source={{
-                    uri: item.image,
-                  }}
-                />
-                <Text style={styles.name}>{item.name.length > 18 ? `${item.name.substr(0, 18)}...` : item.name}</Text>
-
-                <Text style={styles.category}>
-                  {translateCategory(item.category)}
-                </Text>
-                <Text style={styles.price}>
-                  {Math.ceil(
-                    item.price * 1.15 * Number(exchange) +
-                      Number(item.charge) +
-                      2
-                  )}
-                  <Text style={styles.text}> грн</Text>
-                </Text>
-              </TouchableOpacity>
-            );
+        <View
+          style={{
+            alignItems: "center",
+            flexDirection: "row",
           }}
-        />
+        >
+          <Container style={{ height: 50, backgroundColor: "#fff" }}>
+            <Item
+              searchBar
+              style={{
+                backgroundColor: "#fff",
+              }}
+            >
+              <Icon name="ios-search" />
+              <Input
+                placeholder="Искать..."
+                value={searchValue}
+                onChangeText={(value) => setSearchValue(value)}
+              />
+            </Item>
+          </Container>
+        </View>
+
+        <View style={{ height: 1, width: "100%", backgroundColor: "#EEE" }} />
+        <View style={{ marginBottom: 100 }}>
+          <FlatList
+            showsVerticalScrollIndicator={false}
+            activeOpacity={0.7}
+            data={filteredItems}
+            numColumns={2}
+            horizontal={false}
+            keyExtractor={(item, index) => index.toString()}
+            ItemSeparatorComponent={renderedSeparator}
+            style={{ paddingBottom: 30 }}
+            renderItem={({ item }) => {
+              return (
+                <TouchableOpacity
+                  style={styles.container}
+                  onPress={() =>
+                    navigation.navigate("ItemScreen", { info: item })
+                  }
+                >
+                  {item.sale ? (
+                    <View style={styles.sale}>
+                      <Text style={styles.salesText}>%Скидка</Text>
+                    </View>
+                  ) : (
+                    <></>
+                  )}
+                  {item.inStock ? (
+                    <View
+                      style={{
+                        position: "absolute",
+                        backgroundColor: "#5cbcbf",
+                        top: item.sale ? 54 : 24,
+                        left: 6,
+                        zIndex: 3,
+                      }}
+                    >
+                      <Text style={styles.salesText}>В наличии</Text>
+                    </View>
+                  ) : (
+                    <></>
+                  )}
+                  <Image
+                    style={styles.pic}
+                    source={{
+                      uri: item.image,
+                    }}
+                  />
+                  <Text style={styles.name}>
+                    {item.name.length > 18
+                      ? `${item.name.substr(0, 18)}...`
+                      : item.name}
+                  </Text>
+
+                  <Text style={styles.category}>
+                    {translateCategory(item.category)}
+                  </Text>
+                  <Text style={styles.price}>
+                    {Math.ceil(
+                      item.price * 1.15 * Number(exchange) +
+                        Number(item.charge) +
+                        2
+                    )}
+                    <Text style={styles.text}> грн</Text>
+                  </Text>
+                </TouchableOpacity>
+              );
+            }}
+          />
+        </View>
       </View>
-    </View>
+    </>
   );
 };
 

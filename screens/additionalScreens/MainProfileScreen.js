@@ -38,6 +38,10 @@ export const MainProfileScreen = ({ navigation, route }) => {
       <Tab.Navigator
         tabBarOptions={{
           showLabel: true,
+          labelStyle: { fontSize: 14, fontFamily: "Roboto-Condensed-Regular"},
+            indicatorStyle: { backgroundColor: '#ade9ed' },
+            style: { backgroundColor: '#fff' },
+            activeTintColor : '#555'
         }}
       >
         {admin ? (
@@ -53,7 +57,7 @@ export const MainProfileScreen = ({ navigation, route }) => {
                 // ),
               }
             }
-            name="Admin Page"
+            name="Админ панель"
             component={AdminPageScreen}
           />
         ) : (
@@ -69,7 +73,7 @@ export const MainProfileScreen = ({ navigation, route }) => {
                 // ),
               }
             }
-            name="Orders"
+            name="Список заказов"
             component={ProfileListScreen}
           />
         )}
@@ -85,7 +89,7 @@ export const MainProfileScreen = ({ navigation, route }) => {
               // ),
             }
           }
-          name="Profile"
+          name="Профиль"
           component={ProfileScreen}
         />
       </Tab.Navigator>

@@ -1,17 +1,33 @@
 import React, { useState, useEffect } from "react";
+
 import { StyleSheet, Text, View, Picker, TextInput } from "react-native";
 import { useSelector } from "react-redux";
-import { firestore } from "../../firebase/config";
 import moment from "moment";
+import { firestore } from "../../firebase/config";
 
-export const ProfileOrderScreen = ({ order }) => {
-    const { admin, userId, buyer } = useSelector((state) => state.user);
-  const day = moment(order.numberOfOrder).format("D/M/YYYY, HH:mm");
+export const ProfileOrderScreen = ( {item} ) => {
+  const { admin, userId, buyer } = useSelector((state) => state.user);
+  const day = moment(item.numberOfOrder).format("D/M/YYYY, HH:mm");
+  const [order, setOrder] = useState(item);
   const [status, setStatus] = useState("Обработка");
+
   useEffect(() => {
     translateStatus();
     remindToPay(order.numberOfOrder);
+    const getOrder = async () => {
+      await firestore
+        .collection("orders")
+        .where("numberOfOrder", "==", item.numberOfOrder)
+        .get()
+        .then(function (querySnapshot) {
+          querySnapshot.forEach(function (doc) {
+            setOrder(doc.data());
+          });
+        });
+    };
+    getOrder();
   }, []);
+
   const translateStatus = () => {
     if (order.status === "processing") {
       setStatus("Обработка");
@@ -31,6 +47,7 @@ export const ProfileOrderScreen = ({ order }) => {
       setStatus("Получено");
     }
   };
+
   const remindToPay = async (id) => {
     if (!admin && !buyer) {
       await firestore.collection("notifications").add({
@@ -38,9 +55,11 @@ export const ProfileOrderScreen = ({ order }) => {
         notification: "Не забудьте оплатить заказ ",
         orderNo: id,
         date: Date.now(),
+        userToken: user.userToken,
       });
     }
   };
+
   const weightPrice = Number(order.weight) * 0.006 * Number(order.kurs);
 
   const newPriceHrn =
@@ -60,47 +79,58 @@ export const ProfileOrderScreen = ({ order }) => {
     );
 
   let newPrice = Math.ceil(newPriceHrn + weightPrice);
+
   return (
-    <View style={styles.container}>
-      <Text>Заказ No {order.numberOfOrder}</Text>
-      <Text>{newPrice} грн</Text>
-      <Text>Статус: {status}</Text>
-      <Text>Дата заказа {day}</Text>
-      {order.deliveryNo ? (
-        <Text>Номер накладной: {order.deliveryNo}</Text>
-      ) : (
-        <></>
-      )}
-      {order.payTime !== "" &&
-      order.payTime !== null &&
-      order.payTime !== undefined ? (
-        <Text>Оплачено {order.payTime}</Text>
-      ) : (
-        <></>
-      )}
-      <Text>Скидка: {order.userBonus}</Text>
-      {order.alreadyPayed ? (
-        <>
-          <Text>
-            Оплачено: {Math.round(order.alreadyPayed * Number(order.kurs))}
-            грн
-          </Text>
-          <Text>
-            Доплатить:{" "}
-            {Math.ceil((newPrice - order.alreadyPayed) * Number(order.kurs))}
-            грн
-          </Text>
-        </>
-      ) : (
-        <></>
-      )}
-    </View>
+    <>
+      <View style={styles.container}>
+        <Text>&#8470;{order.numberOfOrder}</Text>
+        <Text>{newPrice} грн</Text>
+        <Text>Статус: {status}</Text>
+        <Text>Дата заказа {day}</Text>
+        {order.deliveryNo ? (
+          <Text>Номер накладной: {order.deliveryNo}</Text>
+        ) : (
+          <></>
+        )}
+        {order.payTime !== "" &&
+        order.payTime !== null &&
+        order.payTime !== undefined ? (
+          <Text>Оплачено {order.payTime}</Text>
+        ) : (
+          <></>
+        )}
+        <Text>Скидка: {order.userBonus}</Text>
+        {order.alreadyPayed ? (
+          <>
+            <Text>
+              Оплачено: {Math.round(order.alreadyPayed * Number(order.kurs))}
+              грн
+            </Text>
+            <Text>
+              Доплатить: {console.log("newPrice", newPrice)}
+              {console.log("order.alreadyPayed", order.alreadyPayed)}
+              {Math.ceil(newPrice - order.alreadyPayed * Number(order.kurs))}
+              грн
+            </Text>
+          </>
+        ) : (
+          <></>
+        )}
+      </View>
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => {
+          Alert.alert("Modal has been closed.");
+        }}
+      ></Modal>
+    </>
   );
 };
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    fontFamily: "ubuntu-regular",
     backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "center",

@@ -9,6 +9,7 @@ import {
 } from "react-native";
 import React, { useState, useEffect, useRef } from "react";
 import { firestore } from "../../firebase/config";
+import { Container, Header, Item, Input, Icon } from "native-base";
 
 export const AdminPageScreen = ({ navigation }) => {
   const [orderList, setOrderList] = useState([]);
@@ -22,9 +23,7 @@ export const AdminPageScreen = ({ navigation }) => {
   const [selectedValue, setSelectedValue] = useState("all");
   const [searchValue, setSearchValue] = useState("");
   const [filteredItems, setFilteredItems] = useState([]);
-
-
-
+  
   useEffect(() => {
     getOrders();
     getKurs();
@@ -34,11 +33,9 @@ export const AdminPageScreen = ({ navigation }) => {
     setExchange(rate);
   }, []);
 
-
   useEffect(() => {
     setFilteredOrders(orderList);
   }, [orderList]);
-
 
   useEffect(() => {
     if (orderList) {
@@ -74,7 +71,7 @@ export const AdminPageScreen = ({ navigation }) => {
       if (settingUpFilter[0]) {
         setFilteredItems(settingUpFilter);
       } else {
-        setFilteredItems([1]);
+        setFilteredItems([]);
       }
     } else {
       setFilteredItems(orderList);
@@ -92,6 +89,25 @@ export const AdminPageScreen = ({ navigation }) => {
         setExchange(username.kurs);
       });
   };
+  const translateStatus = (selectedValue) => {
+    if (selectedValue === "processing") {
+      return "Обработка";
+    } else if (selectedValue === "bought") {
+      return "Куплено";
+    } else if (selectedValue === "checkedAndWeighted") {
+      return "Проверено и взвешено";
+    } else if (selectedValue === "approved") {
+      return "Одобрено Админом";
+    } else if (selectedValue === "payed") {
+      return "Оплачено";
+    } else if (selectedValue === "sendToUkr") {
+      return "Едет в Украину";
+    } else if (selectedValue === "inUkr") {
+      return "Прибыло в Украину";
+    } else if (selectedValue === "received") {
+      return "Получено";
+    }
+  };
 
   const filterOrders = (itemValue) => {
     setSelectedValue(itemValue);
@@ -104,25 +120,55 @@ export const AdminPageScreen = ({ navigation }) => {
       setFilteredOrders(orderList.filter((item) => item.status === status));
     }
     openSelectUser(false);
+    setFilteredItems(filteredOrders);
   };
 
   return (
     <View style={styles.container}>
-      <Text>{exchange}</Text>
-      <View>
-        <View style={{ ...StyleSheet.absoluteFill }}></View>
+      <Text style={styles.exchange}>1&#8364; = {exchange}</Text>
+      {/* <View> */}
+      <View style={styles.topWrapper}>
+        <View
+          style={{
+            alignItems: "center",
+            flexDirection: "row",
+          }}
+        >
+          <Container
+            style={{
+              height: 50,
+              backgroundColor: "#fff",
+              alignItems: "center",
+            }}
+          >
+            <Item
+              searchBar
+              style={{
+                backgroundColor: "#fff",
+              }}
+            >
+              <Icon name="ios-search" />
+              <Input
+                placeholder="Искать..."
+                value={searchValue}
+                onChangeText={(value) => setSearchValue(value)}
+              />
+            </Item>
+          </Container>
+        </View>
+      </View>
+      {/* <View style={{ ...StyleSheet.absoluteFill }}></View>
         <TextInput
           style={styles.txtInput}
           placeholder="Искать по телефону"
           value={searchValue}
           onChangeText={(value) => setSearchValue(value)}
         />
-      </View>
+      </View> */}
       <Picker
         selectedValue={selectedValue}
         style={{ width: 200, height: 44, backgroundColor: "#fff" }}
-          itemStyle={{ height: 44 }}
-        // onValueChange={(itemValue) => setSelectedValue(itemValue)}
+        itemStyle={{ height: 44 }}
         onValueChange={(itemValue) => filterOrders(itemValue)}
       >
         <Picker.Item label="Все" value="all" />
@@ -138,6 +184,8 @@ export const AdminPageScreen = ({ navigation }) => {
       </Picker>
       <FlatList
         // data={filteredOrders}
+        contentContainerStyle={{ paddingBottom: 20 }}
+        style={{ width: "100%", paddingHorizontal: 40 }}
         data={filteredItems}
         keyExtractor={(item, indx) => indx.toString()}
         renderItem={({ item }) => {
@@ -149,15 +197,22 @@ export const AdminPageScreen = ({ navigation }) => {
                 }
               >
                 <View style={styles.order}>
-                  <Text>{item.numberOfOrder}</Text>
-                  <Text>{item.userName}</Text>
-                  <Text>{item.status}</Text>
+                  <View style={styles.orderTextWrapper}>
+                    <Text style={styles.orderText}>
+                      &#8470;{item.numberOfOrder}
+                    </Text>
+                    <Text style={styles.orderText}>
+                      {translateStatus(item.status)}
+                    </Text>
+                  </View>
+                  <Text style={styles.orderText}>{item.userName}</Text>
                 </View>
               </TouchableOpacity>
             </View>
           );
         }}
       />
+      {/* </View> */}
     </View>
   );
 };
@@ -167,16 +222,48 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "center",
+    // paddingHorizontal:30,
+    paddingTop: 20,
+  },
+  topWrapper: {
+    alignSelf: "stretch",
+    paddingHorizontal: 30,
+  },
+  exchange: {
+    fontFamily: "Roboto-Condensed-Bold",
+    fontSize: 20,
   },
   order: {
-    width: 330,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 2,
+      height: 3,
+    },
+    shadowOpacity: 0.17,
+    shadowRadius: 4.65,
+    backgroundColor: "#fff",
+    elevation: 6,
+    // width: 330,
+    alignSelf: "stretch",
     marginTop: 20,
-    borderColor: "#6CC4C7",
-    borderWidth: 2,
-    borderRadius: 10,
+    // borderColor: "#6CC4C7",
+    // borderWidth: 2,
+    borderRadius: 2,
     // width: "92%",
     // justifyContent: "space-between",
-    // alignItems: "center",
+    alignItems: "center",
+    paddingHorizontal: 14,
+    paddingBottom: 4,
     // flexDirection: "row",
+  },
+  orderTextWrapper: {
+    flexDirection: "row",
+    alignSelf: "stretch",
+    justifyContent: "space-between",
+    paddingVertical: 4,
+  },
+  orderText: {
+    fontFamily: "Roboto-Condensed-Regular",
+    fontSize: 16,
   },
 });

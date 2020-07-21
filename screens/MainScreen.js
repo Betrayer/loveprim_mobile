@@ -4,20 +4,22 @@ import {
   StyleSheet,
   Text,
   View,
-  Button,
   Image,
   TouchableWithoutFeedback,
   KeyboardAvoidingView,
   Keyboard,
   Platform,
   TextInput,
+  Button,
 } from "react-native";
+// import { Container, Header, Content, Footer, FooterTab, Button, Icon, Text, Badge } from 'native-base';
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Notifications } from "expo"; // Богдан тест
 import * as Permissions from "expo-permissions";
 // import { FontAwesome5 } from "@expo/vector-icons";
 import Constants from "expo-constants";
 import firebase from "firebase"; // Богдан тест
+import { firestore } from "../firebase/config";
 import { useDispatch, useSelector } from "react-redux";
 import { logoutUser } from "../redux/operations";
 import { MainProfileScreen } from "./additionalScreens/MainProfileScreen";
@@ -31,14 +33,33 @@ import { Ionicons } from "@expo/vector-icons";
 const Tab = createBottomTabNavigator();
 
 export const MainScreen = ({ navigation, route }) => {
-  const [userToken, setUserToken] = useState("");
-  const { userId, admin, userName } = useSelector((state) => state.user);
+  // const [userToken, setUserToken] = useState("");
+  const { userId, admin, userToken } = useSelector((state) => state.user);
   const [drawer, setDrawer] = useState(false);
-const [user, setUser] = useState('');
+  const [user, setUser] = useState("");
+  const [notificationList, setNotificationList] = useState([]);
+  const [allNotifications, setAllNotifications] = useState([]);
+
   useEffect(() => {
     setDrawer(false);
     getUser();
   }, []);
+
+  useEffect(() => {
+    getNotifications();
+  }, [userId]);
+
+  // useEffect(() => {
+  //   const ch = route
+  //   console.log(ch)
+  //   if (ch.param.info) {
+  //     navigationBacket();
+  //   }
+  // }, []);
+
+  const navigationBacket = () => {
+    navigation.navigate("BacketScreen");
+  };
 
   const getUser = async () => {
     await firebase
@@ -48,22 +69,77 @@ const [user, setUser] = useState('');
       .onSnapshot((data) => {
         setUser(
           ...data.docs.map((doc) => {
-            console.log("doc.id", doc.id);
+            // console.log("doc.id", doc.id);
             return { id: doc.id };
           })
         );
       });
   };
 
- 
- 
+  useEffect(() => {
+    if (userId) {
+      getNotifications();
+    }
+  }, []);
 
-  async function sendPushNotification(expoPushToken) {
+  useEffect(() => {
+    if (allNotifications[0]) {
+      allNotifications.map((notif) => {
+        sendPushNotification(notif);
+      });
+    }
+  }, [allNotifications]);
+
+  const getAllNotifications = async () => {
+    await firestore.collection("notifications").onSnapshot((data) => {
+      setAllNotifications(
+        data.docs
+          .map((doc, ind) => {
+            return { ...doc.data(), id: doc.id, key: { ind } };
+          })
+          .filter((item) => !item.alreadySent)
+          .sort(function (a, b) {
+            if (a.date > b.date) {
+              return -1;
+            }
+            if (a.date < b.date) {
+              return 1;
+            }
+            return 0;
+          })
+      );
+    });
+  };
+
+  const getNotifications = async () => {
+    await firestore
+      .collection("notifications")
+      .where("userId", "==", userId)
+      .onSnapshot((data) => {
+        setNotificationList(
+          data.docs
+            .map((doc, ind) => {
+              return { ...doc.data(), id: doc.id, key: { ind } };
+            })
+            .sort(function (a, b) {
+              if (a.date > b.date) {
+                return -1;
+              }
+              if (a.date < b.date) {
+                return 1;
+              }
+              return 0;
+            })
+        );
+      });
+  };
+
+  const sendPushNotification = async (notif) => {
     const message = {
-      to: expoPushToken,
+      to: notif.userToken,
       sound: "default",
-      title: "Original Title",
-      body: "And here is the body!",
+      title: "Hello there",
+      body: notif.notification,
       data: { data: "goes here" },
     };
 
@@ -76,23 +152,31 @@ const [user, setUser] = useState('');
       },
       body: JSON.stringify(message),
     });
-  }
+    await firestore.collection("notifications").doc(notif.id).update({
+      alreadySent: true,
+    });
+    // console.log("notificationList", notificationList);
+  };
 
   return (
     <>
+      <Button title="SLAP ME, DADDY" onPress={() => sendPushNotification()} />
       <Tab.Navigator
         tabBarOptions={{
           showLabel: true,
-          keyboardHidesTabBar: true
+          keyboardHidesTabBar: true,
+          labelStyle: { fontSize: 12, fontFamily: "Roboto-Condensed-Regular" },
+          activeTintColor: "#5bb3b6",
         }}
       >
+        {/* {console.log("route", route)} */}
         <Tab.Screen
           options={{
             tabBarIcon: ({ focused, size, color }) => (
               <Ionicons
-                name="md-laptop"
-                size={focused ? 40 : 30}
-                color={!focused ? "#aaa" : "tomato"}
+                name="md-home"
+                size={focused ? 38 : 30}
+                color={!focused ? "#aaa" : "#5bb3b6"}
               />
             ),
           }}
@@ -104,8 +188,8 @@ const [user, setUser] = useState('');
             tabBarIcon: ({ focused, size, color }) => (
               <Ionicons
                 name="ios-albums"
-                size={focused ? 40 : 30}
-                color={!focused ? "#aaa" : "tomato"}
+                size={focused ? 38 : 30}
+                color={!focused ? "#aaa" : "#5bb3b6"}
               />
             ),
           }}
@@ -117,8 +201,8 @@ const [user, setUser] = useState('');
             tabBarIcon: ({ focused, size, color }) => (
               <Ionicons
                 name="ios-basket"
-                size={focused ? 40 : 30}
-                color={!focused ? "#aaa" : "tomato"}
+                size={focused ? 38 : 30}
+                color={!focused ? "#aaa" : "#5bb3b6"}
               />
             ),
           }}
@@ -127,12 +211,39 @@ const [user, setUser] = useState('');
         />
         <Tab.Screen
           options={{
-            tabBarIcon: ({ focused, size, color }) => (
-              <Ionicons
-                name="ios-notifications"
-                size={focused ? 40 : 30}
-                color={!focused ? "#aaa" : "tomato"}
-              />
+            tabBarIcon: ({ focused, color, size }) => (
+              <View>
+                <Ionicons
+                  name="ios-notifications"
+                  size={focused ? 40 : 30}
+                  color={!focused ? "#aaa" : "#5bb3b6"}
+                />
+                {notificationList.length > 0 && (
+                  <View
+                    style={{
+                      position: "absolute",
+                      left: 7,
+                      top: -3,
+                      backgroundColor: "red",
+                      borderRadius: 6,
+                      padding: 2,
+                      paddingHorizontal: 4,
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
+                  >
+                    <Text
+                      style={{
+                        color: "white",
+                        fontSize: 12,
+                        fontWeight: "bold",
+                      }}
+                    >
+                      {notificationList.length}
+                    </Text>
+                  </View>
+                )}
+              </View>
             ),
           }}
           name="Уведомления"
@@ -144,8 +255,8 @@ const [user, setUser] = useState('');
               tabBarIcon: ({ focused, size, color }) => (
                 <Ionicons
                   name="ios-contact"
-                  size={focused ? 40 : 30}
-                  color={!focused ? "#aaa" : "tomato"}
+                  size={focused ? 38 : 30}
+                  color={!focused ? "#aaa" : "#5bb3b6"}
                 />
               ),
             }}
@@ -158,8 +269,8 @@ const [user, setUser] = useState('');
               tabBarIcon: ({ focused, size, color }) => (
                 <Ionicons
                   name="ios-log-in"
-                  size={focused ? 40 : 30}
-                  color={!focused ? "#aaa" : "tomato"}
+                  size={focused ? 38 : 30}
+                  color={!focused ? "#aaa" : "#5bb3b6"}
                 />
               ),
             }}

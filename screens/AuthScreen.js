@@ -61,6 +61,10 @@ export const AuthScreen = ({ navigation, route }) => {
       <Tab.Navigator
         tabBarOptions={{
           showLabel: true,
+          labelStyle: { fontSize: 14, fontFamily: "Roboto-Condensed-Regular"},
+            indicatorStyle: { backgroundColor: '#ade9ed' },
+            style: { backgroundColor: '#fff' },
+            activeTintColor : '#555'
         }}
       >
         <Tab.Screen
