@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, Component } from "react";
-import { Container, Header, Fab, Icon } from "native-base";
+import { Fab, Icon, Toast } from "native-base";
 import { Dimensions, ScrollView } from "react-native";
 import { useSelector } from "react-redux";
 import Modal from "react-native-modal";
@@ -9,8 +9,8 @@ import {
   Text,
   View,
   Image,
-  Button,
   TouchableOpacity,
+  Button,
   FlatList,
   Alert,
   Share,
@@ -89,6 +89,7 @@ export const ItemScreen = ({ route, navigation }) => {
   const [exchange, setExchange] = useState(27);
   const [active, setActive] = useState(false);
   const [isModalVisible, setModalVisible] = useState(false);
+  const [isModalVisibleBacket, setModalVisibleBacket] = useState(false);
   const [price, setPrice] = useState(
     Math.ceil(good.price * 1.15 * Number(exchange) + Number(good.charge) + 2)
   );
@@ -132,14 +133,6 @@ export const ItemScreen = ({ route, navigation }) => {
     let mounted = true;
     if (mounted) {
       getKurs();
-      return () => (mounted = false);
-    }
-  }, [exchange]);
-
-  useEffect(() => {
-    let mounted = true;
-    if (mounted) {
-      getPrice();
       return () => (mounted = false);
     }
   }, [exchange]);
@@ -285,30 +278,67 @@ export const ItemScreen = ({ route, navigation }) => {
   };
 
   const ddd = async () => {
-    await firestore
-      .collection("backet")
-      .add({
-        userId: userId,
-        name: good.name,
-        text: good.text,
-        image: good.image,
-        price: good.price,
-        priceWeight: good.priceWeight,
-        weight: 0,
-        size: chosenSizes,
-        charge: good.charge ? good.charge : 0,
-        inStock: good.inStock,
-      })
-      .then(alert("Товар добавлен в корзину"));
+    toggleModalBacket();
+    //   await firestore
+    //     .collection("backet")
+    //     .add({
+    //       userId: userId,
+    //       name: good.name,
+    //       text: good.text,
+    //       image: good.image,
+    //       price: good.price,
+    //       priceWeight: good.priceWeight,
+    //       weight: 0,
+    //       size: chosenSizes,
+    //       charge: good.charge ? good.charge : 0,
+    //       inStock: good.inStock,
+    //     })
+    //     .then(alert("Товар добавлен в корзину"));
   };
+
+  const navigationBacket = () => {
+    navigation.navigate("BacketScreen")
+  }
 
   const toggleModal = () => {
     setModalVisible(!isModalVisible);
   };
 
+  const toggleModalBacket = () => {
+    setModalVisibleBacket(!isModalVisibleBacket);
+  };
+
   return (
     <>
       <ScrollView style={styles.container}>
+        <Modal
+          style={{ justifyContent: "flex-end" }}
+          isVisible={isModalVisibleBacket}
+          animationIn="slideInUp"
+          animationInTiming={500}
+          hasBackdrop={true}
+          backdropOpacity={0.7}
+          backdropTransitionOutTiming={10}
+          onBackdropPress={() => toggleModalBacket()}
+          swipeDirection="down"
+        >
+          <View style={styles.sizesModalBacket}>
+            <TouchableOpacity
+              style={styles.activeSizes}
+              onPress={() => {
+                toggleModalBacket();
+              }}
+            >
+              <Text style={styles.chosenSizes}>Продолжить</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.sizes}
+              onPress={() => navigation.navigate("MainScreen", { info: "backet" })}
+            >
+              <Text style={styles.size}>В корзину</Text>
+            </TouchableOpacity>
+          </View>
+        </Modal>
         <Modal
           style={{ justifyContent: "flex-end" }}
           isVisible={isModalVisible}
@@ -389,7 +419,6 @@ export const ItemScreen = ({ route, navigation }) => {
             />
           </View>
         </Modal>
-        {/* {console.log("chosenSizes", chosenSizes)} */}
         <Image style={styles.itemImage} source={{ uri: good.image }} />
         <View style={styles.textWrapper}>
           {good.sale ? <Text style={styles.goodSale}>Скидка%</Text> : <></>}
@@ -413,13 +442,6 @@ export const ItemScreen = ({ route, navigation }) => {
           )}
           {/* <Text style={styles.text}>{translatedCatagory}</Text> */}
         </View>
-        {/* <TouchableOpacity
-          style={styles.container}
-          onPress={() => navigation.navigate("ItemScreen", { info: item })}
-        >
-          <Text>{item}</Text>
-        </TouchableOpacity> */}
-
         <View>
           <Fab
             active={!active}
@@ -514,10 +536,6 @@ const styles = StyleSheet.create({
   },
   sizes: {
     flexDirection: "column",
-    //   height: 30,
-    // //   width: 30,
-    // fontSize: 18,
-    // backgroundColor: "#6CC4C7",
     borderColor: "#6CC4C7",
     marginBottom: 6,
     borderRadius: 5,

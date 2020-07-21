@@ -71,7 +71,7 @@ export const AdminPageScreen = ({ navigation }) => {
       if (settingUpFilter[0]) {
         setFilteredItems(settingUpFilter);
       } else {
-        setFilteredItems([1]);
+        setFilteredItems([]);
       }
     } else {
       setFilteredItems(orderList);
@@ -120,6 +120,7 @@ export const AdminPageScreen = ({ navigation }) => {
       setFilteredOrders(orderList.filter((item) => item.status === status));
     }
     openSelectUser(false);
+    setFilteredItems(filteredOrders);
   };
 
   return (
