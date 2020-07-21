@@ -34,7 +34,7 @@ export const BacketScreen = ({ navigation }) => {
   const [finalPrice, setPrice] = useState(0);
   const [bonusArray, setBonusArray] = useState([]);
   const [discount, setDiscount] = useState(0);
-
+  
   useEffect(() => {
     if (userId && myUser !== undefined && myUser !== "") {
       if (
@@ -48,7 +48,7 @@ export const BacketScreen = ({ navigation }) => {
         ).map(function (x, i) {
           return i;
         });
-        setBonusArray(bonusArr)
+        setBonusArray(bonusArr);
       }
     }
   }, [myUser]);
@@ -253,122 +253,145 @@ export const BacketScreen = ({ navigation }) => {
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      {userId ? 
-      <>
-      {backet.length === 0 ? (
-        <View style={styles.container}>
-          <Text
-            // style={{
-            //   alignItems: "center",
-            //   justifyContent: "center",
-            //   padding: 10,
-            // }}
-            style={styles.register}
-          >
-            Ваша корзина пуста :&#40;
-          </Text>
-        </View>
-      ) : (
-        <View style={{ marginTop: 10 }}>
-          <View style={styles.container}>
-            <SwipeListView
-              data={backet}
-              style={{ width: "100%" }}
-              renderHiddenItem={renderHiddenItem}
-              leftOpenValue={0}
-              rightOpenValue={-50}
-              previewRowKey={"0"}
-              previewOpenValue={-40}
-              previewOpenDelay={3000}
-              // onRowDidOpen={onRowDidOpen}
-              renderItem={({ item }) => {
-                return (
-                  <View style={styles.productWrapper}>
-                    <Image
-                      style={styles.pic}
-                      source={{
-                        uri: item.image,
-                      }}
-                    />
-                    <View style={styles.textWrapper}>
-                      <Text style={styles.name}>{item.name}</Text>
-                      <Text style={styles.price}>
-                        {Math.ceil(
-                          item.price * 1.15 * Number(rate) +
-                            2 +
-                            Number(item.charge)
-                        )}
-                        <Text style={styles.text}>грн</Text>
-                      </Text>
-                      {item.size ? (
-                        <Text style={styles.size}>Размер {item.size}</Text>
-                      ) : (
-                        <></>
-                      )}
-                    </View>
-                    {/* <TouchableOpacity
+      {userId ? (
+        <>
+          {backet.length === 0 ? (
+            <View style={styles.container}>
+              <Text
+                // style={{
+                //   alignItems: "center",
+                //   justifyContent: "center",
+                //   padding: 10,
+                // }}
+                style={styles.register}
+              >
+                Ваша корзина пуста :&#40;
+              </Text>
+            </View>
+          ) : (
+            <View style={{ marginTop: 10 }}>
+              <View style={styles.container}>
+                <SwipeListView
+                  data={backet}
+                  style={{ width: "100%" }}
+                  renderHiddenItem={renderHiddenItem}
+                  leftOpenValue={0}
+                  rightOpenValue={-50}
+                  previewRowKey={"0"}
+                  previewOpenValue={-40}
+                  previewOpenDelay={3000}
+                  // onRowDidOpen={onRowDidOpen}
+                  renderItem={({ item }) => {
+                    return (
+                      <View style={styles.productWrapper}>
+                        <Image
+                          style={styles.pic}
+                          source={{
+                            uri: item.image,
+                          }}
+                        />
+                        <View style={styles.textWrapper}>
+                          <Text style={styles.name}>{item.name}</Text>
+                          <Text style={styles.price}>
+                            {Math.ceil(
+                              item.price * 1.15 * Number(rate) +
+                                2 +
+                                Number(item.charge)
+                            )}
+                            <Text style={styles.text}>грн</Text>
+                          </Text>
+                          {item.size ? (
+                            <Text style={styles.size}>Размер {item.size}</Text>
+                          ) : (
+                            <></>
+                          )}
+                        </View>
+                        {/* <TouchableOpacity
                     style={styles.del}
                     onPress={() => onDelBask(item.id)}
                   >
                     <Text style={{ color: "white" }}>УДАЛИТЬ</Text>
                   </TouchableOpacity> */}
-                  </View>
-                );
-              }}
-            />
-          </View>
-          <View style={styles.checkout}>
-            <Text style={styles.checkoutText}>
-              Всего товаров:{" "}
-              <Text style={styles.checkoutTextBold}>{backet.length} шт</Text>
-            </Text>
-            <Text style={styles.checkoutText}>
-              Цена:{" "}
-              <Text style={styles.checkoutTextBold}>{finalPrice} грн</Text>
-            </Text>
-            <Text style={styles.checkoutText}>
-            Скидка:{" "}
-            </Text>
-            {myUser && myUser.userBonus ? <Picker
-              mode="dropdown"
-              iosHeader="Скидка"
-              placeholder="Виберите скидку"
-              iosIcon={<Icon name="arrow-down" />}
-              style={{ marginHorizontal: 18, borderColor: "#eee", borderWidth: 1, marginBottom: 10 }}
-              selectedValue={discount}
-              onValueChange={(val) => setDiscount(val)}
-            >
-              {bonusArray.map((item, index) => {return (<Picker.Item label={item*15 + 'грн'} value={index*15} key={index}/>)} )}
-              
-            </Picker> : <></>}
-            <Text style={styles.checkoutText}>Комментарий к заказу: </Text>
-            <TextInput
-              style={styles.input}
-              multiline={true}
-              textAlignVertical={'top'}
-              maxLength={500}
-              placeholderTextColor={'#888'}
-              placeholder="Комментарий"
-              onChangeText={(value) => setComment(value)}
-            />
-            <Text style={styles.sum}>
-              Общая сумма: {finalPrice - Number(discount)} грн
-            </Text>
-            <Text style={styles.additional}>
-              *Стоимость заказа указана без учета стоимости доставки товара в
-              Украину, необходимой упаковки и доставки по Украине
-            </Text>
+                      </View>
+                    );
+                  }}
+                />
+              </View>
+              <View style={styles.checkout}>
+                <Text style={styles.checkoutText}>
+                  Всего товаров:{" "}
+                  <Text style={styles.checkoutTextBold}>
+                    {backet.length} шт
+                  </Text>
+                </Text>
+                <Text style={styles.checkoutText}>
+                  Цена:{" "}
+                  <Text style={styles.checkoutTextBold}>{finalPrice} грн</Text>
+                </Text>
+                <Text style={styles.checkoutText}>Скидка: </Text>
+                {myUser && myUser.userBonus ? (
+                  <Picker
+                    mode="dropdown"
+                    iosHeader="Скидка"
+                    placeholder="Виберите скидку"
+                    iosIcon={<Icon name="arrow-down" />}
+                    style={{
+                      marginHorizontal: 18,
+                      borderColor: "#eee",
+                      borderWidth: 1,
+                      marginBottom: 10,
+                    }}
+                    selectedValue={discount}
+                    onValueChange={(val) => setDiscount(val)}
+                  >
+                    {bonusArray.map((item, index) => {
+                      return (
+                        <Picker.Item
+                          label={item * 15 + "грн"}
+                          value={index * 15}
+                          key={index}
+                        />
+                      );
+                    })}
+                  </Picker>
+                ) : (
+                  <></>
+                )}
+                <Text style={styles.checkoutText}>Комментарий к заказу: </Text>
+                <TextInput
+                  style={styles.input}
+                  multiline={true}
+                  textAlignVertical={"top"}
+                  maxLength={500}
+                  placeholderTextColor={"#888"}
+                  placeholder="Комментарий"
+                  onChangeText={(value) => setComment(value)}
+                />
+                <Text style={styles.sum}>
+                  Общая сумма: {finalPrice - Number(discount)} грн
+                </Text>
+                <Text style={styles.additional}>
+                  *Стоимость заказа указана без учета стоимости доставки товара
+                  в Украину, необходимой упаковки и доставки по Украине
+                </Text>
 
-            <TouchableOpacity
-              style={styles.del}
-              onPress={() => onBuyBtnClick()}
-            >
-              <Text style={styles.buyText}>КУПИТЬ</Text>
-            </TouchableOpacity>
-          </View>
+                <TouchableOpacity
+                  style={styles.del}
+                  onPress={() => onBuyBtnClick()}
+                >
+                  <Text style={styles.buyText}>КУПИТЬ</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          )}
+        </>
+      ) : (
+        <View style={styles.container}>
+          <Text style={styles.register}>
+            Вы должны зарегистрироваться чтобы просмотреть корзину
+          </Text>
         </View>
       )}
-      </> : <View style={styles.container}><Text style={styles.register}>Вы должны зарегистрироваться чтобы просмотреть корзину</Text></View>}
     </ScrollView>
   );
 };
@@ -409,44 +432,44 @@ const styles = StyleSheet.create({
     fontFamily: "Roboto-Condensed-Regular",
     fontSize: 17,
     paddingHorizontal: 20,
-    marginBottom: 6
+    marginBottom: 6,
   },
-  checkoutTextBold:{
+  checkoutTextBold: {
     fontFamily: "Roboto-Condensed-Bold",
     fontSize: 16,
   },
-  sum:{
+  sum: {
     fontFamily: "Roboto-Condensed-Bold",
     fontSize: 20,
     paddingHorizontal: 20,
     marginTop: 16,
   },
-  register:{
+  register: {
     fontFamily: "Roboto-Condensed-Light",
     fontSize: 22,
     color: "#666",
     paddingHorizontal: 20,
     marginTop: 22,
-    textAlign: "center"
+    textAlign: "center",
   },
-  additional:{
+  additional: {
     color: "#777",
     fontFamily: "Roboto-Condensed-Light",
     fontSize: 14,
-    marginTop: 6
+    marginTop: 6,
   },
   input: {
     color: "#787472",
     marginHorizontal: 20,
-    paddingHorizontal: 10, 
-    minHeight: 65, 
-    borderColor: '#eee', 
-    borderWidth: 1, 
-    backgroundColor: '#fff',
+    paddingHorizontal: 10,
+    minHeight: 65,
+    borderColor: "#eee",
+    borderWidth: 1,
+    backgroundColor: "#fff",
     fontFamily: "Roboto-Condensed-Regular",
-    paddingTop:6,
+    paddingTop: 6,
     fontSize: 16,
-},
+  },
   pic: {
     width: 100,
     height: 140,
@@ -503,15 +526,15 @@ const styles = StyleSheet.create({
     right: 0,
     height: "100%",
   },
-  del:{
-    alignSelf:'stretch',
-    backgroundColor: '#5bb3b6',
-    marginTop:10,
+  del: {
+    alignSelf: "stretch",
+    backgroundColor: "#5bb3b6",
+    marginTop: 10,
   },
-  buyText:{
-    color:'#fff',
+  buyText: {
+    color: "#fff",
     paddingVertical: 12,
-    textAlign: 'center',
+    textAlign: "center",
     fontFamily: "Roboto-Condensed-Bold",
     fontSize: 18,
   },
