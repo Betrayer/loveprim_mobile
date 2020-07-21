@@ -11,59 +11,15 @@ import {
 const win = Dimensions.get("window");
 export const CatalogScreen = ({ navigation }) => {
 
-  const toReviews = () => {
-    navigation.navigate("ReviewsScreen");
-  };
-
-  const toFAQ = () => {
-    navigation.navigate("FAQScreen");
-  };
-
-  const toSizeChart = () => {
-    navigation.navigate("SizeChartScreen");
-  };
-
-  const toChildren = () => {
-    navigation.navigate("GirlsScreen");
-  };
-
-  const toMen = () => {
-    navigation.navigate("MenScreen");
-  };
-
-  const toWomen = () => {
-    navigation.navigate("WomenScreen");
-  };
-
-  const toShoes = () => {
-    navigation.navigate("ShoesScreen");
-  };
-
-  const toAccesories = () => {
-    navigation.navigate("AccesoriesScreen");
-  };
-
-  const toDecor = () => {
-    navigation.navigate("DecorationsScreen");
-  };
-
-  const toStock = () => {
-    navigation.navigate("InStockScreen");
-  };
-
-  const toSales = () => {
-    navigation.navigate("SalesScreen");
-  };
-
-  const toBoys = () => {
-    navigation.navigate("BoysScreen");
-  };
+  const redirect = (name) => {
+    navigation.navigate(name);
+  }
 
   return (
     <View style={{ flex: 1, backgroundColor: "#fff" }}>
       <ScrollView contentContainerStyle={styles.container}>
         <View style={styles.menu}>
-          <TouchableOpacity onPress={() => toReviews()} style={styles.menuItem}>
+          <TouchableOpacity onPress={() => redirect('ReviewsScreen')} style={styles.menuItem}>
             <Image
               style={styles.pic}
               source={require("../../image/review.png")}
@@ -74,7 +30,7 @@ export const CatalogScreen = ({ navigation }) => {
               Отзывы
             </Text>
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => toFAQ()} style={styles.menuItem}>
+          <TouchableOpacity onPress={() => redirect('FAQScreen')} style={styles.menuItem}>
             <Image style={styles.pic} source={require("../../image/faq.png")} />
             <Text
               style={{ fontFamily: "Roboto-Condensed-Regular", fontSize: 16 }}
@@ -83,7 +39,7 @@ export const CatalogScreen = ({ navigation }) => {
             </Text>
           </TouchableOpacity>
           <TouchableOpacity
-            onPress={() => toSizeChart()}
+            onPress={() => redirect('SizeChartScreen')}
             style={styles.menuItem}
           >
             <Image
@@ -96,7 +52,7 @@ export const CatalogScreen = ({ navigation }) => {
               Размеры
             </Text>
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => toWomen()} style={styles.menuItem}>
+          <TouchableOpacity onPress={() => redirect('WomenScreen')} style={styles.menuItem}>
             <Image
               style={styles.pic}
               source={require("../../image/woman.png")}
@@ -107,7 +63,7 @@ export const CatalogScreen = ({ navigation }) => {
               Женщинам
             </Text>
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => toMen()} style={styles.menuItem}>
+          <TouchableOpacity onPress={() => redirect('MenScreen')} style={styles.menuItem}>
             <Image style={styles.pic} source={require("../../image/man.png")} />
             <Text
               style={{ fontFamily: "Roboto-Condensed-Regular", fontSize: 16 }}
@@ -116,7 +72,7 @@ export const CatalogScreen = ({ navigation }) => {
             </Text>
           </TouchableOpacity>
           <TouchableOpacity
-            onPress={() => toChildren()}
+            onPress={() => redirect('GirlsScreen')}
             style={styles.menuItem}
           >
             <Image
@@ -129,7 +85,7 @@ export const CatalogScreen = ({ navigation }) => {
               Девочкам
             </Text>
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => toBoys()} style={styles.menuItem}>
+          <TouchableOpacity onPress={() => redirect('BoysScreen')} style={styles.menuItem}>
             <Image style={styles.pic} source={require("../../image/boy.png")} />
             <Text
               style={{ fontFamily: "Roboto-Condensed-Regular", fontSize: 16 }}
@@ -137,7 +93,7 @@ export const CatalogScreen = ({ navigation }) => {
               Мальчикам
             </Text>
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => toShoes()} style={styles.menuItem}>
+          <TouchableOpacity onPress={() => redirect('ShoesScreen')} style={styles.menuItem}>
             <Image
               style={styles.pic}
               source={require("../../image/shoes.png")}
@@ -149,7 +105,7 @@ export const CatalogScreen = ({ navigation }) => {
             </Text>
           </TouchableOpacity>
           <TouchableOpacity
-            onPress={() => toAccesories()}
+            onPress={() => redirect('AccesoriesScreen')}
             style={styles.menuItem}
           >
             <Image
@@ -162,7 +118,7 @@ export const CatalogScreen = ({ navigation }) => {
               Аксессуары
             </Text>
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => toDecor()} style={styles.menuItem}>
+          <TouchableOpacity onPress={() => redirect('DecorationsScreen')} style={styles.menuItem}>
             <Image
               style={styles.pic}
               source={require("../../image/decor.png")}
@@ -173,7 +129,7 @@ export const CatalogScreen = ({ navigation }) => {
               Декор
             </Text>
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => toStock()} style={styles.menuItem}>
+          <TouchableOpacity onPress={() => redirect('InStockScreen')} style={styles.menuItem}>
             <Image
               style={styles.pic}
               source={require("../../image/stock.png")}
@@ -184,7 +140,7 @@ export const CatalogScreen = ({ navigation }) => {
               В наличии
             </Text>
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => toSales()} style={styles.menuItem}>
+          <TouchableOpacity onPress={() => redirect('SalesScreen')} style={styles.menuItem}>
             <Image
               style={styles.pic}
               source={require("../../image/sale.png")}

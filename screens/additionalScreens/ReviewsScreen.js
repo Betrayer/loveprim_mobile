@@ -69,7 +69,9 @@ export const ReviewsScreen = ({ navigation, route }) => {
           return (
             <View style={styles.comment}>
               <TouchableOpacity
-                onLongPress={() => navigation.navigate("CommentImg", { info: item })}
+                onLongPress={() =>
+                  navigation.navigate("CommentImg", { info: item })
+                }
               >
                 <View style={styles.head}>
                   <Image
@@ -104,7 +106,7 @@ const styles = StyleSheet.create({
     paddingTop: 20,
     // marginHorizontal: 10,
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: "#f0f3f5",
     alignItems: "center",
     justifyContent: "center",
   },
@@ -124,13 +126,21 @@ const styles = StyleSheet.create({
 
   comment: {
     marginTop: 20,
-    borderColor: "#6CC4C7",
-    borderWidth: 2,
     borderRadius: 10,
     // width: "92%",
     // justifyContent: "space-between",
     // alignItems: "center",
     flexDirection: "row",
+    backgroundColor: "#fff",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+marginHorizontal:20,
+    elevation: 5,
   },
   head: {
     // justifyContent: "space-between",
