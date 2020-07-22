@@ -186,7 +186,7 @@ export const BacketScreen = ({ navigation }) => {
   const onBuyBtnClick = () => {
     onBasket();
     alert("Спасибо за покупку! С вами вскоре свяжутся");
-    navigation.navigate("Profile");
+    navigation.navigate("Профиль");
   };
 
   const getUsers = async () => {
@@ -269,7 +269,7 @@ export const BacketScreen = ({ navigation }) => {
               </Text>
             </View>
           ) : (
-            <View style={{ marginTop: 10 }}>
+            // <View style={{ marginTop: 10 }}>
               <View style={styles.container}>
                 <SwipeListView
                   data={backet}
@@ -316,7 +316,7 @@ export const BacketScreen = ({ navigation }) => {
                     );
                   }}
                 />
-              </View>
+              {/* </View> */}
               <View style={styles.checkout}>
                 <Text style={styles.checkoutText}>
                   Всего товаров:{" "}

@@ -176,7 +176,7 @@ export const ProfileScreen = ({ navigation, route }) => {
     setUserTel(number);
     phoneTranslate(number);
   };
-  const keyboardVerticalOffset = Platform.OS === 'ios' ? 100 : 0
+  const keyboardVerticalOffset = Platform.OS === 'ios' ? 140 : 0
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -185,7 +185,7 @@ export const ProfileScreen = ({ navigation, route }) => {
         // style={{ flex: 1 }}
         behavior='position' keyboardVerticalOffset={keyboardVerticalOffset}
       >
-        <View style={{  backgroundColor: "#fff",  }}>
+        <View style={{  backgroundColor: "#fff",  paddingBottom: 60}}>
           <ScrollView contentContainerStyle={styles.container}>
             <View style={styles.inputWrapper}>
               <Text style={styles.inputTitle}>ФИО</Text>

@@ -14,6 +14,7 @@ import {
 } from "react-native";
 // import { Container, Header, Content, Footer, FooterTab, Button, Icon, Text, Badge } from 'native-base';
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { NavigationContainer } from "@react-navigation/native";
 import { Notifications } from "expo"; // Богдан тест
 import * as Permissions from "expo-permissions";
 // import { FontAwesome5 } from "@expo/vector-icons";
@@ -46,19 +47,19 @@ export const MainScreen = ({ navigation, route }) => {
   }, []);
 
   useEffect(() => {
+    if (route.params) {
+      if (route.params.info === "backet") {
+        navigationBacket();
+      }
+    }
+  }, [route.params]);
+
+  useEffect(() => {
     getNotifications();
   }, [userId]);
 
-  // useEffect(() => {
-  //   const ch = route
-  //   console.log(ch)
-  //   if (ch.param.info) {
-  //     navigationBacket();
-  //   }
-  // }, []);
-
   const navigationBacket = () => {
-    navigation.navigate("BacketScreen");
+    navigation.navigate("Корзина");
   };
 
   const getUser = async () => {
@@ -82,13 +83,13 @@ export const MainScreen = ({ navigation, route }) => {
     }
   }, []);
 
-  useEffect(() => {
-    if (allNotifications[0]) {
-      allNotifications.map((notif) => {
-        sendPushNotification(notif);
-      });
-    }
-  }, [allNotifications]);
+  // useEffect(() => {
+  //   if (allNotifications[0]) {
+  //     allNotifications.map((notif) => {
+  //       sendPushNotification(notif);
+  //     });
+  //   }
+  // }, [allNotifications]);
 
   const getAllNotifications = async () => {
     await firestore.collection("notifications").onSnapshot((data) => {
@@ -160,16 +161,19 @@ export const MainScreen = ({ navigation, route }) => {
 
   return (
     <>
-    <Button title="S" onPress={() => sendPushNotification()} />
+    {/* <NavigationContainer> */}
+      <Button title="S" onPress={() => sendPushNotification()} />
       <Tab.Navigator
         tabBarOptions={{
           showLabel: true,
           keyboardHidesTabBar: true,
-          labelStyle: { fontSize: 12, fontFamily: "Roboto-Condensed-Regular" },
+          labelStyle: {
+            fontSize: 12,
+            fontFamily: "Roboto-Condensed-Regular",
+          },
           activeTintColor: "#5bb3b6",
         }}
       >
-        {/* {console.log("route", route)} */}
         <Tab.Screen
           options={{
             tabBarIcon: ({ focused, size, color }) => (
@@ -279,6 +283,7 @@ export const MainScreen = ({ navigation, route }) => {
           />
         )}
       </Tab.Navigator>
+    {/* </NavigationContainer> */}
     </>
   );
 };
