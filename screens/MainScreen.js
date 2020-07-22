@@ -161,7 +161,7 @@ export const MainScreen = ({ navigation, route }) => {
 
   return (
     <>
-    {/* <NavigationContainer> */}
+      {/* <NavigationContainer> */}
       <Button title="S" onPress={() => sendPushNotification()} />
       <Tab.Navigator
         tabBarOptions={{
@@ -283,7 +283,7 @@ export const MainScreen = ({ navigation, route }) => {
           />
         )}
       </Tab.Navigator>
-    {/* </NavigationContainer> */}
+      {/* </NavigationContainer> */}
     </>
   );
 };
