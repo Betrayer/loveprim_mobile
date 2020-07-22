@@ -81,13 +81,13 @@ export const MainScreen = ({ navigation, route }) => {
     getAllNotifications();
   }, []);
 
-  useEffect(() => {
-    if (allNotifications[0]) {
-      allNotifications.map((notif) => {
-        sendPushNotification(notif);
-      });
-    }
-  }, [allNotifications]);
+  // useEffect(() => {
+  //   if (allNotifications[0]) {
+  //     allNotifications.map((notif) => {
+  //       sendPushNotification(notif);
+  //     });
+  //   }
+  // }, [allNotifications]);
 
   const getAllNotifications = async () => {
     await firestore.collection("notifications").onSnapshot((data) => {
@@ -159,7 +159,6 @@ export const MainScreen = ({ navigation, route }) => {
 
   return (
     <>
-    <Button title="S" onPress={() => sendPushNotification()} />
       <Tab.Navigator
         tabBarOptions={{
           showLabel: true,
