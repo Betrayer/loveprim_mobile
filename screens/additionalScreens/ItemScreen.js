@@ -449,10 +449,10 @@ export const ItemScreen = ({ route, navigation }) => {
             containerStyle={{}}
             style={{
               backgroundColor: "#2f8f85",
-              top: -win.height / 4 + 20,
-              left: win.width / 2,
+              top: -win.height / 6,
+              left: win.width / 22,
             }}
-            position="topRight"
+            // position="topRight"
             onPress={onShare}
           >
             <Icon color="#fff" name="md-share" />

@@ -13,7 +13,12 @@ export const ProfileOrderScreen = ( {item} ) => {
 
   useEffect(() => {
     translateStatus();
-    remindToPay(order.numberOfOrder);
+    if (
+      Date.now() - Number(order.needToPay) >= 122800000 &&
+      order.payTime === ""
+    ) {
+      remindToPay(order.numberOfOrder);
+    }
     const getOrder = async () => {
       await firestore
         .collection("orders")

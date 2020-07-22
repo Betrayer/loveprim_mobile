@@ -176,7 +176,7 @@ export const ProfileScreen = ({ navigation, route }) => {
     setUserTel(number);
     phoneTranslate(number);
   };
-  const keyboardVerticalOffset = Platform.OS === 'ios' ? 200 : 0
+  const keyboardVerticalOffset = Platform.OS === 'ios' ? 100 : 0
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
