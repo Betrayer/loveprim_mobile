@@ -112,22 +112,7 @@ export const ItemScreen = ({ route, navigation }) => {
       alert(error.message);
     }
   };
-  // const selectRef = useRef(null);
-  // useOutsideAlerter(selectRef);
 
-  // useEffect(() => {
-  //   const timer = setTimeout(() => {
-  //     setVerification(false);
-  //   }, 5000);
-  //   return () => clearTimeout(timer);
-  // }, [verification]);
-
-  // useEffect(() => {
-  //   const timer = setTimeout(() => {
-  //     setActiveHelp(false);
-  //   }, 3500);
-  //   return () => clearTimeout(timer);
-  // }, [activeHelp]);
 
   useEffect(() => {
     let mounted = true;
