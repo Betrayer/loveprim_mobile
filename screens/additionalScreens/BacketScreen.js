@@ -269,11 +269,11 @@ export const BacketScreen = ({ navigation }) => {
               </Text>
             </View>
           ) : (
-            <View style={{ marginTop: 10 }}>
+            // <View style={{ marginTop: 10 }}>
               <View style={styles.container}>
                 <SwipeListView
                   data={backet}
-                  style={{ width: "100%" }}
+                  style={{ width: "100%", alignSelf: 'stretch' }}
                   renderHiddenItem={renderHiddenItem}
                   leftOpenValue={0}
                   rightOpenValue={-50}
@@ -316,7 +316,7 @@ export const BacketScreen = ({ navigation }) => {
                     );
                   }}
                 />
-              </View>
+              {/* </View> */}
               <View style={styles.checkout}>
                 <Text style={styles.checkoutText}>
                   Всего товаров:{" "}
