@@ -186,7 +186,7 @@ export const BacketScreen = ({ navigation }) => {
   const onBuyBtnClick = () => {
     onBasket();
     alert("Спасибо за покупку! С вами вскоре свяжутся");
-    navigation.navigate("Profile");
+    navigation.navigate("Профиль");
   };
 
   const getUsers = async () => {

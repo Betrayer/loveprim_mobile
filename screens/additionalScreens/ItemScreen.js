@@ -293,12 +293,8 @@ export const ItemScreen = ({ route, navigation }) => {
           charge: good.charge ? good.charge : 0,
           inStock: good.inStock,
         })
-        .then(alert("Товар добавлен в корзину"));
+        // .then(alert("Товар добавлен в корзину"));
   };
-
-  const navigationBacket = () => {
-    navigation.navigate("BacketScreen")
-  }
 
   const toggleModal = () => {
     setModalVisible(!isModalVisible);

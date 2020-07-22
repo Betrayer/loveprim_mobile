@@ -70,28 +70,42 @@ export const AddReviewsScreen = () => {
   };
 
   return (
-    <View style={styles.container}>
-      <ScrollView contentContainerStyle={{ paddingBottom: 20 }}>
-        <KeyboardAvoidingView
-          behavior={Platform.Os == "ios" ? "padding" : "height"}
-          style={styles.container}
-        >
-          <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-            <View style={styles.inner}>
-              {photo ? (
-                <>
-                  <Image
-                    source={{ uri: photo }}
-                    style={{ width: 300, height: 400 }}
-                  />
-                  <Button title="Обновить фото" onPress={() => setPhoto("")} />
-                </>
-              ) : (
-                <View style={{ flex: 0.9 }}>
-                  <Camera
-                    ref={(ref) => setTakePhoto(ref)}
-                    style={{ width: 300, height: 400 }}
-                    type={type}
+    <KeyboardAvoidingView
+      behavior={Platform.Os == "ios" ? "padding" : "height"}
+      style={styles.container}
+    >
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <ScrollView>
+          <View style={styles.inner}>
+            {photo ? (
+              <>
+                <Image
+                  source={{ uri: photo }}
+                  style={{ width: 300, height: 400 }}
+                />
+                <Button title="Обновить фото" onPress={() => setPhoto("")} />
+              </>
+            ) : (
+              <View style={{ flex: 0.9 }}>
+                <Camera
+                  ref={(ref) => setTakePhoto(ref)}
+                  style={{ width: 300, height: 400 }}
+                  type={type}
+                >
+                  <TouchableOpacity
+                    style={{
+                      flex: 1,
+                      alignSelf: "flex-end",
+                      alignItems: "center",
+                      paddingRight: 10,
+                    }}
+                    onPress={() => {
+                      setType(
+                        type === Camera.Constants.Type.back
+                          ? Camera.Constants.Type.front
+                          : Camera.Constants.Type.back
+                      );
+                    }}
                   >
                     <TouchableOpacity
                       style={{
@@ -107,59 +121,47 @@ export const AddReviewsScreen = () => {
                             : Camera.Constants.Type.back
                         );
                       }}
-                    >
-                      <Text
-                        style={{
-                          fontSize: 18,
-                          marginBottom: 10,
-                          color: "white",
-                        }}
-                      >
-                        Камера
-                      </Text>
-                    </TouchableOpacity>
-                  </Camera>
-                  <Button style={styles.btn} iconLeft onPress={snap}>
-                    <Icon name="ios-camera" />
-
-                    <Text style={styles.btnText}>Сделать фото</Text>
-                  </Button>
-                  
-                </View>
-              )}
-              <TextInput
-                style={styles.txtInput}
-                placeholder="Напишите отзыв"
-                onChangeText={(value) => setFeed(value)}
-                value={feed}
-                multiline={true}
-                textAlignVertical={"top"}
-                placeholderTextColor={"#777"}
-              />
-              {photo ? (
-                <TouchableOpacity
-                  style={{
-                    marginTop: 30,
-                    padding: 10,
-                    width: 300,
-                    height: 40,
-                    justifyContent: "center",
-                    alignItems: "center",
-                    borderRadius: 10,
-                    backgroundColor: "#6CC4C7",
-                  }}
-                  onPress={() => handleUpload(photo)}
-                >
-                  <Text style={styles.txtTouch}>ДОБАВИТЬ ОТЗЫВ</Text>
-                </TouchableOpacity>
-              ) : (
-                <></>
-              )}
-            </View>
-          </TouchableWithoutFeedback>
-        </KeyboardAvoidingView>
-      </ScrollView>
-    </View>
+                    ><Text>
+                      Камера
+                    </Text>
+                  </TouchableOpacity></TouchableOpacity>
+                </Camera>
+                <Button title="Сделать фото" onPress={snap} />
+              </View>
+            )}
+            <TextInput
+              style={styles.txtInput}
+              placeholder="Напишите отзыв"
+              onChangeText={(value) => setFeed(value)}
+              value={feed}
+              multiline={true}
+              textAlignVertical={"top"}
+              placeholderTextColor={"#777"}
+            />
+            {photo ? (
+              <TouchableOpacity
+                style={{
+                  marginTop: 30,
+                  padding: 10,
+                  width: 300,
+                  height: 40,
+                  justifyContent: "center",
+                  alignItems: "center",
+                  borderRadius: 10,
+                  backgroundColor: "#6CC4C7",
+                }}
+                onPress={() => handleUpload(photo)}
+              >
+                <Text style={styles.txtTouch}>ДОБАВИТЬ ОТЗЫВ</Text>
+              </TouchableOpacity>
+            ) : (
+              <></>
+            )}
+          </View>
+          <View style={{ width: "100%", height: 100 }}></View>
+        </ScrollView>
+      </TouchableWithoutFeedback>
+    </KeyboardAvoidingView>
   );
 };
 

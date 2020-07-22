@@ -23,7 +23,7 @@ export const AdminPageScreen = ({ navigation }) => {
   const [selectedValue, setSelectedValue] = useState("all");
   const [searchValue, setSearchValue] = useState("");
   const [filteredItems, setFilteredItems] = useState([]);
-  
+
   useEffect(() => {
     getOrders();
     getKurs();
@@ -34,14 +34,23 @@ export const AdminPageScreen = ({ navigation }) => {
   }, []);
 
   useEffect(() => {
-    setFilteredOrders(orderList);
-  }, [orderList]);
+    // setFilteredOrders(orderList);
+    // console.log("filteredOrders", filteredOrders.length);
+
+  }, [filteredOrders]);
+
+  
+  // useEffect(() => {
+  //   filterOrders(selectedValue)
+  //   console.log("orderList", orderList.length);
+
+  // }, [orderList]);
 
   useEffect(() => {
     if (orderList) {
       headerFilter(searchValue);
     }
-  }, [searchValue, orderList]);
+  }, [searchValue]);
 
   const getOrders = async () => {
     await firestore.collection("orders").onSnapshot((data) => {
@@ -69,12 +78,12 @@ export const AdminPageScreen = ({ navigation }) => {
         product.userPhone.toLowerCase().includes(searchValue.toLowerCase())
       );
       if (settingUpFilter[0]) {
-        setFilteredItems(settingUpFilter);
+        setFilteredOrders(settingUpFilter);
       } else {
-        setFilteredItems([]);
+        setFilteredOrders([]);
       }
     } else {
-      setFilteredItems(orderList);
+      setFilteredOrders(orderList);
     }
   };
 
@@ -110,23 +119,28 @@ export const AdminPageScreen = ({ navigation }) => {
   };
 
   const filterOrders = (itemValue) => {
+    // console.log("itemValue", itemValue);
     setSelectedValue(itemValue);
     const status = itemValue;
     if (status === "wait") {
+      // console.log("WAIT");
       setFilteredOrders(orderList.filter((item) => item.waiting === true));
     } else if (status === "all") {
+      // console.log("ALL");
       setFilteredOrders(orderList);
     } else {
+      // console.log(status);
       setFilteredOrders(orderList.filter((item) => item.status === status));
     }
-    openSelectUser(false);
-    setFilteredItems(filteredOrders);
+    // console.log("length", filteredOrders.length);
+    // openSelectUser(false);
+    // setFilteredItems(orderList);
   };
 
   return (
     <View style={styles.container}>
       <Text style={styles.exchange}>1&#8364; = {exchange}</Text>
-      {/* <View> */}
+
       <View style={styles.topWrapper}>
         <View
           style={{
@@ -183,10 +197,10 @@ export const AdminPageScreen = ({ navigation }) => {
         <Picker.Item label="Получено" value="received" />
       </Picker>
       <FlatList
-        // data={filteredOrders}
+        data={filteredOrders}
         contentContainerStyle={{ paddingBottom: 20 }}
         style={{ width: "100%", paddingHorizontal: 40 }}
-        data={filteredItems}
+        // data={filteredItems}
         keyExtractor={(item, indx) => indx.toString()}
         renderItem={({ item }) => {
           return (

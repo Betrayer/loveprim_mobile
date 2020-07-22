@@ -14,6 +14,7 @@ import {
 } from "react-native";
 // import { Container, Header, Content, Footer, FooterTab, Button, Icon, Text, Badge } from 'native-base';
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { NavigationContainer } from "@react-navigation/native";
 import { Notifications } from "expo"; // Богдан тест
 import * as Permissions from "expo-permissions";
 // import { FontAwesome5 } from "@expo/vector-icons";
@@ -67,17 +68,20 @@ export const MainScreen = ({ navigation, route }) => {
     timer()
     }
   }, [timernator]);
+  useEffect(() => {
+    if (route.params) {
+      if (route.params.info === "backet") {
+        navigationBacket();
+      }
+    }
+  }, [route.params]);
 
-  // useEffect(() => {
-  //   const ch = route
-  //   console.log(ch)
-  //   if (ch.param.info) {
-  //     navigationBacket();
-  //   }
-  // }, []);
+  useEffect(() => {
+    getNotifications();
+  }, [userId]);
 
   const navigationBacket = () => {
-    navigation.navigate("BacketScreen");
+    navigation.navigate("Корзина");
   };
 
   const getUser = async () => {
@@ -201,11 +205,13 @@ const rrr =() =>{
         tabBarOptions={{
           showLabel: true,
           keyboardHidesTabBar: true,
-          labelStyle: { fontSize: 12, fontFamily: "Roboto-Condensed-Regular" },
+          labelStyle: {
+            fontSize: 12,
+            fontFamily: "Roboto-Condensed-Regular",
+          },
           activeTintColor: "#5bb3b6",
         }}
       >
-        {/* {console.log("route", route)} */}
         <Tab.Screen
           options={{
             tabBarIcon: ({ focused, size, color }) => (
@@ -315,6 +321,7 @@ const rrr =() =>{
           />
         )}
       </Tab.Navigator>
+    {/* </NavigationContainer> */}
     </>
   );
 };
