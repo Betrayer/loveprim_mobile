@@ -200,12 +200,16 @@ export const RegistrScreen = ({ navigation, route }) => {
       registerUser(textValue, setError, setErrorId, toMain, userToken)
     );
   };
+  const keyboardVerticalOffset = Platform.OS === 'ios' ? 200 : 100
+
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <KeyboardAvoidingView
         behavior={Platform.Os == "ios" ? "padding" : "height"}
-        style={styles.container}
+        // behavior='position' keyboardVerticalOffset={keyboardVerticalOffset}
+
+        style={{flex: 1}}
       >
  <ScrollView width="100%" contentContainerStyle={styles.container}>         
   {/* <View style={{ ...StyleSheet.absoluteFill }}> */}
@@ -302,6 +306,7 @@ export const RegistrScreen = ({ navigation, route }) => {
               <Text style={styles.btnText}>Вход</Text></TouchableOpacity>
           {errorId ? <Text>{errorId}</Text> : <></>}
           </View>
+          <View style={{width: "100%", height: 100}}></View>
         </ScrollView>
       </KeyboardAvoidingView>
     </TouchableWithoutFeedback>
@@ -315,6 +320,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "center",
+    paddingBottom: 10
   },
   inputWrapper: {
     width: "80%",
