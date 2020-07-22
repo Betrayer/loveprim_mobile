@@ -279,21 +279,21 @@ export const ItemScreen = ({ route, navigation }) => {
 
   const ddd = async () => {
     toggleModalBacket();
-    //   await firestore
-    //     .collection("backet")
-    //     .add({
-    //       userId: userId,
-    //       name: good.name,
-    //       text: good.text,
-    //       image: good.image,
-    //       price: good.price,
-    //       priceWeight: good.priceWeight,
-    //       weight: 0,
-    //       size: chosenSizes,
-    //       charge: good.charge ? good.charge : 0,
-    //       inStock: good.inStock,
-    //     })
-    //     .then(alert("Товар добавлен в корзину"));
+      await firestore
+        .collection("backet")
+        .add({
+          userId: userId,
+          name: good.name,
+          text: good.text,
+          image: good.image,
+          price: good.price,
+          priceWeight: good.priceWeight,
+          weight: 0,
+          size: chosenSizes,
+          charge: good.charge ? good.charge : 0,
+          inStock: good.inStock,
+        })
+        .then(alert("Товар добавлен в корзину"));
   };
 
   const navigationBacket = () => {
@@ -448,13 +448,11 @@ export const ItemScreen = ({ route, navigation }) => {
             direction="up"
             containerStyle={{}}
             style={{
-              backgroundColor: "#2f8f85",
-              top: -230,
-              left: 19
-              // top: -win.height / 4 - 300,
-              // left: win.width / 2,
+              backgroundColor: "#f09360",
+              top: -win.height / 6,
+              left: win.width / 22,
             }}
-            position="topRight"
+            // position="topRight"
             onPress={onShare}
           >
             <Icon color="#fff" name="md-share" />

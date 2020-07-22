@@ -149,6 +149,8 @@ export const OrderScreen = ({ route }) => {
       notification: `Накладная No${deliveryNo}, заказ `,
       orderNo: route.params.info.numberOfOrder,
       date: Date.now(),
+      alreadySent: false,
+      title: 'Титыль'
     });
   };
   const checkOnlyOne = async (id) => {
@@ -169,6 +171,8 @@ export const OrderScreen = ({ route }) => {
         orderNo: route.params.info.numberOfOrder,
         date: Date.now(),
         userToken: user.userToken,
+        alreadySent: false,
+        title: 'Титыль'
       });
     }
     if (id === "payed") {
@@ -178,6 +182,8 @@ export const OrderScreen = ({ route }) => {
         orderNo: route.params.info.numberOfOrder,
         date: Date.now(),
         userToken: user.userToken,
+        alreadySent: false, 
+        title: 'Титыль'
       });
     }
   };
