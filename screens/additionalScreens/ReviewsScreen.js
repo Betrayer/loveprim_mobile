@@ -151,12 +151,16 @@ marginHorizontal:20,
   },
   text: {
     // marginLeft: 80
+    fontFamily: "Roboto-Condensed-Regular"
   },
   mainText: {
     width: "60%",
     margin: 10,
+    fontFamily: "Roboto-Condensed-Regular",
+    
   },
   headtext: {
-    fontWeight: "bold",
+    fontFamily: "Roboto-Condensed-Bold",
+    fontSize:16
   },
 });

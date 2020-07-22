@@ -444,7 +444,7 @@ export const ItemScreen = ({ route, navigation }) => {
             direction="up"
             containerStyle={{}}
             style={{
-              backgroundColor: "#2f8f85",
+              backgroundColor: "#f09360",
               top: -win.height / 6,
               left: win.width / 22,
             }}

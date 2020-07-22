@@ -40,12 +40,34 @@ export const MainScreen = ({ navigation, route }) => {
   const [user, setUser] = useState("");
   const [notificationList, setNotificationList] = useState([]);
   const [allNotifications, setAllNotifications] = useState([]);
+  const [timernator, setTimernator] = useState(false)
 
   useEffect(() => {
     setDrawer(false);
     getUser();
+
+    // setTimeout(() => {
+    //   console.log('allNotifications outside', allNotifications)
+    //   // if (allNotifications[0]) {
+    //     console.log('allNotifications Inside', allNotifications)
+    //     allNotifications.map((notif) => {
+    //       sendPushNotification(notif);
+    //     });
+    //   // }
+    // }, 10000);
+    // return () => clearTimeout(timer);
   }, []);
 
+  useEffect(() => {
+    getAllNotifications();
+  }, []);
+
+  useEffect(() => {
+      console.log('timernator', timernator)
+    if(timernator){
+    timer()
+    }
+  }, [timernator]);
   useEffect(() => {
     if (route.params) {
       if (route.params.info === "backet") {
@@ -89,7 +111,7 @@ export const MainScreen = ({ navigation, route }) => {
   //       sendPushNotification(notif);
   //     });
   //   }
-  // }, [allNotifications]);
+  // }, [notificationList]);
 
   const getAllNotifications = async () => {
     await firestore.collection("notifications").onSnapshot((data) => {
@@ -98,7 +120,7 @@ export const MainScreen = ({ navigation, route }) => {
           .map((doc, ind) => {
             return { ...doc.data(), id: doc.id, key: { ind } };
           })
-          .filter((item) => !item.alreadySent)
+          .filter((item) => item.alreadySent===false)
           .sort(function (a, b) {
             if (a.date > b.date) {
               return -1;
@@ -109,9 +131,12 @@ export const MainScreen = ({ navigation, route }) => {
             return 0;
           })
       );
-    });
+    }).then(rrr())
+    
   };
-
+const rrr =() =>{
+   setTimeout(() => {console.log('all',allNotifications.length)}, 5000)
+}
   const getNotifications = async () => {
     await firestore
       .collection("notifications")
@@ -159,10 +184,23 @@ export const MainScreen = ({ navigation, route }) => {
     // console.log("notificationList", notificationList);
   };
 
+  const timer = async() => {
+    
+    setTimeout(() => {
+      // console.log('allNotifications outside', allNotifications)
+      // if (allNotifications[0]) {
+        // console.log('allNotifications Inside', allNotifications)
+        allNotifications.map((notif) => {
+          sendPushNotification(notif);
+        });
+      // }
+    }, 10000);
+  }
+
   return (
     <>
-    {/* <NavigationContainer> */}
-      <Button title="S" onPress={() => sendPushNotification()} />
+      {/* <Button title="S" onPress={() => timer()} /> */}
+      {console.log('html', allNotifications.length)}
       <Tab.Navigator
         tabBarOptions={{
           showLabel: true,
