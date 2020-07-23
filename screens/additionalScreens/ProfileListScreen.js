@@ -122,7 +122,7 @@ export const ProfileListScreen = ({ navigation, route }) => {
     return (
       <View style={{ paddingHorizontal: 20, paddingVertical: 10 }}>
         <Modal
-          // style={{ justifyContent: "flex-end" }}
+          style={{ justifyContent: "flex-end" }}
           isVisible={payModalVisible}
           animationIn="slideInUp"
           animationInTiming={500}
