@@ -199,7 +199,7 @@ export const AdminPageScreen = ({ navigation }) => {
       <FlatList
         data={filteredOrders}
         contentContainerStyle={{ paddingBottom: 20 }}
-        style={{ width: "100%", paddingHorizontal: 40 }}
+        style={{ width: "100%", paddingHorizontal: 30 }}
         // data={filteredItems}
         keyExtractor={(item, indx) => indx.toString()}
         renderItem={({ item }) => {
@@ -268,6 +268,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingHorizontal: 14,
     paddingBottom: 4,
+    marginHorizontal:10
     // flexDirection: "row",
   },
   orderTextWrapper: {

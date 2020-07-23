@@ -57,14 +57,14 @@ export const ProfileListScreen = ({ navigation, route }) => {
     showMode("time");
   };
 
-  // const handler = async () => {
-  //   await firestore
-  //     .collection("orders")
-  //     .doc(id)
-  //     .update({
-  //       payTime: `${moment(date).format("DD-MM-YYYY")} ${time}`,
-  //     });
-  // };
+  const dateHandler = async () => {
+    await firestore
+      .collection("orders")
+      .doc(id)
+      .update({
+        payTime: `${date}`,
+      });
+  };
 
   // DTP
 
@@ -137,7 +137,7 @@ export const ProfileListScreen = ({ navigation, route }) => {
             /> */}
             <Button onPress={showDatepicker} title="Show date picker!" />
             <Button onPress={showTimepicker} title="Show time picker!" />
-            {/* <Button onPress={() => handler()} title="Show me smth" /> */}
+            <Button onPress={() => dateHandler()} title="Show me smth" />
             {show && (
               <DateTimePicker
                 testID="dateTimePicker"
@@ -320,21 +320,20 @@ export const ProfileListScreen = ({ navigation, route }) => {
 
   return (
     <Container>
-      <Content padder style={{ backgroundColor: "white" }}>
-        <FlatList
-          data={orderList}
-          keyExtractor={(item, indx) => indx.toString()}
-          renderItem={({ item }) => {
-            return <ProfileOrderScreen item={item} />;
-          }}
-        />
-        <Accordion
-          animation={true}
-          dataArray={orderList}
-          renderHeader={renderHeader}
-          renderContent={ProfileOrderScreen}
-        />
-      </Content>
+      {orderList[0] ? (
+        <Content padder style={{ backgroundColor: "white" }}>
+          <Accordion
+            animation={true}
+            dataArray={orderList}
+            renderHeader={renderHeader}
+            renderContent={ProfileOrderScreen}
+          />
+        </Content>
+      ) : (
+        <View style={styles.container}>
+          <Text style={styles.noNotif}>У Вас пока нет заказов</Text>
+        </View>
+      )}
     </Container>
   );
 };
@@ -345,6 +344,14 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "center",
+  },
+  noNotif: {
+    fontFamily: "Roboto-Condensed-Light",
+    fontSize: 22,
+    color: "#666",
+    paddingHorizontal: 20,
+    marginTop: 16,
+    textAlign: "center",
   },
   buttonStl: {
     width: "80%",
@@ -400,7 +407,6 @@ const styles = StyleSheet.create({
   },
   paymentWrapper: {
     backgroundColor: "white",
-    // overflow: "scroll",
   },
   paymentImage: {
     width: "100%",

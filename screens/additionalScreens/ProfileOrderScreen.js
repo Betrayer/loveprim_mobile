@@ -60,6 +60,8 @@ export const ProfileOrderScreen = ( {item} ) => {
         orderNo: id,
         date: Date.now(),
         userToken: user.userToken,
+        alreadySent: false,
+        title: 'Напоминаем'
       });
     }
   };

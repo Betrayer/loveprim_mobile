@@ -22,7 +22,7 @@ export const FAQScreen = () => {
     {
       title: "Есть ли программа скидок?",
       content:
-        "Вы можете получить скидку в размере 15 грн на следующую покупку оставив отзыв за предыдущий Ваш заказ =) Оставить отзыв",
+        "Вы можете получить скидку в размере 15 грн на следующую покупку оставив отзыв за предыдущий Ваш заказ =)",
     },
     {
       title: "Обмен и возврат",
@@ -39,7 +39,7 @@ export const FAQScreen = () => {
         alignItems: "center" ,
         
         backgroundColor: "#fff", }}>
-      <Text style={{ fontSize: 20,
+      <Text style={{ fontSize: 19,
         fontFamily: "Roboto-Condensed-Regular", }}>
           {" "}{item.title}
         </Text>

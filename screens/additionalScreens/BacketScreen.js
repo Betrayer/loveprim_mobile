@@ -28,7 +28,6 @@ export const BacketScreen = ({ navigation }) => {
   const [comment, setComment] = useState("");
   const [rate, setRate] = useState(27);
   const [users, setUsers] = useState([]);
-  const [selectUser, openSelectUser] = useState(false);
   const [myUser, setMyUser] = useState(userId);
   const [successfulPurchase, setSuccessfulPurchase] = useState(false);
   const [finalPrice, setPrice] = useState(0);
@@ -135,7 +134,17 @@ export const BacketScreen = ({ navigation }) => {
         console.error("Error removing document: ", error);
       });
   };
-
+  const sendNotification = async (user) => {
+    await firestore.collection("notifications").add({
+      userId: user.userId,
+      notification: "Поступил новый заказ ",
+      orderNo: "",
+      date: Date.now(),
+      userToken: user.userToken,
+      alreadySent: false, 
+      title: 'Новый заказ'
+    });
+  };
   const onBasket = async () => {
     await firestore
       .collection("backet")
@@ -158,6 +167,8 @@ export const BacketScreen = ({ navigation }) => {
       .catch(function (error) {
         console.log("Error getting documents: ", error);
       });
+
+    users.filter(user => user.admin).forEach(user => sendNotification(user))
     await firestore
       .collection("users")
       .doc(myUser.id)
@@ -216,10 +227,8 @@ export const BacketScreen = ({ navigation }) => {
     if (e.target.name === "user") {
       setUserID(e.target.value);
       setPhone(users.find((user) => user.userId === e.target.value).userPhone);
-      openSelectUser(false);
     } else {
       setDiscount(e.target.value);
-      openSelectUser(false);
     }
   };
   const deleteRow = (rowMap, rowKey, id) => {
@@ -273,7 +282,7 @@ export const BacketScreen = ({ navigation }) => {
               <View style={styles.container}>
                 <SwipeListView
                   data={backet}
-                  style={{ width: "100%" }}
+                  style={{ width: "100%", alignSelf: 'stretch' }}
                   renderHiddenItem={renderHiddenItem}
                   leftOpenValue={0}
                   rightOpenValue={-50}

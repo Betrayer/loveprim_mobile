@@ -39,12 +39,22 @@ export const MainScreen = ({ navigation, route }) => {
   const [drawer, setDrawer] = useState(false);
   const [user, setUser] = useState("");
   const [notificationList, setNotificationList] = useState([]);
-  const [allNotifications, setAllNotifications] = useState([]);
+  const [pushNotif, setPushNotif] = useState([]);
+  const [timernator, setTimernator] = useState(false);
 
   useEffect(() => {
     setDrawer(false);
     getUser();
+    getPushNotif();
+    ttt();
   }, []);
+
+
+  useEffect(() => {
+    if (timernator) {
+      timer();
+    }
+  }, [pushNotif]);
 
   useEffect(() => {
     if (route.params) {
@@ -77,27 +87,14 @@ export const MainScreen = ({ navigation, route }) => {
       });
   };
 
-  useEffect(() => {
-    getNotifications();
-    getAllNotifications();
-  }, []);
-
-  // useEffect(() => {
-  //   if (allNotifications[0]) {
-  //     allNotifications.map((notif) => {
-  //       sendPushNotification(notif);
-  //     });
-  //   }
-  // }, [allNotifications]);
-
-  const getAllNotifications = async () => {
+  const getPushNotif = async () => {
     await firestore.collection("notifications").onSnapshot((data) => {
-      setAllNotifications(
+      setPushNotif(
         data.docs
           .map((doc, ind) => {
             return { ...doc.data(), id: doc.id, key: { ind } };
           })
-          .filter((item) => !item.alreadySent)
+          .filter((item) => item.alreadySent === false)
           .sort(function (a, b) {
             if (a.date > b.date) {
               return -1;
@@ -138,7 +135,7 @@ export const MainScreen = ({ navigation, route }) => {
     const message = {
       to: notif.userToken,
       sound: "default",
-      title: "Hello there",
+      title: notif.title,
       body: notif.notification,
       data: { data: "goes here" },
     };
@@ -155,12 +152,23 @@ export const MainScreen = ({ navigation, route }) => {
     await firestore.collection("notifications").doc(notif.id).update({
       alreadySent: true,
     });
-    // console.log("notificationList", notificationList);
+  };
+
+  const timer = () => {
+    pushNotif.map((notif) => {
+      sendPushNotification(notif);
+    });
+    setTimernator(false);
+  };
+
+  const ttt = () => {
+    setInterval(() => {
+      setTimernator(!timernator);
+    }, 20000);
   };
 
   return (
     <>
-      {/* <NavigationContainer> */}
       <Tab.Navigator
         tabBarOptions={{
           showLabel: true,
