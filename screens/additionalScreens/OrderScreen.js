@@ -150,7 +150,7 @@ export const OrderScreen = ({ route }) => {
       orderNo: route.params.info.numberOfOrder,
       date: Date.now(),
       alreadySent: false,
-      title: 'Титыль'
+      title: 'Обновление по Вашему заказу'
     });
   };
   const checkOnlyOne = async (id) => {
@@ -172,7 +172,7 @@ export const OrderScreen = ({ route }) => {
         date: Date.now(),
         userToken: user.userToken,
         alreadySent: false,
-        title: 'Титыль'
+        title: 'Ваш заказ был одобрен!'
       });
     }
     if (id === "payed") {
@@ -183,7 +183,7 @@ export const OrderScreen = ({ route }) => {
         date: Date.now(),
         userToken: user.userToken,
         alreadySent: false, 
-        title: 'Титыль'
+        title: 'Оплата заказа принята'
       });
     }
   };
