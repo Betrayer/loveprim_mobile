@@ -273,7 +273,7 @@ export const BacketScreen = ({ navigation }) => {
               <View style={styles.container}>
                 <SwipeListView
                   data={backet}
-                  style={{ width: "100%" }}
+                  style={{ width: "100%", alignSelf: 'stretch' }}
                   renderHiddenItem={renderHiddenItem}
                   leftOpenValue={0}
                   rightOpenValue={-50}
