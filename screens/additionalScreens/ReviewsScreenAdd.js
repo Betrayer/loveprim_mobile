@@ -50,7 +50,10 @@ export const AddReviewsScreen = () => {
     const file = await response.blob();
     const uniqueName = Date.now().toString();
     await storage.ref(`imagesFeeds/${uniqueName}`).put(file);
-    const url = await storage.ref("imagesFeeds/").child(uniqueName).getDownloadURL();
+    const url = await storage
+      .ref("imagesFeeds/")
+      .child(uniqueName)
+      .getDownloadURL();
     console.log("url", url);
     await firestore
       .collection("feeds")
@@ -67,12 +70,12 @@ export const AddReviewsScreen = () => {
   };
 
   return (
-    <ScrollView>
-      <KeyboardAvoidingView
-        behavior={Platform.Os == "ios" ? "padding" : "height"}
-        style={styles.container}
-      >
-        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+    <KeyboardAvoidingView
+      behavior={Platform.Os == "ios" ? "padding" : "height"}
+      style={styles.container}
+    >
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <ScrollView>
           <View style={styles.inner}>
             {photo ? (
               <>
@@ -140,9 +143,10 @@ export const AddReviewsScreen = () => {
               <></>
             )}
           </View>
-        </TouchableWithoutFeedback>
-      </KeyboardAvoidingView>
-    </ScrollView>
+          <View style={{ width: "100%", height: 100 }}></View>
+        </ScrollView>
+      </TouchableWithoutFeedback>
+    </KeyboardAvoidingView>
   );
 };
 

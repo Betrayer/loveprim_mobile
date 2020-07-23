@@ -279,26 +279,20 @@ export const ItemScreen = ({ route, navigation }) => {
 
   const ddd = async () => {
     toggleModalBacket();
-      await firestore
-        .collection("backet")
-        .add({
-          userId: userId,
-          name: good.name,
-          text: good.text,
-          image: good.image,
-          price: good.price,
-          priceWeight: good.priceWeight,
-          weight: 0,
-          size: chosenSizes,
-          charge: good.charge ? good.charge : 0,
-          inStock: good.inStock,
-        })
-        // .then(alert("Товар добавлен в корзину"));
+    await firestore.collection("backet").add({
+      userId: userId,
+      name: good.name,
+      text: good.text,
+      image: good.image,
+      price: good.price,
+      priceWeight: good.priceWeight,
+      weight: 0,
+      size: chosenSizes,
+      charge: good.charge ? good.charge : 0,
+      inStock: good.inStock,
+    });
+    // .then(alert("Товар добавлен в корзину"));
   };
-
-  const navigationBacket = () => {
-    navigation.navigate("BacketScreen")
-  }
 
   const toggleModal = () => {
     setModalVisible(!isModalVisible);
@@ -333,7 +327,9 @@ export const ItemScreen = ({ route, navigation }) => {
             </TouchableOpacity>
             <TouchableOpacity
               style={styles.sizes}
-              onPress={() => navigation.navigate("MainScreen", { info: "backet" })}
+              onPress={() =>
+                navigation.navigate("MainScreen", { info: "backet" })
+              }
             >
               <Text style={styles.size}>В корзину</Text>
             </TouchableOpacity>

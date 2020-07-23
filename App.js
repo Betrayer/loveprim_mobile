@@ -29,7 +29,7 @@ import { AdminPageScreen } from "./screens/additionalScreens/AdminPageScreen";
 import { OrderScreen } from "./screens/additionalScreens/OrderScreen";
 import { BoysScreen } from "./screens/additionalScreens/BoysScreen/BoysScreen";
 import { AuthScreen } from "./screens/AuthScreen";
-// import { BacketScreen } from "./screens/additionalScreens/BacketScreen";
+import { BacketScreen } from "./screens/additionalScreens/BacketScreen";
 
 
 export default function App() {
