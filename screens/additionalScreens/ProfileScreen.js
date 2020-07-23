@@ -31,7 +31,64 @@ export const ProfileScreen = ({ navigation, route }) => {
   const [address, setAddress] = useState("");
   const [delivery, setDelivery] = useState("");
   const [newPassword, setNewPassword] = useState("");
+  const [passInp, setPassInp] = useState(true);
+  const [phoneInp, setPhoneInp] = useState(true);
+  const [nameInp, setNameInp] = useState(true);
+  const [emailInp, setEmailInp] = useState(true);
 
+  useEffect(() => {
+    let handleOnChange = (email) => {
+      let re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+      if (re.test(email)) {
+        setEmailInp(true);
+      } else {
+        setEmailInp(false);
+      }
+    };
+    if (newEmail !== "") {
+      handleOnChange(newEmail);
+    }
+  }, [newEmail]);
+
+  useEffect(() => {
+    if (newPassword.length < 6 && newPassword !== "") {
+      setPassInp(false);
+    } else {
+      setPassInp(true);
+    }
+  }, [newPassword]);
+
+  useEffect(() => {
+    if (username) {
+      if (
+        (username.split(" ").length < 3 ||
+          !username.split(" ").every((elem) => elem.length >= 2)) &&
+        username !== ""
+      ) {
+        setNameInp(false);
+      } else if (
+        (username.split(" ").length >= 3 &&
+          username.split(" ").every((elem) => elem.length >= 2)) ||
+        username === ""
+      ) {
+        setNameInp(true);
+      }
+    }
+  }, [username]);
+
+  useEffect(() => {
+    if (userTel) {
+    if (userTel.length < 10 && userTel !== "" && userTel.substr(0,3) !== "+38") {
+      setPhoneInp(false);
+    } else if(userTel.substr(0,3) === "+38" && userTel.length < 13){
+      setPhoneInp(false);
+    }
+    else {
+      setPhoneInp(true);
+    }
+    phoneTranslate(userTel);}
+  }, [userTel]);
+  
   const logout = () => {
     console.log("LOGOUT");
     dispatch(logoutUser());
@@ -190,7 +247,7 @@ export const ProfileScreen = ({ navigation, route }) => {
             <View style={styles.inputWrapper}>
               <Text style={styles.inputTitle}>ФИО</Text>
               <TextInput
-                style={styles.input}
+                style={nameInp ? styles.input : styles.inputNotValid}
                 textContentType="username"
                 onChangeText={(text) => setUsername(text)}
                 value={username}
@@ -198,7 +255,7 @@ export const ProfileScreen = ({ navigation, route }) => {
               <Text style={styles.inputTitle}>Телефон</Text>
               <TextInput
                 keyboardType="phone-pad"
-                style={styles.input}
+                style={phoneInp ? styles.input : styles.inputNotValid}
                 textContentType="telephoneNumber"
                 placeholder="Введите телефон"
                 onChangeText={(number) => onChangeTel(number)}
@@ -207,7 +264,7 @@ export const ProfileScreen = ({ navigation, route }) => {
               <Text style={styles.inputTitle}>Email</Text>
               <TextInput
                 keyboardType="email-address"
-                style={styles.input}
+                style={emailInp ? styles.input : styles.inputNotValid}
                 textContentType="emailAddress"
                 onChangeText={(text) => setUserEmail(text)}
                 placeholder="Введите еmail"
@@ -242,7 +299,7 @@ export const ProfileScreen = ({ navigation, route }) => {
               </Picker>
               <Text style={styles.inputTitle}>Новый пароль</Text>
               <TextInput
-                style={styles.input}
+                style={passInp ? styles.input : styles.inputNotValid}
                 secureTextEntry={true}
                 textContentType="newPassword"
                 placeholder="Введите пароль"
@@ -301,6 +358,18 @@ const styles = StyleSheet.create({
   input: {
     height: 40,
     borderColor: "#ddd",
+    borderWidth: 1,
+    borderRadius: 2,
+    paddingHorizontal: 6,
+    marginVertical: 6,
+    backgroundColor: "#fff",
+    color: "#333",
+    fontFamily: "Roboto-Condensed-Regular",
+    fontSize: 16,
+  },
+  inputNotValid: {
+    height: 40,
+    borderColor: "tomato",
     borderWidth: 1,
     borderRadius: 2,
     paddingHorizontal: 6,
