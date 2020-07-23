@@ -56,13 +56,6 @@ export const MainScreen = ({ navigation, route }) => {
     }
   }, [pushNotif]);
 
-
-  useEffect(() => {
-      console.log('timernator', timernator)
-    if(timernator){
-    timer()
-    }
-  }, [timernator]);
   useEffect(() => {
     if (route.params) {
       if (route.params.info === "backet") {
@@ -112,12 +105,9 @@ export const MainScreen = ({ navigation, route }) => {
             return 0;
           })
       );
-    }).then(rrr())
-    
+    });
   };
-const rrr =() =>{
-   setTimeout(() => {console.log('all',allNotifications.length)}, 5000)
-}
+
   const getNotifications = async () => {
     await firestore
       .collection("notifications")
