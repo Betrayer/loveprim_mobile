@@ -19,39 +19,6 @@ export const CatalogScreen = ({ navigation }) => {
     <View style={{ flex: 1, backgroundColor: "#fff" }}>
       <ScrollView contentContainerStyle={styles.container}>
         <View style={styles.menu}>
-          <TouchableOpacity onPress={() => redirect('ReviewsScreen')} style={styles.menuItem}>
-            <Image
-              style={styles.pic}
-              source={require("../../image/review.png")}
-            />
-            <Text
-              style={{ fontFamily: "Roboto-Condensed-Regular", fontSize: 16 }}
-            >
-              Отзывы
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => redirect('FAQScreen')} style={styles.menuItem}>
-            <Image style={styles.pic} source={require("../../image/faq.png")} />
-            <Text
-              style={{ fontFamily: "Roboto-Condensed-Regular", fontSize: 16 }}
-            >
-              Вопрос&Ответ
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => redirect('SizeChartScreen')}
-            style={styles.menuItem}
-          >
-            <Image
-              style={styles.pic}
-              source={require("../../image/sizes.png")}
-            />
-            <Text
-              style={{ fontFamily: "Roboto-Condensed-Regular", fontSize: 16 }}
-            >
-              Размеры
-            </Text>
-          </TouchableOpacity>
           <TouchableOpacity onPress={() => redirect('WomenScreen')} style={styles.menuItem}>
             <Image
               style={styles.pic}
@@ -149,6 +116,39 @@ export const CatalogScreen = ({ navigation }) => {
               style={{ fontFamily: "Roboto-Condensed-Regular", fontSize: 16 }}
             >
               Скидки
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => redirect('ReviewsScreen')} style={styles.menuItem}>
+            <Image
+              style={styles.pic}
+              source={require("../../image/review.png")}
+            />
+            <Text
+              style={{ fontFamily: "Roboto-Condensed-Regular", fontSize: 16 }}
+            >
+              Отзывы
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => redirect('FAQScreen')} style={styles.menuItem}>
+            <Image style={styles.pic} source={require("../../image/faq.png")} />
+            <Text
+              style={{ fontFamily: "Roboto-Condensed-Regular", fontSize: 16 }}
+            >
+              Вопрос&Ответ
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => redirect('SizeChartScreen')}
+            style={styles.menuItem}
+          >
+            <Image
+              style={styles.pic}
+              source={require("../../image/sizes.png")}
+            />
+            <Text
+              style={{ fontFamily: "Roboto-Condensed-Regular", fontSize: 16 }}
+            >
+              Размеры
             </Text>
           </TouchableOpacity>
         </View>
