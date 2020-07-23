@@ -73,9 +73,9 @@ export const RegistrScreen = ({ navigation, route }) => {
   }, [textValue.userPhone]);
 
   useEffect(() => {
-    if (!textValue.userName.split(' ').length < 3 && !textValue.userName.split(' ').every(elem => elem.length > 2) && textValue.userName !== "") {
+    if ((textValue.userName.split(' ').length < 3 || !textValue.userName.split(' ').every(elem => elem.length >= 2)) && textValue.userName !== "") {
       setNameInp(false);
-    } else {
+    } else if((textValue.userName.split(' ').length >= 3 && textValue.userName.split(' ').every(elem => elem.length >= 2)) || textValue.userName === "" ) {
       setNameInp(true);
     }
   }, [textValue.userName]);
