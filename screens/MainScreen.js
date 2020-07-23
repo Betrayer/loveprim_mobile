@@ -39,28 +39,23 @@ export const MainScreen = ({ navigation, route }) => {
   const [drawer, setDrawer] = useState(false);
   const [user, setUser] = useState("");
   const [notificationList, setNotificationList] = useState([]);
-  const [allNotifications, setAllNotifications] = useState([]);
-  const [timernator, setTimernator] = useState(false)
+  const [pushNotif, setPushNotif] = useState([]);
+  const [timernator, setTimernator] = useState(false);
 
   useEffect(() => {
     setDrawer(false);
     getUser();
-
-    // setTimeout(() => {
-    //   console.log('allNotifications outside', allNotifications)
-    //   // if (allNotifications[0]) {
-    //     console.log('allNotifications Inside', allNotifications)
-    //     allNotifications.map((notif) => {
-    //       sendPushNotification(notif);
-    //     });
-    //   // }
-    // }, 10000);
-    // return () => clearTimeout(timer);
+    getPushNotif();
+    ttt();
   }, []);
+
 
   useEffect(() => {
-    getAllNotifications();
-  }, []);
+    if (timernator) {
+      timer();
+    }
+  }, [pushNotif]);
+
 
   useEffect(() => {
       console.log('timernator', timernator)
@@ -99,28 +94,14 @@ export const MainScreen = ({ navigation, route }) => {
       });
   };
 
-  useEffect(() => {
-    if (userId) {
-      getNotifications();
-    }
-  }, []);
-
-  // useEffect(() => {
-  //   if (allNotifications[0]) {
-  //     allNotifications.map((notif) => {
-  //       sendPushNotification(notif);
-  //     });
-  //   }
-  // }, [notificationList]);
-
-  const getAllNotifications = async () => {
+  const getPushNotif = async () => {
     await firestore.collection("notifications").onSnapshot((data) => {
-      setAllNotifications(
+      setPushNotif(
         data.docs
           .map((doc, ind) => {
             return { ...doc.data(), id: doc.id, key: { ind } };
           })
-          .filter((item) => item.alreadySent===false)
+          .filter((item) => item.alreadySent === false)
           .sort(function (a, b) {
             if (a.date > b.date) {
               return -1;
@@ -181,26 +162,23 @@ const rrr =() =>{
     await firestore.collection("notifications").doc(notif.id).update({
       alreadySent: true,
     });
-    // console.log("notificationList", notificationList);
   };
 
-  const timer = async() => {
-    
-    setTimeout(() => {
-      // console.log('allNotifications outside', allNotifications)
-      // if (allNotifications[0]) {
-        // console.log('allNotifications Inside', allNotifications)
-        allNotifications.map((notif) => {
-          sendPushNotification(notif);
-        });
-      // }
-    }, 10000);
-  }
+  const timer = () => {
+    pushNotif.map((notif) => {
+      sendPushNotification(notif);
+    });
+    setTimernator(false);
+  };
+
+  const ttt = () => {
+    setInterval(() => {
+      setTimernator(!timernator);
+    }, 20000);
+  };
 
   return (
     <>
-      {/* <Button title="S" onPress={() => timer()} /> */}
-      {console.log('html', allNotifications.length)}
       <Tab.Navigator
         tabBarOptions={{
           showLabel: true,
@@ -321,7 +299,7 @@ const rrr =() =>{
           />
         )}
       </Tab.Navigator>
-    {/* </NavigationContainer> */}
+      {/* </NavigationContainer> */}
     </>
   );
 };
