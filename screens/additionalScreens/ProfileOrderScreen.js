@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-
 import { StyleSheet, Text, View, Picker, TextInput } from "react-native";
 import { useSelector } from "react-redux";
 import moment from "moment";
