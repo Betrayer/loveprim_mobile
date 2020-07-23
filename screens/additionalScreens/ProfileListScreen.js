@@ -229,21 +229,20 @@ export const ProfileListScreen = ({ navigation, route }) => {
 
   return (
     <Container>
-      <Content padder style={{ backgroundColor: "white" }}>
-        {/* <FlatList
-        data={orderList}
-        keyExtractor={(item, indx) => indx.toString()}
-        renderItem={({ item }) => {
-          return <ProfileOrderScreen item={item} />;
-        }}
-      /> */}
-        <Accordion
-          animation={true}
-          dataArray={orderList}
-          renderHeader={renderHeader}
-          renderContent={ProfileOrderScreen}
-        />
-      </Content>
+      {orderList[0] ? (
+        <Content padder style={{ backgroundColor: "white" }}>
+          <Accordion
+            animation={true}
+            dataArray={orderList}
+            renderHeader={renderHeader}
+            renderContent={ProfileOrderScreen}
+          />
+        </Content>
+      ) : (
+        <View style={styles.container}>
+          <Text style={styles.noNotif}>У Вас пока нет заказов</Text>
+        </View>
+      )}
     </Container>
   );
 };
@@ -254,6 +253,14 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "center",
+  },
+  noNotif: {
+    fontFamily: "Roboto-Condensed-Light",
+    fontSize: 22,
+    color: "#666",
+    paddingHorizontal: 20,
+    marginTop: 16,
+    textAlign: "center",
   },
   buttonStl: {
     width: "80%",
@@ -298,13 +305,13 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     marginVertical: 10,
     backgroundColor: "tomato",
-    borderRadius: 6
+    borderRadius: 6,
   },
   payBtnText: {
     fontFamily: "Roboto-Condensed-Bold",
     fontSize: 16,
-    color:'#fff',
-    paddingHorizontal:20,
-    paddingVertical:10,
+    color: "#fff",
+    paddingHorizontal: 20,
+    paddingVertical: 10,
   },
 });

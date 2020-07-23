@@ -8,14 +8,33 @@ import { ChildrenSizesTab } from "./sizeChartTabs/ChildrenSizesTab";
 export const SizeChartScreen = () => {
   return (
     <Container style={styles.container}>
-      <Tabs tabBarPosition="bottom">
-        <Tab heading="Woman">
+      <Tabs
+        tabBarUnderlineStyle={{ backgroundColor: "#2f8f85" }}
+        tabBarPosition="bottom"
+      >
+        <Tab 
+        textStyle={{ color: "#777", fontFamily: "Roboto-Condensed-Regular" }}
+        tabStyle={{ backgroundColor: "#f7f9f9" }}
+        activeTextStyle={{ color: "#2f8f85", fontFamily: "Roboto-Condensed-Regular" }}
+        activeTabStyle={{ backgroundColor: "#f9f9f9" }}
+        heading="Женщинам">
           <WomenSizesTab />
         </Tab>
-        <Tab heading="Man">
+        <Tab
+          textStyle={{ color: "#777", fontFamily: "Roboto-Condensed-Regular" }}
+          tabStyle={{ backgroundColor: "#f7f9f9" }}
+          activeTextStyle={{ color: "#2f8f85", fontFamily: "Roboto-Condensed-Regular" }}
+          activeTabStyle={{ backgroundColor: "#f9f9f9" }}
+          heading="Мужчинам"
+        >
           <MenSizesTab />
         </Tab>
-        <Tab heading="Child">
+        <Tab
+        textStyle={{ color: "#777",fontFamily: "Roboto-Condensed-Regular" }}
+        tabStyle={{ backgroundColor: "#f5f7f7" }}
+        activeTextStyle={{ color: "#2f8f85", fontFamily: "Roboto-Condensed-Regular" }}
+        activeTabStyle={{ backgroundColor: "#f9f9f9" }}
+         heading="Детям">
           <ChildrenSizesTab />
         </Tab>
       </Tabs>
