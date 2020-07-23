@@ -11,6 +11,7 @@ import {
   Image,
   Clipboard,
   Button,
+  ScrollView,
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import DateTimePicker from "@react-native-community/datetimepicker";
@@ -121,7 +122,7 @@ export const ProfileListScreen = ({ navigation, route }) => {
     return (
       <View style={{ paddingHorizontal: 20, paddingVertical: 10 }}>
         <Modal
-          style={{ justifyContent: "flex-end" }}
+          // style={{ justifyContent: "flex-end" }}
           isVisible={payModalVisible}
           animationIn="slideInUp"
           animationInTiming={500}
@@ -130,14 +131,14 @@ export const ProfileListScreen = ({ navigation, route }) => {
           backdropTransitionOutTiming={10}
           onBackdropPress={() => togglePayModal()}
         >
-          <View style={styles.paymentWrapper}>
-            {/* <Image
+          <ScrollView style={styles.paymentWrapper}>
+            <Image
               source={require("../../assets/images/paymentDet.jpeg")}
               style={styles.paymentImage}
-            /> */}
-            <Button onPress={showDatepicker} title="Show date picker!" />
-            <Button onPress={showTimepicker} title="Show time picker!" />
-            <Button onPress={() => dateHandler()} title="Show me smth" />
+            />
+            <Button onPress={showDatepicker} title="Выбрать дату" />
+            <Button onPress={showTimepicker} title="Выбрать время" />
+            <Button onPress={() => dateHandler()} title="Подтвердить оплату" />
             {show && (
               <DateTimePicker
                 testID="dateTimePicker"
@@ -156,7 +157,7 @@ export const ProfileListScreen = ({ navigation, route }) => {
                 {copyingStatus ? "Скопировано!" : "Копировать реквизиты"}
               </Text>
             </TouchableOpacity>
-          </View>
+          </ScrollView>
         </Modal>
         <Text style={styles.orderText}>&#8470;{item.numberOfOrder}</Text>
         <Text style={styles.orderText}>
@@ -407,10 +408,12 @@ const styles = StyleSheet.create({
   },
   paymentWrapper: {
     backgroundColor: "white",
+    borderRadius: 6,
   },
   paymentImage: {
     width: "100%",
-    height: "90%",
+    height: 500,
+    borderRadius: 6,
   },
   paymentCopyButton: {
     alignSelf: "center",
