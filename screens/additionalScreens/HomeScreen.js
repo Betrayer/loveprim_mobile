@@ -24,6 +24,7 @@ export const HomeScreen = () => {
     (state) => state.user
   );
 
+
   useEffect(() => {
     getCollection();
     getKurs();

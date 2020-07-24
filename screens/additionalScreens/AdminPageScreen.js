@@ -33,18 +33,18 @@ export const AdminPageScreen = ({ navigation }) => {
     setExchange(rate);
   }, []);
 
-  useEffect(() => {
-    // setFilteredOrders(orderList);
-    // console.log("filteredOrders", filteredOrders.length);
+  // useEffect(() => {
+  //   setFilteredOrders(orderList);
+  //   console.log("filteredOrders", filteredOrders.length);
 
-  }, [filteredOrders]);
+  // }, [filteredOrders]);
 
   
-  // useEffect(() => {
-  //   filterOrders(selectedValue)
-  //   console.log("orderList", orderList.length);
+  useEffect(() => {
+    filterOrders(selectedValue)
+    console.log("orderList", orderList.length);
 
-  // }, [orderList]);
+  }, [orderList]);
 
   useEffect(() => {
     if (orderList) {

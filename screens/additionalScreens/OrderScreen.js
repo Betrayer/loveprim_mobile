@@ -197,6 +197,13 @@ export const OrderScreen = ({ route }) => {
         <Text style={styles.orderText}>{route.params.info.userName}</Text>
         <Text style={styles.orderText}>{route.params.info.userPhone}</Text>
         <Text style={styles.orderText}>Дата заказа {day}</Text>
+        {route.params.info.payTime !== "" &&
+      route.params.info.payTime !== null &&
+      route.params.info.payTime !== undefined ? (
+        <Text style={styles.orderText}>Оплачено {route.params.info.payTime}</Text>
+      ) : (
+        <></>
+      )}
       </View>
       <View style={styles.textWrapper}>
         <Text style={styles.orderText}>
