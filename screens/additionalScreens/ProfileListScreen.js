@@ -90,6 +90,7 @@ export const ProfileListScreen = ({ navigation, route }) => {
   const paymentCredentials = () => {
     Clipboard.setString("5168745320092502");
     setCopyingStatus(true);
+    setTimeout(() => setCopyingStatus(false), 5000);
   };
   const getAdmins = async () => {
     await firestore
@@ -172,34 +173,42 @@ export const ProfileListScreen = ({ navigation, route }) => {
                   {copyingStatus ? "Скопировано!" : "Копировать реквизиты"}
                 </Text>
               </TouchableOpacity>
-              <TouchableOpacity style={styles.showTimeBtn} onPress={showDatepicker}>
+              <TouchableOpacity
+                style={styles.showTimeBtn}
+                onPress={showDatepicker}
+              >
                 <Text style={styles.paymentCopyButtonText}>Выбрать дату</Text>
               </TouchableOpacity>
-              <TouchableOpacity style={styles.showTimeBtn} onPress={showTimepicker}>
+              <TouchableOpacity
+                style={styles.showTimeBtn}
+                onPress={showTimepicker}
+              >
                 <Text style={styles.paymentCopyButtonText}>Выбрать время</Text>
               </TouchableOpacity>
-                {show && (
-                  <DateTimePicker
-                    style={{
-                      width: "90%",
-                      height: 104,
-                      backgroundColor: "#fff",
-                      alignSelf: "center",
-                    }}
-                    testID="dateTimePicker"
-                    locale="ru-RU"
-                    value={date}
-                    mode={mode}
-                    is24Hour={true}
-                    display="default"
-                    onChange={onChange}
-                  />
-                )}
+              {show && (
+                <DateTimePicker
+                  style={{
+                    width: "90%",
+                    height: 104,
+                    backgroundColor: "#fff",
+                    alignSelf: "center",
+                  }}
+                  testID="dateTimePicker"
+                  locale="ru-RU"
+                  value={date}
+                  mode={mode}
+                  is24Hour={true}
+                  display="default"
+                  onChange={onChange}
+                />
+              )}
               <TouchableOpacity
                 style={styles.paymentPayButton}
                 onPress={() => dateHandler(item.id)}
               >
-                <Text style={styles.paymentPayButtonText}>Подтвердить оплату</Text>
+                <Text style={styles.paymentPayButtonText}>
+                  Подтвердить оплату
+                </Text>
               </TouchableOpacity>
             </ScrollView>
           </View>
@@ -460,7 +469,7 @@ const styles = StyleSheet.create({
     height: 470,
     borderRadius: 6,
   },
-  showTimeBtn:{
+  showTimeBtn: {
     alignSelf: "center",
     backgroundColor: "#fff",
   },
