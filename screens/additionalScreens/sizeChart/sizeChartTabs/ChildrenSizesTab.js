@@ -164,7 +164,7 @@ const styles = StyleSheet.create({
   sizesColumn: {
     flexDirection: "column",
     height: 300,
-    width: "25%",
+    width: "30%",
     backgroundColor: "#fff",
     justifyContent: "space-around",
     alignItems: "center",
@@ -173,8 +173,8 @@ const styles = StyleSheet.create({
   },
   sizesColumnLong: {
     flexDirection: "column",
-    height: 540,
-    width: "25%",
+    height: 590,
+    width: "30%",
     backgroundColor: "#fff",
     justifyContent: "space-around",
     alignItems: "center",

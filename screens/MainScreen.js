@@ -220,7 +220,7 @@ export const MainScreen = ({ navigation, route }) => {
     const message = {
       to: notif.userToken,
       sound: "default",
-      title: "Hello there",
+      title: notif.title,
       body: notif.notification,
       data: { data: "goes here" },
     };

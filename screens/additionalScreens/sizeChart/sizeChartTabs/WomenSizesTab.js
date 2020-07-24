@@ -77,7 +77,7 @@ export const WomenSizesTab = () => {
         <Text style={styles.headerText}>Сетка на женский низ</Text>
       </View>
       <View style={styles.sizesWrapper}>
-        <View style={styles.sizesColumn}>
+        <View style={styles.sizesColumnWide}>
         <View style={styles.sizesHeader}><Text style={styles.sizesHeder}>Обхват бёдер</Text></View>
           <Text style={styles.text}>80-86см</Text>
           <Text style={styles.text}>86-92см</Text>
@@ -87,7 +87,7 @@ export const WomenSizesTab = () => {
           <Text style={styles.text}>115-120см</Text>
           <Text style={styles.text}>125-130см</Text>
         </View>
-        <View style={styles.sizesColumn}>
+        <View style={styles.sizesColumnWide}>
         <View style={styles.sizesHeader}><Text  style={styles.sizesHeder}>Евро размер</Text></View>
           <Text style={styles.text}>2XS (32/34)</Text>
           <Text style={styles.text}>ХS (34/36)</Text>
@@ -109,7 +109,7 @@ export const WomenSizesTab = () => {
         <Text style={styles.headerText}>ПРИМЕРНАЯ Женская сетка на обувь</Text>
       </View>
       <View style={styles.sizesWrapper}>
-        <View style={styles.sizesColumn}>
+        <View style={styles.sizesColumnWide}>
         <View style={styles.sizesHeader}><Text style={styles.sizesHeder}>Размер</Text></View>
           <Text style={styles.text}>35</Text>
           <Text style={styles.text}>36</Text>
@@ -119,7 +119,7 @@ export const WomenSizesTab = () => {
           <Text style={styles.text}>40</Text>
           <Text style={styles.text}>41</Text>
         </View>
-        <View style={styles.sizesColumn}>
+        <View style={styles.sizesColumnWide}>
           <View style={styles.sizesHeader}><Text style={styles.sizesHeder}>Длина в см</Text></View>
           <Text style={styles.text}>22,35</Text>
           <Text style={styles.text}>22,9</Text>
@@ -179,7 +179,18 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     justifyContent: "space-around",
     alignItems: "center",
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
+    marginBottom:10
+  },
+  sizesColumnWide: {
+    flexDirection: "column",
+    height: 300,
+    width: "36%",
+    backgroundColor: "#fff",
+    justifyContent: "space-around",
+    alignItems: "center",
+    justifyContent: 'space-between',
+    marginBottom:10
   },
   header: {
     width: "100%",

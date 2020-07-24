@@ -103,7 +103,7 @@ export const NotificationScreen = ({ navigation }) => {
           previewOpenDelay={3000}
         />
       ) : (
-        <Text style={styles.noNotif}>Новых уведомлений нету</Text>
+        <Text style={styles.noNotif}>Новых уведомлений нет</Text>
       )}
     </ScrollView>
   );
