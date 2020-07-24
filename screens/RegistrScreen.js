@@ -303,7 +303,7 @@ export const RegistrScreen = ({ navigation, route }) => {
             value={textValue.password}
           />
           <TouchableOpacity style={styles.btn} title="Вход" onPress={registerUserAdd} >
-              <Text style={styles.btnText}>Вход</Text></TouchableOpacity>
+              <Text style={styles.btnText}>Зарегистрироваться</Text></TouchableOpacity>
           {errorId ? <Text>{errorId}</Text> : <></>}
           </View>
           <View style={{width: "100%", height: 100}}></View>

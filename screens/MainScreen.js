@@ -119,6 +119,8 @@ export const MainScreen = ({ navigation, route }) => {
 
   const verifyPush = async () => {
     if (Date.now() > Number(dataPush) + 172800000) {
+      // if (Date.now() > Number(dataPush) + 60000) {
+
       console.log("PUSH1");
       await firestore.collection("users").doc("kurs").update({
         allPush: Date.now(),

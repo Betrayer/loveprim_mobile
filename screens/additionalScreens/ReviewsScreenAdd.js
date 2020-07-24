@@ -66,7 +66,7 @@ export const AddReviewsScreen = () => {
         userId: userId,
         numberOfFeed: Date.now(),
       })
-      .then(Alert.alert("Post added!", "Thanks!"));
+      .then(Alert.alert("Ваш комментарий добавлен!"));
   };
 
   return (
@@ -83,7 +83,14 @@ export const AddReviewsScreen = () => {
                   source={{ uri: photo }}
                   style={{ width: 300, height: 400 }}
                 />
-                <Button title="Обновить фото" onPress={() => setPhoto("")} />
+                <Button
+                  style={styles.btn}
+                  iconLeft
+                  onPress={() => setPhoto("")}
+                >
+                  <Icon name="ios-camera" />
+                  <Text style={styles.btnText}>Обновить фото</Text>
+                </Button>
               </>
             ) : (
               <View style={{ flex: 0.9 }}>
@@ -97,7 +104,8 @@ export const AddReviewsScreen = () => {
                       flex: 1,
                       alignSelf: "flex-end",
                       alignItems: "center",
-                      paddingRight: 10,
+                      justifyContent: "flex-start",
+                      // paddingRight: 10,
                     }}
                     onPress={() => {
                       setType(
@@ -109,10 +117,13 @@ export const AddReviewsScreen = () => {
                   >
                     <TouchableOpacity
                       style={{
-                        flex: 1,
+                        // flex: 0.1,
                         alignSelf: "flex-end",
                         alignItems: "center",
-                        paddingRight: 10,
+                        padding: 5,
+                        // height: 50,
+                        // width:50,
+                        backgroundColor: "rgba(0,0,0,0.7)",
                       }}
                       onPress={() => {
                         setType(
@@ -121,12 +132,19 @@ export const AddReviewsScreen = () => {
                             : Camera.Constants.Type.back
                         );
                       }}
-                    ><Text>
-                      Камера
-                    </Text>
-                  </TouchableOpacity></TouchableOpacity>
+                    >
+                      <Image
+                        style={{ width: 20, height: 20 }}
+                        source={require("../../image/pngfind.com-refresh-icon-png-transparent-6863128.png")}
+                      />
+                      {/* <Text style={{ color: "#fff" }}>Камера</Text> */}
+                    </TouchableOpacity>
+                  </TouchableOpacity>
                 </Camera>
-                <Button title="Сделать фото" onPress={snap} />
+                <Button style={styles.btn} iconLeft onPress={snap}>
+                  <Icon name="ios-camera" />
+                  <Text style={styles.btnText}>Сделать фото</Text>
+                </Button>
               </View>
             )}
             <TextInput
@@ -195,13 +213,15 @@ const styles = StyleSheet.create({
     // justifyContent: "space-around",
   },
   btn: {
+    marginTop: 10,
     alignSelf: "center",
-    // backgroundColor: '#fff'
+    backgroundColor: "#2f8f85",
   },
   btnText: {
     fontFamily: "Roboto-Condensed-Regular",
     fontSize: 17,
-    color: "#333",
+    color: "#fff",
+    paddingHorizontal: 40,
     // paddingVertical: 12,
   },
 });
