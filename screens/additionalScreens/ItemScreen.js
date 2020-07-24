@@ -97,7 +97,8 @@ export const ItemScreen = ({ route, navigation }) => {
   const onShare = async () => {
     try {
       const result = await Share.share({
-        message: `https://loveprim.com.ua/item/${good.numberOfProduct}`,
+        url: `${good.image}`,
+        message: `https://loveprim.com.ua/item/${good.numberOfProduct}`   
       });
       if (result.action === Share.sharedAction) {
         if (result.activityType) {
@@ -295,6 +296,7 @@ export const ItemScreen = ({ route, navigation }) => {
 
   return (
     <>
+    {console.log('good', good)}
       <ScrollView style={styles.container}>
         <Modal
           style={{ justifyContent: "flex-end" }}
