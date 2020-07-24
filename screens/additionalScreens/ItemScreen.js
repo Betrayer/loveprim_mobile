@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, Component } from "react";
 import { Fab, Icon, Toast } from "native-base";
-import { Dimensions, ScrollView } from "react-native";
+import { Dimensions, ScrollView, Platform } from "react-native";
 import { useSelector } from "react-redux";
 import Modal from "react-native-modal";
 import { firestore } from "../../firebase/config";
@@ -97,6 +97,7 @@ export const ItemScreen = ({ route, navigation }) => {
   const onShare = async () => {
     try {
       const result = await Share.share({
+        url: `${good.image}`,
         message: `https://loveprim.com.ua/item/${good.numberOfProduct}`,
       });
       if (result.action === Share.sharedAction) {
@@ -112,22 +113,6 @@ export const ItemScreen = ({ route, navigation }) => {
       alert(error.message);
     }
   };
-  // const selectRef = useRef(null);
-  // useOutsideAlerter(selectRef);
-
-  // useEffect(() => {
-  //   const timer = setTimeout(() => {
-  //     setVerification(false);
-  //   }, 5000);
-  //   return () => clearTimeout(timer);
-  // }, [verification]);
-
-  // useEffect(() => {
-  //   const timer = setTimeout(() => {
-  //     setActiveHelp(false);
-  //   }, 3500);
-  //   return () => clearTimeout(timer);
-  // }, [activeHelp]);
 
   useEffect(() => {
     let mounted = true;
@@ -304,7 +289,9 @@ export const ItemScreen = ({ route, navigation }) => {
 
   return (
     <>
+      {console.log("good", good)}
       <ScrollView style={styles.container}>
+     
         <Modal
           style={{ justifyContent: "flex-end" }}
           isVisible={isModalVisibleBacket}
@@ -416,6 +403,40 @@ export const ItemScreen = ({ route, navigation }) => {
           </View>
         </Modal>
         <Image style={styles.itemImage} source={{ uri: good.image }} />
+        <View>
+          {Platform.OS === "ios" ? (
+            <Fab
+              active={!active}
+              direction="up"
+              containerStyle={{}}
+              style={{
+                backgroundColor: "#f09360",
+                top: -win.height / 2 + 70,
+                left: 26,
+                
+              }}
+              // position="topRight"
+              onPress={onShare}
+            >
+              <Icon color="#fff" name="md-share" />
+            </Fab>
+          ) : (
+            <Fab
+              active={!active}
+              direction="up"
+              containerStyle={{}}
+              style={{
+                backgroundColor: "#f09360",
+                top: -win.height / 2 + 58,
+                left: 19,
+              }}
+              // position="topRight"
+              onPress={onShare}
+            >
+              <Icon color="#fff" name="md-share" />
+            </Fab>
+          )}
+        </View>
         <View style={styles.textWrapper}>
           {good.sale ? <Text style={styles.goodSale}>Скидка%</Text> : <></>}
           <Text style={styles.name}>{good.name}</Text>
@@ -437,22 +458,6 @@ export const ItemScreen = ({ route, navigation }) => {
             <></>
           )}
           {/* <Text style={styles.text}>{translatedCatagory}</Text> */}
-        </View>
-        <View>
-          <Fab
-            active={!active}
-            direction="up"
-            containerStyle={{}}
-            style={{
-              backgroundColor: "#f09360",
-              top: -win.height / 6,
-              left: win.width / 22,
-            }}
-            // position="topRight"
-            onPress={onShare}
-          >
-            <Icon color="#fff" name="md-share" />
-          </Fab>
         </View>
         <TouchableOpacity
           disabled={!userId || (good.sizes[0] && !chosenSizes)}
