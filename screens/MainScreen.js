@@ -223,7 +223,7 @@ export const MainScreen = ({ navigation, route }) => {
       to: notif.userToken,
       sound: "default",
       title: notif.title,
-      body: notif.notification,
+      body: `${notif.notification} ${notif.orderNo}`,
       data: { data: "goes here" },
     };
 

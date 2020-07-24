@@ -27,7 +27,7 @@ export const ProfileListScreen = ({ navigation, route }) => {
   const [orderList, setOrderList] = useState([]);
   const [payModalVisible, setPayModalVisible] = useState(false);
   const [copyingStatus, setCopyingStatus] = useState(false);
-  const [date, setDate] = useState(new Date(Date.now() + 10800000));
+  const [date, setDate] = useState(new Date(Date.now()));
   const [mode, setMode] = useState("date");
   const [show, setShow] = useState(false);
   const dispatch = useDispatch();
@@ -60,7 +60,8 @@ export const ProfileListScreen = ({ navigation, route }) => {
   const showTimepicker = () => {
     showMode("time");
   };
-  const sendNotification = async (user) => {
+  const sendNotification = async (user, no) => {
+    console.log(user);
     await firestore.collection("notifications").add({
       userId: user.userId,
       notification: "Оплатили заказ ",
@@ -71,14 +72,15 @@ export const ProfileListScreen = ({ navigation, route }) => {
       title: "Оплата заказа",
     });
   };
-  const dateHandler = async (id) => {
+  const dateHandler = async (id, no) => {
+    togglePayModal();
     await firestore
       .collection("orders")
       .doc(id)
       .update({
-        payTime: `${moment(date).format("DD-MM-YYYY hh:mm")}`,
+        payTime: `${moment(date).format("DD-MM-YYYY HH:mm")}`,
       });
-    admins.forEach((user) => sendNotification(user));
+    admins.forEach((user) => sendNotification(user, no));
   };
 
   // DTP
@@ -90,10 +92,12 @@ export const ProfileListScreen = ({ navigation, route }) => {
   const paymentCredentials = () => {
     Clipboard.setString("5168745320092502");
     setCopyingStatus(true);
+    setTimeout(() => setCopyingStatus(false), 5000);
   };
+
   const getAdmins = async () => {
     await firestore
-      .collection("notifications")
+      .collection("users")
       .where("admin", "==", true)
       .onSnapshot((data) => {
         setAdmins(
@@ -163,7 +167,8 @@ export const ProfileListScreen = ({ navigation, route }) => {
                 source={require("../../assets/images/paymentDet.jpeg")}
                 style={styles.paymentImage}
               />
-
+              <Text style={styles.paymentTimeText}>Выбранная дата: {moment(date).format("DD.MM.YYYY HH:mm")}</Text>
+         
               <TouchableOpacity
                 style={styles.paymentCopyButton}
                 onPress={() => paymentCredentials()}
@@ -172,34 +177,42 @@ export const ProfileListScreen = ({ navigation, route }) => {
                   {copyingStatus ? "Скопировано!" : "Копировать реквизиты"}
                 </Text>
               </TouchableOpacity>
-              <TouchableOpacity style={styles.showTimeBtn} onPress={showDatepicker}>
+              <TouchableOpacity
+                style={styles.showTimeBtn}
+                onPress={showDatepicker}
+              >
                 <Text style={styles.paymentCopyButtonText}>Выбрать дату</Text>
               </TouchableOpacity>
-              <TouchableOpacity style={styles.showTimeBtn} onPress={showTimepicker}>
+              <TouchableOpacity
+                style={styles.showTimeBtn}
+                onPress={showTimepicker}
+              >
                 <Text style={styles.paymentCopyButtonText}>Выбрать время</Text>
               </TouchableOpacity>
-                {show && (
-                  <DateTimePicker
-                    style={{
-                      width: "90%",
-                      height: 104,
-                      backgroundColor: "#fff",
-                      alignSelf: "center",
-                    }}
-                    testID="dateTimePicker"
-                    locale="ru-RU"
-                    value={date}
-                    mode={mode}
-                    is24Hour={true}
-                    display="default"
-                    onChange={onChange}
-                  />
-                )}
+              {show && (
+                <DateTimePicker
+                  style={{
+                    width: "90%",
+                    height: 104,
+                    backgroundColor: "#fff",
+                    alignSelf: "center",
+                  }}
+                  testID="dateTimePicker"
+                  locale="ru-RU"
+                  value={date}
+                  mode={mode}
+                  is24Hour={true}
+                  display="default"
+                  onChange={onChange}
+                />
+              )}
               <TouchableOpacity
                 style={styles.paymentPayButton}
-                onPress={() => dateHandler(item.id)}
+                onPress={() => dateHandler(item.id, item.numberOfOrder)}
               >
-                <Text style={styles.paymentPayButtonText}>Подтвердить оплату</Text>
+                <Text style={styles.paymentPayButtonText}>
+                  Подтвердить оплату
+                </Text>
               </TouchableOpacity>
             </ScrollView>
           </View>
@@ -460,7 +473,7 @@ const styles = StyleSheet.create({
     height: 470,
     borderRadius: 6,
   },
-  showTimeBtn:{
+  showTimeBtn: {
     alignSelf: "center",
     backgroundColor: "#fff",
   },
@@ -483,9 +496,17 @@ const styles = StyleSheet.create({
   },
   paymentCopyButtonText: {
     fontFamily: "Roboto-Condensed-Regular",
+    fontSize: 17,
+    color: "#be3b7d",
+    paddingHorizontal: 20,
+    paddingVertical: Platform.OS === "ios" ? 8 : 4,
+  },
+  paymentTimeText: {
+    fontFamily: "Roboto-Condensed-Bold",
+    textAlign:'center',
     fontSize: 18,
     color: "#be3b7d",
     paddingHorizontal: 20,
-    paddingVertical: 8,
+    paddingVertical: Platform.OS === "ios" ? 8 : 4,
   },
 });
