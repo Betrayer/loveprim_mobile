@@ -148,6 +148,7 @@ export const OrderScreen = ({ route }) => {
       userId: route.params.info.userId,
       notification: `Накладная No${deliveryNo}, заказ `,
       orderNo: route.params.info.numberOfOrder,
+      userToken: user.userToken,
       date: Date.now(),
       alreadySent: false,
       title: 'Обновление по Вашему заказу'
