@@ -16,7 +16,6 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { logoutUser } from "../../redux/operations";
 import { firestore } from "../../firebase/config";
-import { ProfileOrderScreen } from "./ProfileOrderScreen";
 
 export const ProfileScreen = ({ navigation, route }) => {
   const [user, setUser] = useState("");
