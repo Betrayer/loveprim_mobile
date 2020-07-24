@@ -13,7 +13,6 @@ import {
 import { firestore } from "../../firebase/config";
 import { useDispatch, useSelector } from "react-redux";
 
-
 export const HomeScreen = () => {
   const navigation = useNavigation();
   const [allProducts, setAllProducts] = useState([]);

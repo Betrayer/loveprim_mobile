@@ -34,14 +34,15 @@ export const FAQScreen = () => {
     return (
       <View style={{
         flexDirection: "row",
-        padding: 10,
+        paddingVertical: 10,
+        paddingHorizontal:12,
         justifyContent: "space-between",
         alignItems: "center" ,
         
         backgroundColor: "#fff", }}>
       <Text style={{ fontSize: 19,
-        fontFamily: "Roboto-Condensed-Regular", }}>
-          {" "}{item.title}
+        fontFamily: "Roboto-Condensed-Regular", width:"94%"}}>
+          {item.title}
         </Text>
         {expanded
           ? <Icon style={{ fontSize: 18, color: "tomato" }} name="remove" />
