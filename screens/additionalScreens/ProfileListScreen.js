@@ -23,23 +23,26 @@ export const ProfileListScreen = ({ navigation, route }) => {
   const { userId, admin, userName, userEmail } = useSelector(
     (state) => state.user
   );
-  const [user, setUser] = useState("");
+  const [admins, setAdmins] = useState("");
   const [orderList, setOrderList] = useState([]);
   const [payModalVisible, setPayModalVisible] = useState(false);
   const [copyingStatus, setCopyingStatus] = useState(false);
-  const [date, setDate] = useState(new Date(1598051730000));
+  const [date, setDate] = useState(new Date(Date.now() + 10800000));
   const [mode, setMode] = useState("date");
   const [show, setShow] = useState(false);
   const dispatch = useDispatch();
 
   useEffect(() => {
     getOrders();
+    getAdmins();
     setCopyingStatus(false);
+    console.log("date", moment(date).format("DD-MM-YYYY hh:mm"));
   }, []);
 
   // DTP
 
   const onChange = (event, selectedDate) => {
+    console.log("selectedDate", selectedDate);
     const currentDate = selectedDate || date;
     setShow(Platform.OS === "ios");
     setDate(currentDate);
@@ -57,14 +60,25 @@ export const ProfileListScreen = ({ navigation, route }) => {
   const showTimepicker = () => {
     showMode("time");
   };
-
-  const dateHandler = async () => {
+  const sendNotification = async (user) => {
+    await firestore.collection("notifications").add({
+      userId: user.userId,
+      notification: "Оплатили заказ ",
+      orderNo: no,
+      date: Date.now(),
+      userToken: user.userToken,
+      alreadySent: false,
+      title: "Оплата заказа",
+    });
+  };
+  const dateHandler = async (id) => {
     await firestore
       .collection("orders")
       .doc(id)
       .update({
-        payTime: `${date}`,
+        payTime: `${moment(date).format("DD-MM-YYYY hh:mm")}`,
       });
+    admins.forEach((user) => sendNotification(user));
   };
 
   // DTP
@@ -77,7 +91,18 @@ export const ProfileListScreen = ({ navigation, route }) => {
     Clipboard.setString("5168745320092502");
     setCopyingStatus(true);
   };
-
+  const getAdmins = async () => {
+    await firestore
+      .collection("notifications")
+      .where("admin", "==", true)
+      .onSnapshot((data) => {
+        setAdmins(
+          data.docs.map((doc, ind) => {
+            return { ...doc.data(), id: doc.id };
+          })
+        );
+      });
+  };
   const translateStatus = (item) => {
     if (item.status === "processing") {
       return "Обработка";
@@ -121,8 +146,9 @@ export const ProfileListScreen = ({ navigation, route }) => {
 
     return (
       <View style={{ paddingHorizontal: 20, paddingVertical: 10 }}>
+        {console.log("orderList :>> ", item.payTime)}
         <Modal
-          style={{ justifyContent: "flex-end" }}
+          style={{ justifyContent: "center" }}
           isVisible={payModalVisible}
           animationIn="slideInUp"
           animationInTiming={500}
@@ -131,33 +157,52 @@ export const ProfileListScreen = ({ navigation, route }) => {
           backdropTransitionOutTiming={10}
           onBackdropPress={() => togglePayModal()}
         >
-          <ScrollView style={styles.paymentWrapper}>
-            <Image
-              source={require("../../assets/images/paymentDet.jpeg")}
-              style={styles.paymentImage}
-            />
-            <Button onPress={showDatepicker} title="Выбрать дату" />
-            <Button onPress={showTimepicker} title="Выбрать время" />
-            <Button onPress={() => dateHandler()} title="Подтвердить оплату" />
-            {show && (
-              <DateTimePicker
-                testID="dateTimePicker"
-                value={date}
-                mode={mode}
-                is24Hour={true}
-                display="default"
-                onChange={onChange}
+          <View style={{ height: "90%" }}>
+            <ScrollView style={styles.paymentWrapper}>
+              <Image
+                source={require("../../assets/images/paymentDet.jpeg")}
+                style={styles.paymentImage}
               />
-            )}
-            <TouchableOpacity
-              style={styles.paymentCopyButton}
-              onPress={() => paymentCredentials()}
-            >
-              <Text style={styles.paymentCopyButtonText}>
-                {copyingStatus ? "Скопировано!" : "Копировать реквизиты"}
-              </Text>
-            </TouchableOpacity>
-          </ScrollView>
+
+              <TouchableOpacity
+                style={styles.paymentCopyButton}
+                onPress={() => paymentCredentials()}
+              >
+                <Text style={styles.paymentCopyButtonText}>
+                  {copyingStatus ? "Скопировано!" : "Копировать реквизиты"}
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.showTimeBtn} onPress={showDatepicker}>
+                <Text style={styles.paymentCopyButtonText}>Выбрать дату</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.showTimeBtn} onPress={showTimepicker}>
+                <Text style={styles.paymentCopyButtonText}>Выбрать время</Text>
+              </TouchableOpacity>
+                {show && (
+                  <DateTimePicker
+                    style={{
+                      width: "90%",
+                      height: 104,
+                      backgroundColor: "#fff",
+                      alignSelf: "center",
+                    }}
+                    testID="dateTimePicker"
+                    locale="ru-RU"
+                    value={date}
+                    mode={mode}
+                    is24Hour={true}
+                    display="default"
+                    onChange={onChange}
+                  />
+                )}
+              <TouchableOpacity
+                style={styles.paymentPayButton}
+                onPress={() => dateHandler(item.id)}
+              >
+                <Text style={styles.paymentPayButtonText}>Подтвердить оплату</Text>
+              </TouchableOpacity>
+            </ScrollView>
+          </View>
         </Modal>
         <Text style={styles.orderText}>&#8470;{item.numberOfOrder}</Text>
         <Text style={styles.orderText}>
@@ -412,20 +457,35 @@ const styles = StyleSheet.create({
   },
   paymentImage: {
     width: "100%",
-    height: 500,
+    height: 470,
     borderRadius: 6,
+  },
+  showTimeBtn:{
+    alignSelf: "center",
+    backgroundColor: "#fff",
   },
   paymentCopyButton: {
     alignSelf: "center",
+    backgroundColor: "#fff",
+  },
+  paymentPayButton: {
+    alignSelf: "center",
     marginVertical: 10,
-    backgroundColor: "tomato",
+    backgroundColor: "#be3b7d",
     borderRadius: 6,
   },
-  paymentCopyButtonText: {
+  paymentPayButtonText: {
     fontFamily: "Roboto-Condensed-Bold",
     fontSize: 16,
     color: "#fff",
     paddingHorizontal: 20,
     paddingVertical: 10,
+  },
+  paymentCopyButtonText: {
+    fontFamily: "Roboto-Condensed-Regular",
+    fontSize: 18,
+    color: "#be3b7d",
+    paddingHorizontal: 20,
+    paddingVertical: 8,
   },
 });
