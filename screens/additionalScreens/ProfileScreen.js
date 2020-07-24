@@ -77,17 +77,21 @@ export const ProfileScreen = ({ navigation, route }) => {
 
   useEffect(() => {
     if (userTel) {
-    if (userTel.length < 10 && userTel !== "" && userTel.substr(0,3) !== "+38") {
-      setPhoneInp(false);
-    } else if(userTel.substr(0,3) === "+38" && userTel.length < 13){
-      setPhoneInp(false);
+      if (
+        userTel.length < 10 &&
+        userTel !== "" &&
+        userTel.substr(0, 3) !== "+38"
+      ) {
+        setPhoneInp(false);
+      } else if (userTel.substr(0, 3) === "+38" && userTel.length < 13) {
+        setPhoneInp(false);
+      } else {
+        setPhoneInp(true);
+      }
+      phoneTranslate(userTel);
     }
-    else {
-      setPhoneInp(true);
-    }
-    phoneTranslate(userTel);}
   }, [userTel]);
-  
+
   const logout = () => {
     console.log("LOGOUT");
     dispatch(logoutUser());
@@ -232,16 +236,16 @@ export const ProfileScreen = ({ navigation, route }) => {
     setUserTel(number);
     phoneTranslate(number);
   };
-  const keyboardVerticalOffset = Platform.OS === 'ios' ? 140 : 0
+  const keyboardVerticalOffset = Platform.OS === "ios" ? 40 : 100;
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <KeyboardAvoidingView
-        // behavior={Platform.Os == "ios" ? "padding" : "height"}
-        // style={{ flex: 1 }}
-        behavior='position' keyboardVerticalOffset={keyboardVerticalOffset}
+        behavior={Platform.Os == "ios" ? "padding" : "height"}
+        style={{ flex: 1 }}
+        // behavior='position' keyboardVerticalOffset={keyboardVerticalOffset}
       >
-        <View style={{  backgroundColor: "#fff",  paddingBottom: 60}}>
+        <View style={{ backgroundColor: "#fff" }}>
           <ScrollView contentContainerStyle={styles.container}>
             <View style={styles.inputWrapper}>
               <Text style={styles.inputTitle}>ФИО</Text>
@@ -305,7 +309,8 @@ export const ProfileScreen = ({ navigation, route }) => {
                 onChangeText={(text) => setNewPassword(text)}
                 value={newPassword}
               />
-              <TouchableOpacity style={styles.btn} onPress={updateEverything}>
+              <TouchableOpacity style={!passInp || !nameInp || !emailInp || !phoneInp ? styles.btnDisabled : styles.btn} onPress={updateEverything}
+              disabled={!passInp || !nameInp || !emailInp || !phoneInp}>
                 <Text style={styles.btnText}>Внести изменения</Text>
               </TouchableOpacity>
             </View>
@@ -320,6 +325,7 @@ export const ProfileScreen = ({ navigation, route }) => {
         title=""
         // onPress={() => navigation.navigate("LoginScreen")}
       /> */}
+            <View style={{ marginBottom: 140 }}></View>
           </ScrollView>
         </View>
       </KeyboardAvoidingView>
@@ -381,6 +387,12 @@ const styles = StyleSheet.create({
   btn: {
     alignItems: "center",
     backgroundColor: "#5bb3b6",
+    marginTop: 16,
+    borderRadius: 4,
+  },
+  btnDisabled: {
+    alignItems: "center",
+    backgroundColor: "#aaa",
     marginTop: 16,
     borderRadius: 4,
   },
