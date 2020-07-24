@@ -16,7 +16,6 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { logoutUser } from "../../redux/operations";
 import { firestore } from "../../firebase/config";
-import { ProfileOrderScreen } from "./ProfileOrderScreen";
 
 export const ProfileScreen = ({ navigation, route }) => {
   const [user, setUser] = useState("");
@@ -310,7 +309,8 @@ export const ProfileScreen = ({ navigation, route }) => {
                 onChangeText={(text) => setNewPassword(text)}
                 value={newPassword}
               />
-              <TouchableOpacity style={styles.btn} onPress={updateEverything}>
+              <TouchableOpacity style={!passInp || !nameInp || !emailInp || !phoneInp ? styles.btnDisabled : styles.btn} onPress={updateEverything}
+              disabled={!passInp || !nameInp || !emailInp || !phoneInp}>
                 <Text style={styles.btnText}>Внести изменения</Text>
               </TouchableOpacity>
             </View>
@@ -387,6 +387,12 @@ const styles = StyleSheet.create({
   btn: {
     alignItems: "center",
     backgroundColor: "#5bb3b6",
+    marginTop: 16,
+    borderRadius: 4,
+  },
+  btnDisabled: {
+    alignItems: "center",
+    backgroundColor: "#aaa",
     marginTop: 16,
     borderRadius: 4,
   },
