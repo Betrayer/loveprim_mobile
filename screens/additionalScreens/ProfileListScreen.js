@@ -36,6 +36,7 @@ export const ProfileListScreen = ({ navigation, route }) => {
     getOrders();
     getAdmins();
     setCopyingStatus(false);
+    console.log("date", moment(date).format("DD-MM-YYYY hh:mm"));
   }, []);
 
   // DTP
@@ -91,7 +92,9 @@ export const ProfileListScreen = ({ navigation, route }) => {
   const paymentCredentials = () => {
     Clipboard.setString("5168745320092502");
     setCopyingStatus(true);
+    setTimeout(() => setCopyingStatus(false), 5000);
   };
+
   const getAdmins = async () => {
     await firestore
       .collection("users")
@@ -147,6 +150,7 @@ export const ProfileListScreen = ({ navigation, route }) => {
 
     return (
       <View style={{ paddingHorizontal: 20, paddingVertical: 10 }}>
+        {console.log("orderList :>> ", item.payTime)}
         <Modal
           style={{ justifyContent: "center" }}
           isVisible={payModalVisible}
