@@ -131,10 +131,10 @@ export const ItemScreen = ({ route, navigation }) => {
 
   useEffect(() => {
     let mounted = true;
-    if (mounted) {
+    // if (mounted) {
       getKurs();
-      return () => (mounted = false);
-    }
+    //   return () => (mounted = false);
+    // }
   }, [exchange]);
 
   useEffect(() => {
@@ -178,12 +178,13 @@ export const ItemScreen = ({ route, navigation }) => {
       .then(function (snapshot) {
         const username = snapshot.data();
         setExchange(username.kurs);
+        getPrice(username.kurs)
       });
   };
 
-  const getPrice = () => {
+  const getPrice = (kurs) => {
     setPrice(
-      Math.ceil(good.price * 1.15 * Number(exchange) + Number(good.charge) + 2)
+      Math.ceil(good.price * 1.15 * Number(kurs) + Number(good.charge) + 2)
     );
   };
 
