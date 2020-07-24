@@ -34,27 +34,40 @@ import { Ionicons } from "@expo/vector-icons";
 const Tab = createBottomTabNavigator();
 
 export const MainScreen = ({ navigation, route }) => {
-  // const [userToken, setUserToken] = useState("");
   const { userId, admin, userToken } = useSelector((state) => state.user);
   const [drawer, setDrawer] = useState(false);
   const [user, setUser] = useState("");
   const [notificationList, setNotificationList] = useState([]);
   const [pushNotif, setPushNotif] = useState([]);
   const [timernator, setTimernator] = useState(false);
+  const [allToken, setAllToken] = useState([]);
+  const [dataPush, setDataPush] = useState();
+  const [changeData, setChangeData] = useState(Date.now());
+  const [pushFlag, setPushFlag] = useState(false);
 
   useEffect(() => {
     setDrawer(false);
     getUser();
     getPushNotif();
-    ttt();
+    getAllUserToken();
+    getData();
   }, []);
 
+  useEffect(() => {
+    // dateNow();
+    if (allToken && dataPush) {
+      verifyPush();
+    }
+    if (pushNotif[0]) {
+      setTimernator(true);
+    }
+  }, [notificationList]);
 
   useEffect(() => {
     if (timernator) {
       timer();
     }
-  }, [pushNotif]);
+  }, [timernator]);
 
   useEffect(() => {
     if (route.params) {
@@ -68,8 +81,51 @@ export const MainScreen = ({ navigation, route }) => {
     getNotifications();
   }, [userId]);
 
+  useEffect(() => {
+    if (pushFlag) {
+      sendPush();
+    }
+  }, [pushFlag]);
+
+  // const dateNow = () => {
+  //   setInterval(() => {
+  //     setChangeData(Date.now());
+  //   }, 10000);
+  //   console.log("changeData", changeData);
+  // };
+
   const navigationBacket = () => {
     navigation.navigate("Корзина");
+  };
+
+  const getData = async () => {
+    await firestore
+      .collection("users")
+      .doc("kurs")
+      .get()
+      .then(function (snapshot) {
+        const username = snapshot.data();
+        setDataPush(username.allPush);
+      });
+  };
+
+  const sendPush = () => {
+    setPushFlag(false);
+    console.log("PUSH2");
+    allToken.map((user) => {
+      sendPushAll(user);
+    });
+  };
+
+  const verifyPush = async () => {
+    if (Date.now() > Number(dataPush) + 172800000) {
+      console.log("PUSH1");
+      await firestore.collection("users").doc("kurs").update({
+        allPush: Date.now(),
+      });
+      setPushFlag(true);
+      getData();
+    }
   };
 
   const getUser = async () => {
@@ -80,11 +136,20 @@ export const MainScreen = ({ navigation, route }) => {
       .onSnapshot((data) => {
         setUser(
           ...data.docs.map((doc) => {
-            // console.log("doc.id", doc.id);
             return { id: doc.id };
           })
         );
       });
+  };
+
+  const getAllUserToken = async () => {
+    await firestore.collection("users").onSnapshot((data) => {
+      setAllToken(
+        data.docs.map((doc, ind) => {
+          return { ...doc.data(), id: doc.id, key: { ind } };
+        })
+      );
+    });
   };
 
   const getPushNotif = async () => {
@@ -131,6 +196,26 @@ export const MainScreen = ({ navigation, route }) => {
       });
   };
 
+  const sendPushAll = async (user) => {
+    const message = {
+      to: user.userToken,
+      sound: "default",
+      title: "Hello there",
+      body: "2 days",
+      data: { data: "goes here" },
+    };
+
+    await fetch("https://exp.host/--/api/v2/push/send", {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Accept-encoding": "gzip, deflate",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(message),
+    });
+  };
+
   const sendPushNotification = async (notif) => {
     const message = {
       to: notif.userToken,
@@ -154,17 +239,12 @@ export const MainScreen = ({ navigation, route }) => {
     });
   };
 
-  const timer = () => {
-    pushNotif.map((notif) => {
-      sendPushNotification(notif);
-    });
+  const timer = async () => {
     setTimernator(false);
-  };
-
-  const ttt = () => {
-    setInterval(() => {
-      setTimernator(!timernator);
-    }, 20000);
+    console.log("timernator", timernator);
+    await pushNotif.map((notif) => {
+      sendPushNotification(notif).then(setTimernator(false));
+    });
   };
 
   return (
