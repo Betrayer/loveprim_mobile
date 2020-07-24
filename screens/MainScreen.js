@@ -14,6 +14,7 @@ import {
 } from "react-native";
 // import { Container, Header, Content, Footer, FooterTab, Button, Icon, Text, Badge } from 'native-base';
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { NavigationContainer } from "@react-navigation/native";
 import { Notifications } from "expo"; // Богдан тест
 import * as Permissions from "expo-permissions";
 // import { FontAwesome5 } from "@expo/vector-icons";
@@ -33,32 +34,98 @@ import { Ionicons } from "@expo/vector-icons";
 const Tab = createBottomTabNavigator();
 
 export const MainScreen = ({ navigation, route }) => {
-  // const [userToken, setUserToken] = useState("");
   const { userId, admin, userToken } = useSelector((state) => state.user);
   const [drawer, setDrawer] = useState(false);
   const [user, setUser] = useState("");
   const [notificationList, setNotificationList] = useState([]);
-  const [allNotifications, setAllNotifications] = useState([]);
+  const [pushNotif, setPushNotif] = useState([]);
+  const [timernator, setTimernator] = useState(false);
+  const [allToken, setAllToken] = useState([]);
+  const [dataPush, setDataPush] = useState();
+  const [changeData, setChangeData] = useState(Date.now());
+  const [pushFlag, setPushFlag] = useState(false);
 
   useEffect(() => {
     setDrawer(false);
     getUser();
+    getPushNotif();
+    getAllUserToken();
+    getData();
   }, []);
+
+  useEffect(() => {
+    // dateNow();
+    if (allToken && dataPush) {
+      verifyPush();
+    }
+    if (pushNotif[0]) {
+      setTimernator(true);
+    }
+  }, [notificationList]);
+
+  useEffect(() => {
+    if (timernator) {
+      timer();
+    }
+  }, [timernator]);
+
+  useEffect(() => {
+    if (route.params) {
+      if (route.params.info === "backet") {
+        navigationBacket();
+      }
+    }
+  }, [route.params]);
 
   useEffect(() => {
     getNotifications();
   }, [userId]);
 
-  // useEffect(() => {
-  //   const ch = route
-  //   console.log(ch)
-  //   if (ch.param.info) {
-  //     navigationBacket();
-  //   }
-  // }, []);
+  useEffect(() => {
+    if (pushFlag) {
+      sendPush();
+    }
+  }, [pushFlag]);
+
+  // const dateNow = () => {
+  //   setInterval(() => {
+  //     setChangeData(Date.now());
+  //   }, 10000);
+  //   console.log("changeData", changeData);
+  // };
 
   const navigationBacket = () => {
-    navigation.navigate("BacketScreen");
+    navigation.navigate("Корзина");
+  };
+
+  const getData = async () => {
+    await firestore
+      .collection("users")
+      .doc("kurs")
+      .get()
+      .then(function (snapshot) {
+        const username = snapshot.data();
+        setDataPush(username.allPush);
+      });
+  };
+
+  const sendPush = () => {
+    setPushFlag(false);
+    console.log("PUSH2");
+    allToken.map((user) => {
+      sendPushAll(user);
+    });
+  };
+
+  const verifyPush = async () => {
+    if (Date.now() > Number(dataPush) + 172800000) {
+      console.log("PUSH1");
+      await firestore.collection("users").doc("kurs").update({
+        allPush: Date.now(),
+      });
+      setPushFlag(true);
+      getData();
+    }
   };
 
   const getUser = async () => {
@@ -69,35 +136,30 @@ export const MainScreen = ({ navigation, route }) => {
       .onSnapshot((data) => {
         setUser(
           ...data.docs.map((doc) => {
-            // console.log("doc.id", doc.id);
             return { id: doc.id };
           })
         );
       });
   };
 
-  useEffect(() => {
-    if (userId) {
-      getNotifications();
-    }
-  }, []);
+  const getAllUserToken = async () => {
+    await firestore.collection("users").onSnapshot((data) => {
+      setAllToken(
+        data.docs.map((doc, ind) => {
+          return { ...doc.data(), id: doc.id, key: { ind } };
+        })
+      );
+    });
+  };
 
-  useEffect(() => {
-    if (allNotifications[0]) {
-      allNotifications.map((notif) => {
-        sendPushNotification(notif);
-      });
-    }
-  }, [allNotifications]);
-
-  const getAllNotifications = async () => {
+  const getPushNotif = async () => {
     await firestore.collection("notifications").onSnapshot((data) => {
-      setAllNotifications(
+      setPushNotif(
         data.docs
           .map((doc, ind) => {
             return { ...doc.data(), id: doc.id, key: { ind } };
           })
-          .filter((item) => !item.alreadySent)
+          .filter((item) => item.alreadySent === false)
           .sort(function (a, b) {
             if (a.date > b.date) {
               return -1;
@@ -134,11 +196,31 @@ export const MainScreen = ({ navigation, route }) => {
       });
   };
 
+  const sendPushAll = async (user) => {
+    const message = {
+      to: user.userToken,
+      sound: "default",
+      title: "Hello there",
+      body: "2 days",
+      data: { data: "goes here" },
+    };
+
+    await fetch("https://exp.host/--/api/v2/push/send", {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Accept-encoding": "gzip, deflate",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(message),
+    });
+  };
+
   const sendPushNotification = async (notif) => {
     const message = {
       to: notif.userToken,
       sound: "default",
-      title: "Hello there",
+      title: notif.title,
       body: notif.notification,
       data: { data: "goes here" },
     };
@@ -155,21 +237,29 @@ export const MainScreen = ({ navigation, route }) => {
     await firestore.collection("notifications").doc(notif.id).update({
       alreadySent: true,
     });
-    // console.log("notificationList", notificationList);
+  };
+
+  const timer = async () => {
+    setTimernator(false);
+    console.log("timernator", timernator);
+    await pushNotif.map((notif) => {
+      sendPushNotification(notif).then(setTimernator(false));
+    });
   };
 
   return (
     <>
-    <Button title="S" onPress={() => sendPushNotification()} />
       <Tab.Navigator
         tabBarOptions={{
           showLabel: true,
           keyboardHidesTabBar: true,
-          labelStyle: { fontSize: 12, fontFamily: "Roboto-Condensed-Regular" },
+          labelStyle: {
+            fontSize: 12,
+            fontFamily: "Roboto-Condensed-Regular",
+          },
           activeTintColor: "#5bb3b6",
         }}
       >
-        {/* {console.log("route", route)} */}
         <Tab.Screen
           options={{
             tabBarIcon: ({ focused, size, color }) => (
@@ -279,6 +369,7 @@ export const MainScreen = ({ navigation, route }) => {
           />
         )}
       </Tab.Navigator>
+      {/* </NavigationContainer> */}
     </>
   );
 };

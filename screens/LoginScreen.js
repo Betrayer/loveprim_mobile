@@ -134,7 +134,7 @@ export const LoginScreen = ({ navigation, route }) => {
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <KeyboardAvoidingView
         behavior={Platform.Os == "ios" ? "padding" : "height"}
-        style={styles.container}
+        style={{flex: 1}}
       >
         {/* <View style={styles.container}> */}
         <ScrollView width="100%" contentContainerStyle={styles.container}>
@@ -183,6 +183,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     alignSelf: "stretch",
+    paddingBottom: 50,
   },
   inputWrapper: {
     width: "80%",

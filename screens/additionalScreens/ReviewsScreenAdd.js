@@ -3,7 +3,6 @@ import {
   StyleSheet,
   Text,
   View,
-  Button,
   TouchableOpacity,
   Image,
   Alert,
@@ -14,6 +13,7 @@ import {
   Platform,
   ScrollView,
 } from "react-native";
+import { Button, Icon } from "native-base";
 import { firestore, storage } from "../../firebase/config";
 import { useSelector } from "react-redux";
 import { Camera } from "expo-camera";
@@ -50,7 +50,10 @@ export const AddReviewsScreen = () => {
     const file = await response.blob();
     const uniqueName = Date.now().toString();
     await storage.ref(`imagesFeeds/${uniqueName}`).put(file);
-    const url = await storage.ref("imagesFeeds/").child(uniqueName).getDownloadURL();
+    const url = await storage
+      .ref("imagesFeeds/")
+      .child(uniqueName)
+      .getDownloadURL();
     console.log("url", url);
     await firestore
       .collection("feeds")
@@ -67,12 +70,12 @@ export const AddReviewsScreen = () => {
   };
 
   return (
-    <ScrollView>
-      <KeyboardAvoidingView
-        behavior={Platform.Os == "ios" ? "padding" : "height"}
-        style={styles.container}
-      >
-        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+    <KeyboardAvoidingView
+      behavior={Platform.Os == "ios" ? "padding" : "height"}
+      style={styles.container}
+    >
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <ScrollView>
           <View style={styles.inner}>
             {photo ? (
               <>
@@ -104,12 +107,24 @@ export const AddReviewsScreen = () => {
                       );
                     }}
                   >
-                    <Text
-                      style={{ fontSize: 18, marginBottom: 10, color: "white" }}
-                    >
+                    <TouchableOpacity
+                      style={{
+                        flex: 1,
+                        alignSelf: "flex-end",
+                        alignItems: "center",
+                        paddingRight: 10,
+                      }}
+                      onPress={() => {
+                        setType(
+                          type === Camera.Constants.Type.back
+                            ? Camera.Constants.Type.front
+                            : Camera.Constants.Type.back
+                        );
+                      }}
+                    ><Text>
                       Камера
                     </Text>
-                  </TouchableOpacity>
+                  </TouchableOpacity></TouchableOpacity>
                 </Camera>
                 <Button title="Сделать фото" onPress={snap} />
               </View>
@@ -119,6 +134,9 @@ export const AddReviewsScreen = () => {
               placeholder="Напишите отзыв"
               onChangeText={(value) => setFeed(value)}
               value={feed}
+              multiline={true}
+              textAlignVertical={"top"}
+              placeholderTextColor={"#777"}
             />
             {photo ? (
               <TouchableOpacity
@@ -140,9 +158,10 @@ export const AddReviewsScreen = () => {
               <></>
             )}
           </View>
-        </TouchableWithoutFeedback>
-      </KeyboardAvoidingView>
-    </ScrollView>
+          <View style={{ width: "100%", height: 100 }}></View>
+        </ScrollView>
+      </TouchableWithoutFeedback>
+    </KeyboardAvoidingView>
   );
 };
 
@@ -159,10 +178,13 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     width: 300,
     height: 160,
-    borderColor: "#6CC4C7",
-    borderWidth: 2,
+    borderColor: "#ddd",
+    borderWidth: 1,
     padding: 10,
-    borderRadius: 10,
+    borderRadius: 3,
+    color: "#444",
+    fontSize: 16,
+    fontFamily: "Roboto-Condensed-Regular",
   },
   txtTouch: {
     color: "white",
@@ -171,5 +193,15 @@ const styles = StyleSheet.create({
     padding: 24,
     flex: 1,
     // justifyContent: "space-around",
+  },
+  btn: {
+    alignSelf: "center",
+    // backgroundColor: '#fff'
+  },
+  btnText: {
+    fontFamily: "Roboto-Condensed-Regular",
+    fontSize: 17,
+    color: "#333",
+    // paddingVertical: 12,
   },
 });

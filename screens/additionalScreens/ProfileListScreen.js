@@ -9,22 +9,74 @@ import {
   Picker,
   TouchableOpacity,
   Image,
+  Clipboard,
+  Button,
+  ScrollView,
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
+import DateTimePicker from "@react-native-community/datetimepicker";
+import Modal from "react-native-modal";
 import moment from "moment";
 import { firestore } from "../../firebase/config";
 
 export const ProfileListScreen = ({ navigation, route }) => {
-  const [user, setUser] = useState("");
   const { userId, admin, userName, userEmail } = useSelector(
     (state) => state.user
   );
-  const dispatch = useDispatch();
+  const [user, setUser] = useState("");
   const [orderList, setOrderList] = useState([]);
+  const [payModalVisible, setPayModalVisible] = useState(false);
+  const [copyingStatus, setCopyingStatus] = useState(false);
+  const [date, setDate] = useState(new Date(1598051730000));
+  const [mode, setMode] = useState("date");
+  const [show, setShow] = useState(false);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     getOrders();
+    setCopyingStatus(false);
   }, []);
+
+  // DTP
+
+  const onChange = (event, selectedDate) => {
+    const currentDate = selectedDate || date;
+    setShow(Platform.OS === "ios");
+    setDate(currentDate);
+  };
+
+  const showMode = (currentMode) => {
+    setShow(true);
+    setMode(currentMode);
+  };
+
+  const showDatepicker = () => {
+    showMode("date");
+  };
+
+  const showTimepicker = () => {
+    showMode("time");
+  };
+
+  const dateHandler = async () => {
+    await firestore
+      .collection("orders")
+      .doc(id)
+      .update({
+        payTime: `${date}`,
+      });
+  };
+
+  // DTP
+
+  const togglePayModal = () => {
+    setPayModalVisible(!payModalVisible);
+  };
+
+  const paymentCredentials = () => {
+    Clipboard.setString("5168745320092502");
+    setCopyingStatus(true);
+  };
 
   const translateStatus = (item) => {
     if (item.status === "processing") {
@@ -45,6 +97,7 @@ export const ProfileListScreen = ({ navigation, route }) => {
       return "Получено";
     }
   };
+
   const ProfileOrderScreen = (item) => {
     const weightPrice = Number(item.weight) * 0.006 * Number(item.kurs);
 
@@ -65,8 +118,47 @@ export const ProfileListScreen = ({ navigation, route }) => {
       );
 
     let newPrice = Math.ceil(newPriceHrn + weightPrice);
+
     return (
       <View style={{ paddingHorizontal: 20, paddingVertical: 10 }}>
+        <Modal
+          style={{ justifyContent: "flex-end" }}
+          isVisible={payModalVisible}
+          animationIn="slideInUp"
+          animationInTiming={500}
+          hasBackdrop={true}
+          backdropOpacity={0.7}
+          backdropTransitionOutTiming={10}
+          onBackdropPress={() => togglePayModal()}
+        >
+          <ScrollView style={styles.paymentWrapper}>
+            <Image
+              source={require("../../assets/images/paymentDet.jpeg")}
+              style={styles.paymentImage}
+            />
+            <Button onPress={showDatepicker} title="Выбрать дату" />
+            <Button onPress={showTimepicker} title="Выбрать время" />
+            <Button onPress={() => dateHandler()} title="Подтвердить оплату" />
+            {show && (
+              <DateTimePicker
+                testID="dateTimePicker"
+                value={date}
+                mode={mode}
+                is24Hour={true}
+                display="default"
+                onChange={onChange}
+              />
+            )}
+            <TouchableOpacity
+              style={styles.paymentCopyButton}
+              onPress={() => paymentCredentials()}
+            >
+              <Text style={styles.paymentCopyButtonText}>
+                {copyingStatus ? "Скопировано!" : "Копировать реквизиты"}
+              </Text>
+            </TouchableOpacity>
+          </ScrollView>
+        </Modal>
         <Text style={styles.orderText}>&#8470;{item.numberOfOrder}</Text>
         <Text style={styles.orderText}>
           Цена: <Text style={styles.mainText}>{newPrice}грн</Text>
@@ -160,7 +252,7 @@ export const ProfileListScreen = ({ navigation, route }) => {
         {item.status === "approved" ? (
           <TouchableOpacity
             style={styles.payBtn}
-            onClick={() => console.log("payBtn")}
+            onPress={() => togglePayModal()}
           >
             <Text style={styles.payBtnText}>Оплатить</Text>
           </TouchableOpacity>
@@ -229,21 +321,20 @@ export const ProfileListScreen = ({ navigation, route }) => {
 
   return (
     <Container>
-      <Content padder style={{ backgroundColor: "white" }}>
-        {/* <FlatList
-        data={orderList}
-        keyExtractor={(item, indx) => indx.toString()}
-        renderItem={({ item }) => {
-          return <ProfileOrderScreen item={item} />;
-        }}
-      /> */}
-        <Accordion
-          animation={true}
-          dataArray={orderList}
-          renderHeader={renderHeader}
-          renderContent={ProfileOrderScreen}
-        />
-      </Content>
+      {orderList[0] ? (
+        <Content padder style={{ backgroundColor: "white" }}>
+          <Accordion
+            animation={true}
+            dataArray={orderList}
+            renderHeader={renderHeader}
+            renderContent={ProfileOrderScreen}
+          />
+        </Content>
+      ) : (
+        <View style={styles.container}>
+          <Text style={styles.noNotif}>У Вас пока нет заказов</Text>
+        </View>
+      )}
     </Container>
   );
 };
@@ -254,6 +345,14 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "center",
+  },
+  noNotif: {
+    fontFamily: "Roboto-Condensed-Light",
+    fontSize: 22,
+    color: "#666",
+    paddingHorizontal: 20,
+    marginTop: 16,
+    textAlign: "center",
   },
   buttonStl: {
     width: "80%",
@@ -298,13 +397,35 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     marginVertical: 10,
     backgroundColor: "tomato",
-    borderRadius: 6
+    borderRadius: 6,
   },
   payBtnText: {
     fontFamily: "Roboto-Condensed-Bold",
     fontSize: 16,
-    color:'#fff',
-    paddingHorizontal:20,
-    paddingVertical:10,
+    color: "#fff",
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+  },
+  paymentWrapper: {
+    backgroundColor: "white",
+    borderRadius: 6,
+  },
+  paymentImage: {
+    width: "100%",
+    height: 500,
+    borderRadius: 6,
+  },
+  paymentCopyButton: {
+    alignSelf: "center",
+    marginVertical: 10,
+    backgroundColor: "tomato",
+    borderRadius: 6,
+  },
+  paymentCopyButtonText: {
+    fontFamily: "Roboto-Condensed-Bold",
+    fontSize: 16,
+    color: "#fff",
+    paddingHorizontal: 20,
+    paddingVertical: 10,
   },
 });
