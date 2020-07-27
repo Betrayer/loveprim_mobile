@@ -89,23 +89,27 @@ export const NotificationScreen = ({ navigation }) => {
     console.log("This row opened", rowKey);
   };
   return (
-    <ScrollView contentContainerStyle={styles.container}>
+    <>
       {notificationList[0] ? (
-        <SwipeListView
-          data={notificationList}
-          style={{ marginTop: 20 }}
-          renderItem={renderItem}
-          renderHiddenItem={renderHiddenItem}
-          leftOpenValue={0}
-          rightOpenValue={-50}
-          previewRowKey={"0"}
-          previewOpenValue={-40}
-          previewOpenDelay={3000}
-        />
+        <ScrollView contentContainerStyle={styles.container}>
+          <SwipeListView
+            data={notificationList}
+            style={{ marginTop: 20 }}
+            renderItem={renderItem}
+            renderHiddenItem={renderHiddenItem}
+            leftOpenValue={0}
+            rightOpenValue={-50}
+            previewRowKey={"0"}
+            previewOpenValue={-40}
+            previewOpenDelay={3000}
+          />
+        </ScrollView>
       ) : (
-        <Text style={styles.noNotif}>Новых уведомлений нет</Text>
+        <ScrollView contentContainerStyle={styles.containerWh}>
+          <Text style={styles.noNotif}>Новых уведомлений нет</Text>
+        </ScrollView>
       )}
-    </ScrollView>
+    </>
   );
 };
 
@@ -117,6 +121,16 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     // width: "100%",
     backgroundColor: "#f7f9f9",
+    flex: 1,
+    // paddingVertical: 10,
+  },
+  containerWh: {
+    // flex: 1,
+    // backgroundColor: "#F5F8F8",
+    alignItems: "center",
+    justifyContent: "center",
+    // width: "100%",
+    backgroundColor: "#fff",
     flex: 1,
     // paddingVertical: 10,
   },

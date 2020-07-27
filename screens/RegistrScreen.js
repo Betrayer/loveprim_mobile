@@ -44,12 +44,10 @@ export const RegistrScreen = ({ navigation, route }) => {
   const [user, setUser] = useState({});
   const [userToken, setUserToken] = useState("");
 
-
   // useEffect(() => {
   //   registerForPushNotificationsAsync();
   // }, []);
 
-  
   useEffect(() => {
     if (user) {
       async function pushNotify() {
@@ -73,9 +71,17 @@ export const RegistrScreen = ({ navigation, route }) => {
   }, [textValue.userPhone]);
 
   useEffect(() => {
-    if ((textValue.userName.split(' ').length < 3 || !textValue.userName.split(' ').every(elem => elem.length >= 2)) && textValue.userName !== "") {
+    if (
+      (textValue.userName.split(" ").length < 3 ||
+        !textValue.userName.split(" ").every((elem) => elem.length >= 2)) &&
+      textValue.userName !== ""
+    ) {
       setNameInp(false);
-    } else if((textValue.userName.split(' ').length >= 3 && textValue.userName.split(' ').every(elem => elem.length >= 2)) || textValue.userName === "" ) {
+    } else if (
+      (textValue.userName.split(" ").length >= 3 &&
+        textValue.userName.split(" ").every((elem) => elem.length >= 2)) ||
+      textValue.userName === ""
+    ) {
       setNameInp(true);
     }
   }, [textValue.userName]);
@@ -200,116 +206,132 @@ export const RegistrScreen = ({ navigation, route }) => {
       registerUser(textValue, setError, setErrorId, toMain, userToken)
     );
   };
-  const keyboardVerticalOffset = Platform.OS === 'ios' ? 200 : 100
-
+  const keyboardVerticalOffset = Platform.OS === "ios" ? 200 : 100;
 
   return (
-    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+    <>
       <KeyboardAvoidingView
         behavior={Platform.Os == "ios" ? "padding" : "height"}
         // behavior='position' keyboardVerticalOffset={keyboardVerticalOffset}
 
-        style={{flex: 1}}
+        style={{ flex: 1 }}
       >
- <ScrollView width="100%" contentContainerStyle={styles.container}>         
-  {/* <View style={{ ...StyleSheet.absoluteFill }}> */}
-            {/* <Image
+        <ScrollView width="100%" contentContainerStyle={styles.container}>
+          {/* <View style={{ ...StyleSheet.absoluteFill }}> */}
+          {/* <Image
               source={require("../image/instagram_gradient.png")}
               style={{ flex: 1, width: null, height: null }}
             /> */}
           <View style={styles.inputWrapper}>
+            <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+              <>
+              <TextInput
+                style={{
+                  width: "70%",
+                  height: 40,
+                  padding: 10,
+                  backgroundColor: "rgba(255,255,255,1)",
+                  borderRadius: 2,
+                  fontFamily: "Roboto-Condensed-Regular",
+                  marginVertical: 10,
+                  color: "#777",
+                  borderColor: !nameInp ? "tomato" : "transparent",
+                  borderWidth: !nameInp ? 2 : 0,
+                }}
+                autoCapitalize="words"
+                placeholder="Введите ФИО"
+                onChangeText={(value) =>
+                  setTextValue({ ...textValue, userName: value })
+                }
+                value={textValue.userName}
+              />
 
+              <TextInput
+                style={{
+                  width: "70%",
+                  height: 40,
+                  padding: 10,
+                  backgroundColor: "rgba(255,255,255,1)",
+                  borderRadius: 2,
+                  fontFamily: "Roboto-Condensed-Regular",
+                  marginVertical: 10,
+                  color: "#777",
+                  borderColor: !phoneInp ? "tomato" : "transparent",
+                  borderWidth: !phoneInp ? 2 : 0,
+                }}
+                autoCapitalize="none"
+                placeholder="Введите телефон"
+                onChangeText={(value) =>
+                  setTextValue({ ...textValue, userPhone: value })
+                }
+                value={textValue.userPhone}
+              />
+              <TextInput
+                style={{
+                  width: "70%",
+                  height: 40,
+                  padding: 10,
+                  backgroundColor: "rgba(255,255,255,1)",
+                  borderRadius: 2,
+                  fontFamily: "Roboto-Condensed-Regular",
+                  marginVertical: 10,
+                  color: "#777",
+                  borderColor: !emailInp ? "tomato" : "transparent",
+                  borderWidth: !emailInp ? 2 : 0,
+                }}
+                autoCapitalize="none"
+                placeholder="Введите email"
+                onChangeText={(value) =>
+                  setTextValue({ ...textValue, email: value })
+                }
+                value={textValue.email}
+              />
+              <TextInput
+                style={{
+                  width: "70%",
+                  height: 40,
+                  padding: 10,
+                  backgroundColor: "rgba(255,255,255,1)",
+                  borderRadius: 2,
+                  fontFamily: "Roboto-Condensed-Regular",
+                  marginVertical: 10,
+                  color: "#777",
+                  borderColor: !passInp ? "tomato" : "transparent",
+                  borderWidth: !passInp ? 2 : 0,
+                }}
+                autoCapitalize="none"
+                placeholder="Введите пароль"
+                secureTextEntry={true}
+                onChangeText={(value) =>
+                  setTextValue({ ...textValue, password: value })
+                }
+                value={textValue.password}
+              />
+              </>
+            </TouchableWithoutFeedback>
 
-          <TextInput
-           style={{
-            width: "70%",
-            height: 40,
-            padding: 10,
-            backgroundColor: "rgba(255,255,255,1)",
-            borderRadius: 2,
-            fontFamily: "Roboto-Condensed-Regular",
-            marginVertical:10,
-            color: '#777',
-            borderColor: !nameInp ? "tomato" : "transparent",
-            borderWidth: !nameInp ? 2 : 0
-          }}
-          autoCapitalize='words'
-            placeholder="Введите ФИО"
-            onChangeText={(value) =>
-              setTextValue({ ...textValue, userName: value })
-            }
-            value={textValue.userName}
-          />
+            <TouchableOpacity
+              style={styles.btn}
+              title="Вход"
+              onPress={registerUserAdd}
+            >
+              <Text style={styles.btnText}>Вход</Text>
+            </TouchableOpacity>
 
-          <TextInput
-            style={{
-              width: "70%",
-              height: 40,
-              padding: 10,
-              backgroundColor: "rgba(255,255,255,1)",
-              borderRadius: 2,
-              fontFamily: "Roboto-Condensed-Regular",
-              marginVertical:10,
-              color: '#777',
-              borderColor: !phoneInp ? "tomato" : "transparent",
-              borderWidth: !phoneInp ? 2 : 0
-            }}
-            autoCapitalize='none'
-            placeholder="Введите телефон"
-            onChangeText={(value) =>
-              setTextValue({ ...textValue, userPhone: value })
-            }
-            value={textValue.userPhone}
-          />
-          <TextInput
-            style={{
-              width: "70%",
-              height: 40,
-              padding: 10,
-              backgroundColor: "rgba(255,255,255,1)",
-              borderRadius: 2,
-              fontFamily: "Roboto-Condensed-Regular",
-              marginVertical:10,
-              color: '#777',
-              borderColor: !emailInp ? "tomato" : "transparent",
-              borderWidth: !emailInp ? 2 : 0
-            }}
-            autoCapitalize='none'
-            placeholder="Введите email"
-            onChangeText={(value) =>
-              setTextValue({ ...textValue, email: value })
-            }
-            value={textValue.email}
-          />
-          <TextInput
-            style={{
-              width: "70%",
-              height: 40,
-              padding: 10,
-              backgroundColor: "rgba(255,255,255,1)",
-              borderRadius: 2,
-              fontFamily: "Roboto-Condensed-Regular",
-              marginVertical:10,
-              color: '#777',
-              borderColor: !passInp ? "tomato" : "transparent",
-              borderWidth: !passInp ? 2 : 0
-            }}
-            autoCapitalize='none'
-            placeholder="Введите пароль"
-            secureTextEntry={true}
-            onChangeText={(value) =>
-              setTextValue({ ...textValue, password: value })
-            }
-            value={textValue.password}
-          />
-          <TouchableOpacity style={styles.btn} title="Вход" onPress={registerUserAdd} >
-              <Text style={styles.btnText}>Зарегистрироваться</Text></TouchableOpacity>
-          {errorId ? <Text>{errorId}</Text> : <></>}
+            {errorId ? (
+              <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+                <Text>{errorId}</Text>
+              </TouchableWithoutFeedback>
+            ) : (
+              <></>
+            )}
           </View>
-          <View style={{width: "100%", height: 100}}></View>
+          <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+            <View style={{ width: "100%", height: 100 }}></View>
+          </TouchableWithoutFeedback>
         </ScrollView>
       </KeyboardAvoidingView>
-    </TouchableWithoutFeedback>
+    </>
   );
 };
 
@@ -320,7 +342,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "center",
-    paddingBottom: 10
+    paddingBottom: 10,
   },
   inputWrapper: {
     width: "80%",
@@ -330,7 +352,7 @@ const styles = StyleSheet.create({
     paddingVertical: 30,
     borderTopColor: "#ade9ed",
     borderTopWidth: 3,
-   marginVertical:100,
+    marginVertical: 100,
   },
   txtInput: {
     width: "70%",
@@ -339,21 +361,21 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(255,255,255,1)",
     borderRadius: 2,
     fontFamily: "Roboto-Condensed-Regular",
-    marginVertical:10,
-    color: '#777'
+    marginVertical: 10,
+    color: "#777",
   },
   btn: {
-    width:'70%',
-    backgroundColor: '#5bb3b6',
-    marginTop:10,
-    marginBottom:20
+    width: "70%",
+    backgroundColor: "#5bb3b6",
+    marginTop: 10,
+    marginBottom: 20,
   },
   btnText: {
     fontFamily: "Roboto-Condensed-Bold",
     fontSize: 16,
-    paddingVertical:12,
-    textAlign:'center',
-    color: '#fff',
-    textTransform: 'uppercase'
+    paddingVertical: 12,
+    textAlign: "center",
+    color: "#fff",
+    textTransform: "uppercase",
   },
 });
