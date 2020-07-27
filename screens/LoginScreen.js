@@ -20,8 +20,6 @@ import Constants from "expo-constants";
 import * as Permissions from "expo-permissions";
 import { Notifications } from "expo"; // Богдан тест
 
-
-
 const initialState = {
   email: "",
   password: "",
@@ -35,7 +33,6 @@ export const LoginScreen = ({ navigation, route }) => {
   const { userId, admin } = useSelector((state) => state.user);
   const [user, setUser] = useState({});
   const [userToken, setUserToken] = useState("");
-
 
   // useEffect(() => {
   // }, [error, errorId]);
@@ -97,7 +94,9 @@ export const LoginScreen = ({ navigation, route }) => {
     // console.log("email", email);
     // console.log("password", password);
     // console.log("textValue", textValue);
-    await dispatch(loginUser(textValue, setError, setErrorId, toMain, userToken));
+    await dispatch(
+      loginUser(textValue, setError, setErrorId, toMain, userToken)
+    );
     // await setEmail("");
     // await setPassword("");
 
@@ -131,47 +130,61 @@ export const LoginScreen = ({ navigation, route }) => {
   });
 
   return (
-    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-      <KeyboardAvoidingView
-        behavior={Platform.Os == "ios" ? "padding" : "height"}
-        style={{flex: 1}}
-      >
-        {/* <View style={styles.container}> */}
-        <ScrollView width="100%" contentContainerStyle={styles.container}>
-          {/* <View style={{ ...StyleSheet.absoluteFill }}> */}
-          {/* <Image
+    <KeyboardAvoidingView
+      behavior={Platform.Os == "ios" ? "padding" : "height"}
+      style={{ flex: 1 }}
+    >
+      {/* <View style={styles.container}> */}
+      <ScrollView width="100%" contentContainerStyle={styles.container}>
+        {/* <View style={{ ...StyleSheet.absoluteFill }}> */}
+        {/* <Image
               source={require("../image/instagram_gradient.png")}
               style={{ flex: 1, width: null, height: null }}
             /> */}
-          {/* </View> */}
-          {/* <Text>Email</Text> */}
-          <View style={styles.inputWrapper}>
-            <TextInput
-            autoCapitalize='none'
-              style={styles.txtInput}
-              placeholder="Почта"
-              onChangeText={(value) =>
-                setTextValue({ ...textValue, email: value })
-              }
-            />
-            {/* <Text>Пароль</Text> */}
-            <TextInput
-            autoCapitalize='none'
-              style={styles.txtInput}
-              secureTextEntry={true}
-              placeholder="Пароль"
-              onChangeText={(value) =>
-                setTextValue({ ...textValue, password: value })
-              }
-            />
-            <TouchableOpacity style={styles.btn} title="Вход" onPress={loginUserAdd} >
-              <Text style={styles.btnText}>Вход</Text></TouchableOpacity>
-            {errorId ? <Text>{errorId}</Text> : <></>}
-          </View>
-        </ScrollView>
         {/* </View> */}
-      </KeyboardAvoidingView>
-    </TouchableWithoutFeedback>
+        {/* <Text>Email</Text> */}
+
+        <View style={styles.inputWrapper}>
+          <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+            <>
+              <TextInput
+                autoCapitalize="none"
+                style={styles.txtInput}
+                placeholder="Почта"
+                onChangeText={(value) =>
+                  setTextValue({ ...textValue, email: value })
+                }
+              />
+              {/* <Text>Пароль</Text> */}
+              <TextInput
+                autoCapitalize="none"
+                style={styles.txtInput}
+                secureTextEntry={true}
+                placeholder="Пароль"
+                onChangeText={(value) =>
+                  setTextValue({ ...textValue, password: value })
+                }
+              />
+            </>
+          </TouchableWithoutFeedback>
+          <TouchableOpacity
+            style={styles.btn}
+            title="Вход"
+            onPress={loginUserAdd}
+          >
+            <Text style={styles.btnText}>Вход</Text>
+          </TouchableOpacity>
+          {errorId ? (
+            <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+              <Text>{errorId}</Text>
+            </TouchableWithoutFeedback>
+          ) : (
+            <></>
+          )}
+        </View>
+      </ScrollView>
+      {/* </View> */}
+    </KeyboardAvoidingView>
   );
 };
 
@@ -193,7 +206,7 @@ const styles = StyleSheet.create({
     paddingVertical: 30,
     borderTopColor: "#ade9ed",
     borderTopWidth: 3,
-   marginVertical:100,
+    marginVertical: 100,
   },
   txtInput: {
     width: "70%",
@@ -202,21 +215,21 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(255,255,255,1)",
     borderRadius: 2,
     fontFamily: "Roboto-Condensed-Regular",
-    marginVertical:10,
-    color: '#777'
+    marginVertical: 10,
+    color: "#777",
   },
   btn: {
-    width:'70%',
-    backgroundColor: '#5bb3b6',
-    marginTop:10,
-    marginBottom:20
+    width: "70%",
+    backgroundColor: "#5bb3b6",
+    marginTop: 10,
+    marginBottom: 20,
   },
   btnText: {
     fontFamily: "Roboto-Condensed-Bold",
     fontSize: 16,
-    paddingVertical:12,
-    textAlign:'center',
-    color: '#fff',
-    textTransform: 'uppercase'
+    paddingVertical: 12,
+    textAlign: "center",
+    color: "#fff",
+    textTransform: "uppercase",
   },
 });

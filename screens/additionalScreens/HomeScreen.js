@@ -13,10 +13,12 @@ import {
 import { firestore } from "../../firebase/config";
 import { useDispatch, useSelector } from "react-redux";
 
+
 export const HomeScreen = () => {
   const navigation = useNavigation();
   const [allProducts, setAllProducts] = useState([]);
   const [searchValue, setSearchValue] = useState("");
+  const [loader, setLoader] = useState(true);
   const [filteredItems, setFilteredItems] = useState([]);
   const [exchange, setExchange] = useState(27);
   const [rate, setRate] = useState(27);
@@ -79,6 +81,7 @@ export const HomeScreen = () => {
         setRate(username.kurs);
         setExchange(username.kurs);
       });
+
   };
 
   const getCollection = async () => {

@@ -117,7 +117,7 @@ export const ItemScreen = ({ route, navigation }) => {
   useEffect(() => {
     let mounted = true;
     // if (mounted) {
-      getKurs();
+    getKurs();
     //   return () => (mounted = false);
     // }
   }, [exchange]);
@@ -163,7 +163,7 @@ export const ItemScreen = ({ route, navigation }) => {
       .then(function (snapshot) {
         const username = snapshot.data();
         setExchange(username.kurs);
-        getPrice(username.kurs)
+        getPrice(username.kurs);
       });
   };
 
@@ -290,9 +290,7 @@ export const ItemScreen = ({ route, navigation }) => {
 
   return (
     <>
-      {console.log("good", good)}
       <ScrollView style={styles.container}>
-     
         <Modal
           style={{ justifyContent: "flex-end" }}
           isVisible={isModalVisibleBacket}
@@ -403,7 +401,13 @@ export const ItemScreen = ({ route, navigation }) => {
             />
           </View>
         </Modal>
-        <Image style={styles.itemImage} source={{ uri: good.image }} />
+        <TouchableOpacity
+          onPress={() =>
+            navigation.navigate("CommentImg", { info: good })
+          }
+        >
+          <Image style={styles.itemImage} source={{ uri: good.image }} />
+        </TouchableOpacity>
         <View>
           {Platform.OS === "ios" ? (
             <Fab
@@ -414,7 +418,6 @@ export const ItemScreen = ({ route, navigation }) => {
                 backgroundColor: "#f09360",
                 top: -win.height / 2 + 70,
                 left: 26,
-                
               }}
               // position="topRight"
               onPress={onShare}

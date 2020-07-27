@@ -239,7 +239,7 @@ export const ProfileScreen = ({ navigation, route }) => {
   const keyboardVerticalOffset = Platform.OS === "ios" ? 40 : 100;
 
   return (
-    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+    
       <KeyboardAvoidingView
         behavior={Platform.Os == "ios" ? "padding" : "height"}
         style={{ flex: 1 }}
@@ -248,6 +248,8 @@ export const ProfileScreen = ({ navigation, route }) => {
         <View style={{ backgroundColor: "#fff" }}>
           <ScrollView contentContainerStyle={styles.container}>
             <View style={styles.inputWrapper}>
+            <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+              <>
               <Text style={styles.inputTitle}>ФИО</Text>
               <TextInput
                 style={nameInp ? styles.input : styles.inputNotValid}
@@ -308,7 +310,8 @@ export const ProfileScreen = ({ navigation, route }) => {
                 placeholder="Введите пароль"
                 onChangeText={(text) => setNewPassword(text)}
                 value={newPassword}
-              />
+              /></>
+              </TouchableWithoutFeedback>
               <TouchableOpacity style={!passInp || !nameInp || !emailInp || !phoneInp ? styles.btnDisabled : styles.btn} onPress={updateEverything}
               disabled={!passInp || !nameInp || !emailInp || !phoneInp}>
                 <Text style={styles.btnText}>Внести изменения</Text>
@@ -325,11 +328,10 @@ export const ProfileScreen = ({ navigation, route }) => {
         title=""
         // onPress={() => navigation.navigate("LoginScreen")}
       /> */}
-            <View style={{ marginBottom: 140 }}></View>
+            <TouchableWithoutFeedback onPress={Keyboard.dismiss}><View style={{ marginBottom: 140 }}></View></TouchableWithoutFeedback>
           </ScrollView>
         </View>
       </KeyboardAvoidingView>
-    </TouchableWithoutFeedback>
   );
 };
 
