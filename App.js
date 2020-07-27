@@ -168,7 +168,7 @@ export default function App() {
             <Stack.Screen
               options={{
                 headerTitleAlign: "center",
-                headerTitle: "ЧаВо",
+                headerTitle: "Вопросы и ответы",
                 headerStyle: {
                   backgroundColor: "#6CC4C7",
                 },
@@ -264,7 +264,7 @@ export default function App() {
             <Stack.Screen
               options={{
                 headerTitleAlign: "center",
-                headerTitle: "Ассексуары",
+                headerTitle: "Аксессуары",
                 headerStyle: {
                   backgroundColor: "#6CC4C7",
                 },
