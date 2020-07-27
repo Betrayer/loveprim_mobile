@@ -180,6 +180,7 @@ export default function App() {
             <Stack.Screen
               options={{
                 headerTitleAlign: "center",
+                headerTitle: "",
                 headerStyle: {
                   backgroundColor: "#6CC4C7",
                 },
